@@ -41,6 +41,7 @@
     --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
   }
   *{box-sizing:border-box;}
+  .icon{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;vertical-align:middle;flex-shrink:0;}
   body{
     margin:0;
     background:var(--bg);
@@ -70,7 +71,7 @@
   .day-card.today{border-color:var(--accent);}
   .day-card.rest{background:rgba(27,32,41,0.5);}
   .day-card.rest .day-badge{opacity:0.45;}
-  .day-card.rest .day-title-input{color:var(--text-muted);font-weight:400;}
+  .day-card.rest .day-title-text, .day-card.rest .day-title-input{color:var(--text-muted);font-weight:400;}
   .day-card.rest .day-meta{opacity:0.7;}
   .day-card.rest .chevron{opacity:0.6;}
 
@@ -84,14 +85,18 @@
   }
   .day-card.today .day-badge{border-color:var(--accent);}
   .day-info{flex:1;min-width:0;}
+  .day-title-row{display:flex;align-items:center;gap:6px;}
+  .day-title-text{font-family:var(--display);font-size:16px;letter-spacing:0.3px;text-transform:uppercase;}
   .day-title-input{
     background:transparent;border:none;color:var(--text);font-family:var(--display);
-    font-size:16.5px;letter-spacing:0.3px;text-transform:uppercase;width:100%;padding:2px 0;
+    font-size:16px;letter-spacing:0.3px;text-transform:uppercase;width:100%;padding:2px 0;
   }
   .day-title-input:focus{outline:none;border-bottom:1px solid var(--accent);}
+  .edit-title-btn{background:none;border:none;color:var(--text-muted);padding:4px;display:flex;align-items:center;cursor:pointer;flex-shrink:0;}
+  .edit-title-btn:hover{color:var(--accent);}
   .day-meta{display:block;font-family:var(--mono);font-size:11px;color:var(--text-muted);margin-top:2px;}
   .day-meta .today-tag{color:var(--accent);}
-  .chevron{font-size:16px;color:var(--text-muted);transition:transform .25s ease;flex-shrink:0;}
+  .chevron{color:var(--text-muted);transition:transform .25s ease;flex-shrink:0;display:flex;}
   .day-card.open .chevron{transform:rotate(180deg);color:var(--accent);}
 
   .day-body-wrapper{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease;}
@@ -101,42 +106,42 @@
 
   .empty-state{padding:16px 4px;color:var(--text-muted);font-size:13.5px;text-align:center;}
 
-  .exercise-item{padding:14px 0;border-bottom:1px solid var(--line);}
+  .exercise-item{padding:12px 0;border-bottom:1px solid var(--line);}
   .exercise-item:last-child{border-bottom:none;}
   .exercise-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;cursor:pointer;user-select:none;}
-  .exercise-name{display:block;font-weight:600;font-size:14.5px;}
-  .exercise-muscle{display:inline-block;margin-top:4px;font-family:var(--mono);font-size:10px;letter-spacing:0.5px;text-transform:uppercase;color:var(--accent-dim);background:color-mix(in srgb, var(--accent) 10%, transparent);padding:2px 8px;border-radius:20px;}
-  .exercise-header-actions{display:flex;align-items:center;gap:4px;flex-shrink:0;}
-  .exercise-done-btn{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);background:none;color:transparent;flex-shrink:0;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;padding:0;}
-  .exercise-done-btn.done{background:var(--accent);border-color:var(--accent);color:#14171C;}
-  .exercise-chevron{font-size:14px;color:var(--text-muted);transition:transform .25s ease;flex-shrink:0;padding:4px;}
+  .exercise-name{display:block;font-weight:500;font-size:14px;}
+  .exercise-muscle{display:inline-block;margin-top:3px;font-family:var(--mono);font-size:9.5px;letter-spacing:0.5px;text-transform:uppercase;color:var(--text-muted);}
+  .exercise-header-actions{display:flex;align-items:center;gap:2px;flex-shrink:0;}
+  .exercise-done-btn{width:26px;height:26px;border-radius:8px;border:none;background:var(--card-bg2);color:transparent;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
+  .exercise-done-btn.done{background:var(--accent);color:#14171C;}
+  .exercise-chevron{color:var(--text-muted);transition:transform .25s ease;flex-shrink:0;padding:4px;display:flex;}
   .exercise-item.open .exercise-chevron{transform:rotate(180deg);color:var(--accent);}
-  .remove-exercise-btn{background:none;border:none;color:var(--text-muted);font-size:22px;cursor:pointer;line-height:1;padding:10px 6px;margin:-10px -6px -10px 0;flex-shrink:0;}
+  .remove-exercise-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;padding:4px;margin-left:2px;flex-shrink:0;display:flex;align-items:center;}
   .remove-exercise-btn:hover{color:var(--danger);}
   .exercise-body-wrapper{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease;}
   .exercise-item.open .exercise-body-wrapper{grid-template-rows:1fr;}
   .exercise-body-inner{overflow:hidden;}
-  .exercise-body{padding-top:10px;}
+  .exercise-body{padding:10px 0 0 38px;}
 
   .set-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
-  .set-num{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--bg);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--text-muted);}
-  .set-row input{background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:16px;padding:11px 10px;width:0;flex:1;min-width:0;}
-  .set-row input::placeholder{color:#4E5665;}
-  .set-row .input-reps{padding-left:10px;}
+  .set-num{flex-shrink:0;width:16px;font-family:var(--mono);font-size:10.5px;color:var(--text-muted);text-align:center;}
+  .set-row input{background:var(--card-bg);border:none;border-radius:8px;color:var(--text);font-family:var(--mono);font-size:15px;padding:9px 8px;width:0;flex:1;min-width:0;}
+  .set-row input:focus{outline:1.5px solid var(--accent);}
+  .set-row input::placeholder{color:var(--text-muted);opacity:.6;}
+  .set-row .input-reps{padding-left:8px;}
   .input-with-unit{position:relative;flex:1;min-width:0;display:flex;}
-  .input-with-unit .input-weight{padding-left:32px;}
-  .input-unit{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:12px;color:var(--text-muted);pointer-events:none;z-index:1;}
-  .remove-row-btn{background:none;border:none;color:var(--text-muted);font-size:20px;cursor:pointer;line-height:1;padding:10px 6px;margin:-10px -6px -10px -2px;flex-shrink:0;}
+  .input-with-unit .input-weight{padding-left:30px;}
+  .input-unit{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:11px;color:var(--text-muted);pointer-events:none;z-index:1;}
+  .remove-row-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;padding:6px;flex-shrink:0;display:flex;align-items:center;}
   .remove-row-btn:hover{color:var(--danger);}
-  .difficulty-row{display:flex;gap:6px;margin:0 0 12px 32px;}
+  .difficulty-row{display:flex;gap:6px;margin:0 0 10px;}
   .difficulty-row.hidden{display:none;}
   .diff-btn{flex:1;background:none;border:1px solid var(--line);color:var(--text-muted);font-family:var(--mono);font-size:10.5px;padding:7px 4px;border-radius:7px;cursor:pointer;}
   .diff-btn.facil.active{background:rgba(90,180,120,0.15);border-color:#5AB478;color:#5AB478;}
   .diff-btn.medio.active{background:color-mix(in srgb, var(--accent) 15%, transparent);border-color:var(--accent);color:var(--accent);}
   .diff-btn.dificil.active{background:rgba(193,68,59,0.15);border-color:var(--danger);color:var(--danger);}
   .empty-rows-hint{font-family:var(--mono);font-size:11.5px;color:var(--text-muted);margin:2px 0 10px;}
-  .add-row-btn{display:inline-block;background:none;border:none;color:var(--text-muted);font-family:var(--mono);font-size:11px;padding:6px 2px;margin-top:2px;cursor:pointer;}
-  .add-row-btn:hover{color:var(--accent);}
+  .add-row-btn{display:inline-flex;align-items:center;gap:5px;background:none;border:none;color:var(--accent);font-family:var(--mono);font-size:11px;padding:6px 0;margin-top:2px;cursor:pointer;}
   .save-indicator{font-family:var(--mono);font-size:9.5px;color:var(--accent);opacity:0;transition:opacity .3s ease;margin-left:7px;vertical-align:middle;}
   .save-indicator.show{opacity:1;}
 
@@ -148,8 +153,7 @@
   .history-date{color:var(--accent-dim);min-width:46px;flex-shrink:0;}
   .no-history{font-family:var(--mono);font-size:12px;color:var(--text-muted);}
 
-  .add-exercise-btn{width:100%;margin-top:8px;background:none;border:1.5px dashed var(--line);color:var(--text-muted);padding:11px;border-radius:10px;font-family:var(--mono);font-size:12.5px;cursor:pointer;}
-  .add-exercise-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .add-exercise-btn{display:inline-flex;align-items:center;gap:6px;width:auto;margin-top:8px;background:none;border:none;color:var(--accent);padding:6px 0;font-family:var(--mono);font-size:11.5px;cursor:pointer;}
 
   .day-done-btn{display:block;width:100%;margin:2px 0 14px;background:none;border:1.5px solid var(--line);color:var(--text-muted);font-family:var(--mono);font-size:12px;padding:11px;border-radius:10px;cursor:pointer;min-height:44px;}
   .day-done-btn.done{background:var(--accent);border-color:var(--accent);color:#14171C;font-weight:600;}
@@ -160,8 +164,8 @@
   @keyframes fadeInBtn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 
   .day-type-toggle{display:flex;gap:8px;margin:4px 0 10px;}
-  .day-type-btn{flex:1;background:none;border:1.5px solid var(--line);color:var(--text-muted);font-family:var(--mono);font-size:11.5px;padding:10px;border-radius:8px;cursor:pointer;}
-  .day-type-btn.active{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 12%, transparent);color:var(--accent);font-weight:600;}
+  .day-type-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--card-bg2);border:none;color:var(--text-muted);font-family:var(--mono);font-size:11px;padding:11px 6px;border-radius:22px;cursor:pointer;}
+  .day-type-btn.active{background:var(--accent);color:#14171C;font-weight:600;}
 
   .library-panel{margin-top:10px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;}
   .library-panel.hidden{display:none;}
@@ -339,6 +343,7 @@ const openDays = new Set();
 const openLibrary = new Set();
 const openHistory = new Set();
 const openExercises = new Set();
+const editingTitles = new Set();
 const selectedMuscle = {};
 const pendingRows = {};
 let calendarOpen = false;
@@ -346,6 +351,15 @@ let calendarMonth = new Date().getMonth();
 let calendarYear = new Date().getFullYear();
 const MONTH_NAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 const DOW_LABELS = ['D','S','T','Q','Q','S','S'];
+const ICONS = {
+  check: '<svg class="icon" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>',
+  chevron: '<svg class="icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>',
+  x: '<svg class="icon" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+  plus: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+  book: '<svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+  activity: '<svg class="icon" viewBox="0 0 24 24"><path d="M3 12h4l2-8 4 16 2-8h6"/></svg>',
+  pencil: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
+};
 
 function getRows(exId){
   if(!pendingRows[exId]){
@@ -673,7 +687,7 @@ function renderExercise(dayKey, ex){
         <input type="number" inputmode="decimal" step="0.5" placeholder="0" class="input-weight" data-exid="${ex.id}" data-rowidx="${idx}" value="${row.weight}">
       </div>
       <input type="number" inputmode="numeric" placeholder="reps" class="input-reps" data-exid="${ex.id}" data-rowidx="${idx}" value="${row.reps}">
-      <button class="remove-row-btn" data-action="remove-row" data-exid="${ex.id}" data-rowidx="${idx}" title="Remover linha">×</button>
+      <button class="remove-row-btn" data-action="remove-row" data-exid="${ex.id}" data-rowidx="${idx}" title="Remover linha">${ICONS.x}</button>
     </div>
     <div class="difficulty-row ${row.reps===''?'hidden':''}" data-exid="${ex.id}" data-rowidx="${idx}">
       <button class="diff-btn facil ${row.difficulty==='facil'?'active':''}" data-action="set-difficulty" data-exid="${ex.id}" data-rowidx="${idx}" data-diff="facil">Fácil</button>
@@ -694,14 +708,14 @@ function renderExercise(dayKey, ex){
           <span class="save-indicator" id="save-ind-${ex.id}">✓ salvo</span>
         </div>
         <div class="exercise-header-actions">
-          <button class="exercise-done-btn ${isDone?'done':''}" data-action="toggle-exercise-done" data-exid="${ex.id}" title="Marcar exercício como concluído">✓</button>
-          <span class="exercise-chevron">⌄</span>
-          <button class="remove-exercise-btn" data-action="remove-exercise" data-day="${dayKey}" data-exid="${ex.id}" title="Remover exercício">×</button>
+          <button class="exercise-done-btn ${isDone?'done':''}" data-action="toggle-exercise-done" data-exid="${ex.id}" title="Marcar exercício como concluído">${ICONS.check}</button>
+          <span class="exercise-chevron">${ICONS.chevron}</span>
+          <button class="remove-exercise-btn" data-action="remove-exercise" data-day="${dayKey}" data-exid="${ex.id}" title="Remover exercício">${ICONS.x}</button>
         </div>
       </div>
       <div class="exercise-body-wrapper"><div class="exercise-body-inner"><div class="exercise-body">
         ${rowsSection}
-        <button class="add-row-btn" data-action="add-row" data-exid="${ex.id}">+ série</button>
+        <button class="add-row-btn" data-action="add-row" data-exid="${ex.id}">${ICONS.plus}série</button>
         <button class="history-toggle" data-action="toggle-history" data-exid="${ex.id}">${historyOpen ? '▴ Ocultar histórico' : '▾ Histórico'}</button>
         <div class="history-list ${historyOpen ? '' : 'hidden'}">${historyHtml}</div>
       </div></div></div>
@@ -744,8 +758,8 @@ function renderDay(day){
     : `<button class="workout-control-btn start" data-action="start-workout">▶ Iniciar treino</button>`;
   const dayTypeButtons = data.exercises.length === 0
     ? `<div class="day-type-toggle">
-        <button class="day-type-btn ${!data.forceTraining?'active':''}" data-action="set-day-type" data-day="${day.key}" data-type="rest">Descanso</button>
-        <button class="day-type-btn ${data.forceTraining?'active':''}" data-action="set-day-type" data-day="${day.key}" data-type="cardio">Cardio</button>
+        <button class="day-type-btn ${!data.forceTraining?'active':''}" data-action="set-day-type" data-day="${day.key}" data-type="rest">${ICONS.book}Descanso</button>
+        <button class="day-type-btn ${data.forceTraining?'active':''}" data-action="set-day-type" data-day="${day.key}" data-type="cardio">${ICONS.activity}Cardio</button>
       </div>`
     : '';
   const restNow = restRunning ? Math.max(0, (restEnd-Date.now())/1000) : restRemaining;
@@ -768,17 +782,19 @@ function renderDay(day){
       <div class="day-header" data-action="toggle-day" data-day="${day.key}">
         <div class="day-badge">${day.badge}</div>
         <div class="day-info">
-          <input class="day-title-input" data-day="${day.key}" value="${data.title}" placeholder="Nome do treino">
+          ${editingTitles.has(day.key)
+            ? `<input class="day-title-input" data-day="${day.key}" value="${data.title}" placeholder="Nome do treino">`
+            : `<div class="day-title-row"><span class="day-title-text">${data.title}</span><button class="edit-title-btn" data-action="edit-day-title" data-day="${day.key}" title="Editar nome" aria-label="Editar nome">${ICONS.pencil}</button></div>`}
           <span class="day-meta">${data.exercises.length} exercício${data.exercises.length===1?'':'s'}${isToday ? ' · <span class="today-tag">HOJE</span>' : ''}${isDayDone ? ' · ✓' : ''}${data.forceTraining && data.exercises.length===0 ? ' · <span class="today-tag">CARDIO</span>' : ''}</span>
         </div>
-        <span class="chevron">⌄</span>
+        <span class="chevron">${ICONS.chevron}</span>
       </div>
       <div class="day-body-wrapper"><div class="day-body-inner"><div class="day-body">
         ${workoutControlBtn}
         ${dayDoneBtn}
         ${exercisesHtml}
         ${dayTypeButtons}
-        <button class="add-exercise-btn" data-action="toggle-library" data-day="${day.key}">+ Adicionar exercício</button>
+        <button class="add-exercise-btn" data-action="toggle-library" data-day="${day.key}">${ICONS.plus}Adicionar exercício</button>
         ${renderLibrary(day.key)}
         ${restWidget}
       </div></div></div>
@@ -805,6 +821,15 @@ function attachEvents(){
       const key = el.dataset.day;
       openDays.has(key) ? openDays.delete(key) : openDays.add(key);
       render();
+    }
+    else if(action==='edit-day-title'){
+      const key = el.dataset.day;
+      editingTitles.add(key);
+      render();
+      requestAnimationFrame(()=>{
+        const input = document.querySelector(`.day-title-input[data-day="${key}"]`);
+        if(input){ input.focus(); input.select(); }
+      });
     }
     else if(action==='toggle-library'){
       const key = el.dataset.day;
@@ -926,6 +951,8 @@ function attachEvents(){
       const key = e.target.dataset.day;
       plan[key].title = e.target.value.trim() || 'Sem título';
       savePlan();
+      editingTitles.delete(key);
+      render();
     }
     if(e.target.classList && (e.target.classList.contains('input-reps') || e.target.classList.contains('input-weight'))){
       commitRows(e.target.dataset.exid);
