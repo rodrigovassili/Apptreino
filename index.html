@@ -291,6 +291,27 @@
   .inline-rest-value.warn{color:var(--accent);animation:pulse-dot 1s ease-in-out infinite;}
   @keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:0.3;}}
   .inline-rest-controls{display:flex;align-items:center;justify-content:center;gap:8px;}
+
+  .rest-mini-bar{position:fixed;left:0;right:0;bottom:0;max-width:520px;margin:0 auto;background:var(--card-bg);border-top:1px solid var(--line);padding:11px 20px calc(11px + env(safe-area-inset-bottom));display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer;transform:translateY(100%);transition:transform .3s ease;z-index:15;}
+  .rest-mini-bar.show{transform:translateY(0);}
+  .rest-mini-bar.alert{animation:timer-alert 0.6s ease 3;}
+  .rest-mini-label{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;}
+  .rest-mini-time{font-family:var(--display);font-size:17px;font-weight:700;}
+  .rest-mini-icon{width:26px;height:26px;border-radius:50%;background:var(--accent);color:#14171C;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;}
+
+  .rest-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:60;padding:20px;}
+  .rest-overlay.show{opacity:1;pointer-events:auto;}
+  .rest-focus-card{background:var(--card-bg);border-radius:24px;padding:28px 26px calc(24px + env(safe-area-inset-bottom));text-align:center;width:100%;max-width:300px;transform:scale(.92);transition:transform .25s ease;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+  .rest-overlay.show .rest-focus-card{transform:scale(1);}
+  .rest-focus-card.alert{animation:timer-alert 0.6s ease 3;}
+  .rest-focus-label{font-family:var(--mono);font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}
+  .rest-focus-time{font-family:var(--display);font-size:52px;font-weight:800;line-height:1;margin-bottom:22px;}
+  .rest-time-value.warn{color:var(--accent);animation:pulse-dot 1s ease-in-out infinite;}
+  .rest-focus-ctrls{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:16px;}
+  .rest-focus-btn{width:48px;height:48px;border-radius:50%;background:var(--bg);border:none;color:var(--text);font-family:var(--mono);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .rest-focus-btn.play{width:64px;height:64px;background:var(--accent);color:#14171C;font-size:20px;}
+  .rest-close-hint{font-family:var(--mono);font-size:10px;color:var(--text-muted);}
+
   .timer-btn{background:none;border:1px solid var(--line);color:var(--text);width:42px;height:42px;border-radius:10px;font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-family:var(--mono);padding:0;}
   .timer-btn.wide{width:50px;font-size:12.5px;}
   .timer-btn.primary{background:var(--accent);border-color:var(--accent);color:#14171C;}
@@ -345,6 +366,25 @@
   </div>
 </div>
 <div id="toast" class="toast"></div>
+
+<div class="rest-mini-bar" id="rest-mini-bar">
+  <span class="rest-mini-label">Descanso</span>
+  <span class="rest-mini-time rest-time-value">01:30</span>
+  <div class="rest-mini-icon inline-rest-toggle">▶</div>
+</div>
+
+<div class="rest-overlay" id="rest-overlay">
+  <div class="rest-focus-card" id="rest-focus-card">
+    <div class="rest-focus-label">Descanso</div>
+    <div class="rest-focus-time rest-time-value">01:30</div>
+    <div class="rest-focus-ctrls">
+      <button class="rest-focus-btn" data-action="rest-minus">−30s</button>
+      <button class="rest-focus-btn play inline-rest-toggle" data-action="rest-toggle">▶</button>
+      <button class="rest-focus-btn" data-action="rest-plus">+30s</button>
+    </div>
+    <div class="rest-close-hint">toque fora pra fechar</div>
+  </div>
+</div>
 
 <nav class="bottom-nav">
   <button class="nav-btn" data-action="switch-tab" data-tab="profile">Perfil</button>
@@ -941,20 +981,6 @@ function renderDay(day){
         <button class="day-type-btn ${data.forceTraining?'active':''}" data-action="set-day-type" data-day="${day.key}" data-type="cardio">${ICONS.activity}Cardio</button>
       </div>`
     : '';
-  const restNow = restRunning ? Math.max(0, (restEnd-Date.now())/1000) : restRemaining;
-  const restWarn = restRunning && restNow<=5 && restNow>0;
-  const restWidget = totalRunning
-    ? `<div class="inline-rest-timer ${restWarn?'warn':''}">
-        <div class="inline-rest-label">Descanso</div>
-        <div class="inline-rest-value ${restWarn?'warn':''}">${fmtTime(restNow)}</div>
-        <div class="inline-rest-controls">
-          <button class="timer-btn wide" data-action="rest-minus">−30</button>
-          <button class="timer-btn primary inline-rest-toggle" data-action="rest-toggle">${restRunning?'⏸':'▶'}</button>
-          <button class="timer-btn wide" data-action="rest-plus">+30</button>
-          <button class="timer-btn reset" data-action="rest-reset">↺</button>
-        </div>
-      </div>`
-    : '';
 
   return `
     <div class="day-card ${isOpen?'open':''} ${isToday?'today':''} ${isRest?'rest':''}" data-day="${day.key}">
@@ -975,7 +1001,6 @@ function renderDay(day){
         ${dayTypeButtons}
         <button class="add-exercise-btn" data-action="toggle-library" data-day="${day.key}">${ICONS.plus}Adicionar exercício</button>
         ${renderLibrary(day.key)}
-        ${restWidget}
       </div></div></div>
     </div>
   `;
@@ -1408,6 +1433,12 @@ function toggleTotal(){
     totalStart = Date.now();
     totalRunning = true;
   }
+  const miniBar = document.getElementById('rest-mini-bar');
+  if(miniBar) miniBar.classList.toggle('show', totalRunning);
+  if(!totalRunning){
+    const overlay = document.getElementById('rest-overlay');
+    if(overlay) overlay.classList.remove('show');
+  }
   render();
 }
 
@@ -1426,7 +1457,7 @@ function updateRestDisplay(){
     remaining = restRemaining;
   }
   const isWarn = restRunning && remaining<=5 && remaining>0;
-  document.querySelectorAll('.inline-rest-value').forEach(el=>{
+  document.querySelectorAll('.rest-time-value').forEach(el=>{
     el.textContent = fmtTime(remaining);
     el.classList.toggle('warn', isWarn);
   });
@@ -1449,7 +1480,7 @@ function resetRest(){
   restRunning = false;
   clearInterval(restInterval);
   restRemaining = restDefault;
-  document.querySelectorAll('.inline-rest-timer').forEach(el=> el.classList.remove('alert'));
+  document.querySelectorAll('.rest-mini-bar, .rest-focus-card').forEach(el=> el.classList.remove('alert'));
   updateRestDisplay();
 }
 function adjustRest(delta){
@@ -1463,7 +1494,7 @@ function adjustRest(delta){
   updateRestDisplay();
 }
 function onRestFinished(){
-  document.querySelectorAll('.inline-rest-timer').forEach(el=>{
+  document.querySelectorAll('.rest-mini-bar, .rest-focus-card').forEach(el=>{
     el.classList.add('alert');
     setTimeout(()=>el.classList.remove('alert'), 2000);
   });
@@ -1479,8 +1510,27 @@ function updateTimerButtons(){
   });
 }
 
+function attachRestFocusEvents(){
+  const miniBar = document.getElementById('rest-mini-bar');
+  const overlay = document.getElementById('rest-overlay');
+  if(!miniBar || !overlay) return;
+  miniBar.addEventListener('click', ()=> overlay.classList.add('show'));
+  overlay.addEventListener('click', (e)=>{
+    if(e.target===overlay) overlay.classList.remove('show');
+  });
+  overlay.addEventListener('click', (e)=>{
+    const el = e.target.closest('[data-action]');
+    if(!el) return;
+    const action = el.dataset.action;
+    if(action==='rest-toggle') toggleRest();
+    else if(action==='rest-minus') adjustRest(-30);
+    else if(action==='rest-plus') adjustRest(30);
+  });
+}
+
 function initTimers(){
   updateRestDisplay();
+  attachRestFocusEvents();
 }
 
 </script>
