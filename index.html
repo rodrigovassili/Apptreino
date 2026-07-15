@@ -40,6 +40,19 @@
     --display:'Sora',sans-serif;
     --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
   }
+  :root[data-theme="mono"]{
+    --bg:#0A0A0C;
+    --card-bg:#161618;
+    --card-bg2:#1E1E20;
+    --line:rgba(255,255,255,0.1);
+    --text:#F5F5F5;
+    --text-muted:#7A7A7E;
+    --accent:#F5F5F5;
+    --accent-dim:#B8B8BC;
+    --danger:#C1443B;
+    --display:'Sora',sans-serif;
+    --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
+  }
   *{box-sizing:border-box;}
   .icon{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;vertical-align:middle;flex-shrink:0;}
   html{background:var(--bg);}
@@ -1409,13 +1422,15 @@ function attachBackupEvents(){
   });
 }
 
-const THEME_COLORS = { d: '#241F38', e: '#16303A' };
+const THEME_ORDER = ['e', 'd', 'mono'];
+const THEME_COLORS = { d: '#241F38', e: '#16303A', mono: '#0A0A0C' };
 function attachThemeToggle(){
   const btn = document.getElementById('theme-toggle-btn');
   if(!btn) return;
   btn.addEventListener('click', ()=>{
-    const current = document.documentElement.getAttribute('data-theme') || 'd';
-    const next = current === 'd' ? 'e' : 'd';
+    const current = document.documentElement.getAttribute('data-theme') || 'e';
+    const idx = THEME_ORDER.indexOf(current);
+    const next = THEME_ORDER[(idx+1) % THEME_ORDER.length];
     document.documentElement.setAttribute('data-theme', next);
     try{ localStorage.setItem('vamo-theme', next); }catch(e){}
     const meta = document.getElementById('theme-color-meta');
