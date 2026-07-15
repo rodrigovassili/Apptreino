@@ -2,10 +2,10 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<script>(function(){try{var t=localStorage.getItem('vamo-theme')||'d';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<script>(function(){try{var t=localStorage.getItem('vamo-theme')||'e';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Vamo!</title>
-<meta name="theme-color" content="#241F38" id="theme-color-meta">
+<meta name="theme-color" content="#16303A" id="theme-color-meta">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="favicon-32.png" type="image/png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,20 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root, :root[data-theme="d"]{
-    --bg:#241F38;
-    --card-bg:#332B4D;
-    --card-bg2:#3B3259;
-    --line:#453C63;
-    --text:#F5F1FA;
-    --text-muted:#B3ACC9;
-    --accent:#FF6B4A;
-    --accent-dim:#C74E32;
-    --danger:#C1443B;
-    --display:'Sora',sans-serif;
-    --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
-  }
-  :root[data-theme="e"]{
+  :root, :root[data-theme="e"]{
     --bg:#16303A;
     --card-bg:#1F4048;
     --card-bg2:#254A52;
@@ -36,6 +23,19 @@
     --text-muted:#9DBFBF;
     --accent:#C6FF3D;
     --accent-dim:#8FB82C;
+    --danger:#C1443B;
+    --display:'Sora',sans-serif;
+    --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
+  }
+  :root[data-theme="d"]{
+    --bg:#241F38;
+    --card-bg:#332B4D;
+    --card-bg2:#3B3259;
+    --line:#453C63;
+    --text:#F5F1FA;
+    --text-muted:#B3ACC9;
+    --accent:#FF6B4A;
+    --accent-dim:#C74E32;
     --danger:#C1443B;
     --display:'Sora',sans-serif;
     --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
@@ -303,8 +303,8 @@
   @keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:0.3;}}
   .inline-rest-controls{display:flex;align-items:center;justify-content:center;gap:8px;}
 
-  .nav-timer-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--accent);}
-  .nav-timer-btn.hidden{display:none;}
+  .nav-timer-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--accent);transition:color .2s;}
+  .nav-timer-btn.idle{color:var(--text-muted);}
   .nav-timer-btn .icon{width:15px;height:15px;}
   .nav-timer-btn span{font-family:var(--mono);font-size:10.5px;font-weight:700;}
   .nav-timer-btn.alert{animation:timer-alert 0.6s ease 3;}
@@ -393,7 +393,7 @@
   <button class="nav-btn" data-action="switch-tab" data-tab="profile">Perfil</button>
   <button class="nav-btn active" data-action="switch-tab" data-tab="treinos">Treinos</button>
   <button class="nav-btn" data-action="switch-tab" data-tab="stats">Estatística</button>
-  <button class="nav-btn nav-timer-btn hidden" id="nav-timer-btn" data-action="open-rest-focus">
+  <button class="nav-btn nav-timer-btn idle" id="nav-timer-btn" data-action="open-rest-focus">
     <svg class="icon" viewBox="0 0 24 24"><path d="M6 4l12 8-12 8V4z"/></svg>
     <span class="rest-time-value">01:30</span>
   </button>
@@ -1480,7 +1480,7 @@ function toggleTotal(){
     totalRunning = true;
   }
   const navTimerBtn = document.getElementById('nav-timer-btn');
-  if(navTimerBtn) navTimerBtn.classList.toggle('hidden', !totalRunning);
+  if(navTimerBtn) navTimerBtn.classList.toggle('idle', !totalRunning);
   if(!totalRunning){
     const overlay = document.getElementById('rest-overlay');
     if(overlay) overlay.classList.remove('show');
