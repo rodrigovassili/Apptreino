@@ -97,6 +97,17 @@
   .chevron{color:var(--text-muted);transition:transform .25s ease;flex-shrink:0;display:flex;}
   .day-card.open .chevron{transform:rotate(180deg);}
   .day-card.today .chevron{color:var(--accent);}
+  .chevron-fwd{transform:rotate(-90deg);}
+  .day-card.today .chevron-fwd{color:var(--accent);}
+
+  .day-detail{padding-top:2px;}
+  .detail-top-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+  .detail-back-btn{background:none;border:none;color:var(--text-muted);padding:6px;margin-left:-6px;display:flex;cursor:pointer;}
+  .detail-back-btn .icon{transform:rotate(90deg);width:18px;height:18px;}
+  .detail-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;color:var(--accent);text-transform:uppercase;}
+  .detail-title-row{display:flex;align-items:center;gap:10px;margin:2px 0 20px;}
+  .detail-title-text{font-family:var(--display);font-size:21px;font-weight:700;margin:0;flex-shrink:1;min-width:0;}
+  .detail-title-input{font-size:21px;flex:1;min-width:0;}
 
   .day-body-wrapper{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease;}
   .day-card.open .day-body-wrapper{grid-template-rows:1fr;}
@@ -157,9 +168,9 @@
   .day-done-btn{display:block;width:100%;margin:2px 0 14px;background:none;border:1.5px solid var(--line);color:var(--text-muted);font-family:var(--mono);font-size:12px;padding:11px;border-radius:10px;cursor:pointer;min-height:44px;}
   .day-done-btn.done{background:var(--accent);border-color:var(--accent);color:#14171C;font-weight:600;}
 
-  .workout-control-btn{display:block;width:100%;margin:0 0 12px;padding:14px;border-radius:10px;font-family:var(--mono);font-size:13px;cursor:pointer;min-height:48px;animation:fadeInBtn .35s ease;}
-  .workout-control-btn.start{background:var(--accent);border:none;color:#14171C;font-weight:700;}
-  .workout-control-btn.finish{background:none;border:1.5px solid var(--danger);color:var(--danger);font-weight:600;}
+  .workout-control-btn{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;white-space:nowrap;padding:8px 13px;border-radius:20px;font-family:var(--mono);font-size:11px;font-weight:600;cursor:pointer;}
+  .workout-control-btn.start{background:none;border:1.5px solid var(--accent);color:var(--accent);}
+  .workout-control-btn.finish{background:var(--accent);border:1.5px solid var(--accent);color:#14171C;}
   @keyframes fadeInBtn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 
   .day-type-toggle{display:flex;gap:8px;margin:4px 0 10px;}
@@ -269,7 +280,7 @@
   .backup-hint{font-size:12.5px;color:var(--text-muted);margin:0 0 4px;line-height:1.5;}
   .backup-label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:0.5px;text-transform:uppercase;color:var(--text-muted);margin:12px 0 6px;}
   .backup-textarea{width:100%;min-height:90px;background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:11.5px;padding:10px;resize:vertical;box-sizing:border-box;}
-  .backup-action-btn{margin-top:8px;width:100%;background:none;border:1px solid var(--line);color:var(--text);font-family:var(--mono);font-size:12.5px;padding:11px;border-radius:8px;cursor:pointer;min-height:44px;}
+  .backup-action-btn{margin-top:8px;width:100%;background:none;border:1px solid var(--line);color:var(--text);font-family:var(--mono);font-size:12.5px;padding:11px;border-radius:8px;cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:center;gap:8px;}
   .backup-action-btn.primary{background:var(--accent);border-color:var(--accent);color:#14171C;font-weight:600;}
 
   .loading{color:var(--text-muted);font-family:var(--mono);font-size:13px;padding:30px 4px;text-align:center;}
@@ -355,13 +366,12 @@
     <button class="reset-btn" id="reset-btn">Limpar todos os dados</button>
     <button class="backup-btn" id="backup-toggle-btn">Backup manual (exportar / importar)</button>
     <div class="backup-panel hidden" id="backup-panel">
-      <p class="backup-hint">Os dados ficam salvos no navegador deste aparelho. Use isso pra levar seus dados pra outro celular/navegador, ou como backup extra: copie o texto abaixo e guarde em algum app de notas. Pra restaurar, cole no segundo campo e toque em Importar.</p>
+      <p class="backup-hint">Os dados ficam salvos no navegador deste aparelho. Baixe um arquivo de backup de vez em quando, ou pra levar seus dados pra outro celular/navegador.</p>
       <label class="backup-label">Seus dados atuais</label>
-      <textarea class="backup-textarea" id="export-textarea" readonly></textarea>
-      <button class="backup-action-btn" id="copy-export-btn">Copiar</button>
-      <label class="backup-label">Colar dados salvos antes</label>
-      <textarea class="backup-textarea" id="import-textarea" placeholder="Cole aqui o texto exportado anteriormente"></textarea>
-      <button class="backup-action-btn primary" id="import-btn">Importar</button>
+      <button class="backup-action-btn primary" id="download-backup-btn"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3v13"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>Baixar arquivo de backup</button>
+      <label class="backup-label">Restaurar de um arquivo</label>
+      <button class="backup-action-btn" id="import-file-btn"><svg class="icon" viewBox="0 0 24 24"><path d="M12 21V8"/><path d="M7 13l5-5 5 5"/><path d="M4 20h16"/></svg>Escolher arquivo de backup</button>
+      <input type="file" id="import-file-input" accept=".json,application/json" style="display:none;">
     </div>
   </div>
 </div>
@@ -450,6 +460,9 @@ const ICONS = {
   pencil: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
   flame: '<svg class="icon" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 17c1 0 2-1 2-2 0-.6-.2-1-.5-1.5C11 12 10 10.5 10 8.5 10 5 13 3 13 3s0 3 2 5c2.5 2.5 3 5 3 7a5 5 0 0 1-10 0c0-1 .3-2 .8-3"/></svg>',
   user: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>',
+  play: '<svg class="icon" viewBox="0 0 24 24"><path d="M6 4l12 8-12 8V4z"/></svg>',
+  download: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 3v13"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>',
+  upload: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 21V8"/><path d="M7 13l5-5 5 5"/><path d="M4 20h16"/></svg>',
 };
 
 function getRows(exId){
@@ -960,21 +973,39 @@ function renderLibrary(dayKey){
   `;
 }
 
-function renderDay(day){
+let activeDayKey = null;
+
+function renderDayRow(day){
   const data = plan[day.key];
-  const isOpen = openDays.has(day.key);
   const isToday = day.key === todayKey();
   const isRest = !isTrainingDay(day.key);
+  const isDayDone = isToday && !!completions[todayStr()];
+  return `
+    <div class="day-card ${isToday?'today':''} ${isRest?'rest':''}" data-day="${day.key}">
+      <div class="day-header" data-action="open-day" data-day="${day.key}">
+        <div class="day-badge">${day.badge}</div>
+        <div class="day-info">
+          <span class="day-title-text">${data.title}</span>
+          <span class="day-meta">${data.exercises.length} exercício${data.exercises.length===1?'':'s'}${isToday ? ' · <span class="today-tag">HOJE</span>' : ''}${isDayDone ? ' · ✓' : ''}${data.forceTraining && data.exercises.length===0 ? ' · <span class="today-tag">CARDIO</span>' : ''}</span>
+        </div>
+        <span class="chevron chevron-fwd">${ICONS.chevron}</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderDayDetail(day){
+  const data = plan[day.key];
+  const isToday = day.key === todayKey();
   const isDayDone = isToday && !!completions[todayStr()];
   const exercisesHtml = data.exercises.length
     ? data.exercises.map(ex => renderExercise(day.key, ex)).join('')
     : '<p class="empty-state">Nenhum exercício ainda. Toque em "+ Adicionar exercício" para montar o treino.</p>';
-  const dayDoneBtn = isToday
-    ? `<button class="day-done-btn ${isDayDone?'done':''}" data-action="toggle-day-done">${isDayDone ? '✓ Treino de hoje concluído' : 'Concluir treino de hoje'}</button>`
+  const workoutControlBtn = isToday
+    ? (totalRunning
+        ? `<button class="workout-control-btn finish" data-action="finish-workout">${ICONS.check}Concluir treino</button>`
+        : `<button class="workout-control-btn start" data-action="start-workout">${ICONS.play}Iniciar treino</button>`)
     : '';
-  const workoutControlBtn = totalRunning
-    ? `<button class="workout-control-btn finish" data-action="finish-workout">■ Finalizar treino</button>`
-    : `<button class="workout-control-btn start" data-action="start-workout">▶ Iniciar treino</button>`;
   const dayTypeButtons = data.exercises.length === 0
     ? `<div class="day-type-toggle">
         <button class="day-type-btn ${!data.forceTraining?'active':''}" data-action="set-day-type" data-day="${day.key}" data-type="rest">${ICONS.book}Descanso</button>
@@ -983,25 +1014,21 @@ function renderDay(day){
     : '';
 
   return `
-    <div class="day-card ${isOpen?'open':''} ${isToday?'today':''} ${isRest?'rest':''}" data-day="${day.key}">
-      <div class="day-header" data-action="toggle-day" data-day="${day.key}">
-        <div class="day-badge">${day.badge}</div>
-        <div class="day-info">
-          ${editingTitles.has(day.key)
-            ? `<input class="day-title-input" data-day="${day.key}" value="${data.title}" placeholder="Nome do treino">`
-            : `<div class="day-title-row"><span class="day-title-text">${data.title}</span><button class="edit-title-btn" data-action="edit-day-title" data-day="${day.key}" title="Editar nome" aria-label="Editar nome">${ICONS.pencil}</button></div>`}
-          <span class="day-meta">${data.exercises.length} exercício${data.exercises.length===1?'':'s'}${isToday ? ' · <span class="today-tag">HOJE</span>' : ''}${isDayDone ? ' · ✓' : ''}${data.forceTraining && data.exercises.length===0 ? ' · <span class="today-tag">CARDIO</span>' : ''}</span>
-        </div>
-        <span class="chevron">${ICONS.chevron}</span>
+    <div class="day-detail">
+      <div class="detail-top-row">
+        <button class="detail-back-btn" data-action="close-day-detail" aria-label="Voltar">${ICONS.chevron}</button>
+        <span class="detail-eyebrow">${day.label}${isToday ? ' · Hoje' : ''}</span>
       </div>
-      <div class="day-body-wrapper"><div class="day-body-inner"><div class="day-body">
+      <div class="detail-title-row">
+        ${editingTitles.has(day.key)
+          ? `<input class="day-title-input detail-title-input" data-day="${day.key}" value="${data.title}" placeholder="Nome do treino">`
+          : `<h2 class="detail-title-text">${data.title}</h2><button class="edit-title-btn" data-action="edit-day-title" data-day="${day.key}" title="Editar nome" aria-label="Editar nome">${ICONS.pencil}</button>`}
         ${workoutControlBtn}
-        ${dayDoneBtn}
-        ${exercisesHtml}
-        ${dayTypeButtons}
-        <button class="add-exercise-btn" data-action="toggle-library" data-day="${day.key}">${ICONS.plus}Adicionar exercício</button>
-        ${renderLibrary(day.key)}
-      </div></div></div>
+      </div>
+      ${exercisesHtml}
+      ${dayTypeButtons}
+      <button class="add-exercise-btn" data-action="toggle-library" data-day="${day.key}">${ICONS.plus}Adicionar exercício</button>
+      ${renderLibrary(day.key)}
     </div>
   `;
 }
@@ -1107,7 +1134,12 @@ function attachProfileEvents(){
 
 function render(){
   const container = document.getElementById('days-container');
-  container.innerHTML = DAYS.map(renderDay).join('');
+  if(activeDayKey && plan[activeDayKey]){
+    const day = DAYS.find(d=>d.key===activeDayKey);
+    container.innerHTML = renderDayDetail(day);
+  }else{
+    container.innerHTML = DAYS.map(renderDayRow).join('');
+  }
   renderCalendar();
   renderStreakCard();
   renderEvolutionChart();
@@ -1122,11 +1154,15 @@ function attachEvents(){
     if(!el) return;
     const action = el.dataset.action;
 
-    if(action==='toggle-day'){
-      if(e.target.closest('.day-title-input')) return;
-      const key = el.dataset.day;
-      openDays.has(key) ? openDays.delete(key) : openDays.add(key);
+    if(action==='open-day'){
+      activeDayKey = el.dataset.day;
       render();
+      window.scrollTo(0,0);
+    }
+    else if(action==='close-day-detail'){
+      activeDayKey = null;
+      render();
+      window.scrollTo(0,0);
     }
     else if(action==='edit-day-title'){
       const key = el.dataset.day;
@@ -1197,6 +1233,11 @@ function attachEvents(){
         showToast(`Treino finalizado — ${fmtTime(totalAccum)}`);
         totalAccum = 0;
       }
+      if(!completions[todayStr()]){
+        completions[todayStr()] = true;
+        saveCompletions();
+      }
+      render();
     }
     else if(action==='rest-toggle'){
       toggleRest();
@@ -1303,8 +1344,9 @@ function attachEvents(){
     await saveLogs();
     saveCompletions();
     saveDurations();
-    openDays.clear(); openLibrary.clear(); openHistory.clear();
+    openLibrary.clear(); openHistory.clear(); openExercises.clear();
     Object.keys(pendingRows).forEach(k => delete pendingRows[k]);
+    activeDayKey = null;
     render();
   });
 }
@@ -1312,51 +1354,58 @@ function attachEvents(){
 function attachBackupEvents(){
   const panel = document.getElementById('backup-panel');
   const toggleBtn = document.getElementById('backup-toggle-btn');
-  const exportArea = document.getElementById('export-textarea');
-  const importArea = document.getElementById('import-textarea');
+  const fileInput = document.getElementById('import-file-input');
 
   toggleBtn.addEventListener('click', ()=>{
-    const nowHidden = panel.classList.toggle('hidden');
-    if(!nowHidden){
-      exportArea.value = JSON.stringify({plan, logs, completions, durations}, null, 2);
-    }
+    panel.classList.toggle('hidden');
   });
 
-  document.getElementById('copy-export-btn').addEventListener('click', async ()=>{
-    exportArea.value = JSON.stringify({plan, logs, completions, durations}, null, 2);
-    exportArea.focus();
-    exportArea.select();
-    exportArea.setSelectionRange(0, 999999);
-    try{
-      await navigator.clipboard.writeText(exportArea.value);
-      showToast('Copiado! Guarde esse texto em algum lugar seguro.');
-    }catch(e){
-      showToast('Não deu pra copiar sozinho — o texto já está selecionado, toque em copiar manualmente.');
-    }
+  document.getElementById('download-backup-btn').addEventListener('click', ()=>{
+    const data = JSON.stringify({plan, logs, completions, durations}, null, 2);
+    const blob = new Blob([data], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `vamo-backup-${todayStr()}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('Arquivo baixado. Guarde ele em algum lugar seguro.');
   });
 
-  document.getElementById('import-btn').addEventListener('click', async ()=>{
-    const raw = importArea.value.trim();
-    if(!raw){ showToast('Cole o texto exportado antes de importar.'); return; }
-    try{
-      const data = JSON.parse(raw);
-      if(!data.plan || !data.logs) throw new Error('formato inválido');
-      plan = data.plan;
-      logs = data.logs;
-      completions = data.completions || {};
-      durations = data.durations || {};
-      await savePlan();
-      await saveLogs();
-      saveCompletions();
-      saveDurations();
-      openDays.clear(); openLibrary.clear(); openHistory.clear();
-      Object.keys(pendingRows).forEach(k => delete pendingRows[k]);
-      render();
-      importArea.value = '';
-      showToast('Dados importados com sucesso.');
-    }catch(e){
-      showToast('Não consegui importar — confira se colou o texto certo, sem cortar nada.');
-    }
+  document.getElementById('import-file-btn').addEventListener('click', ()=>{
+    fileInput.value = '';
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', ()=>{
+    const file = fileInput.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = async ()=>{
+      try{
+        const data = JSON.parse(reader.result);
+        if(!data.plan || !data.logs) throw new Error('formato inválido');
+        plan = data.plan;
+        logs = data.logs;
+        completions = data.completions || {};
+        durations = data.durations || {};
+        await savePlan();
+        await saveLogs();
+        saveCompletions();
+        saveDurations();
+        openLibrary.clear(); openHistory.clear(); openExercises.clear();
+        Object.keys(pendingRows).forEach(k => delete pendingRows[k]);
+        activeDayKey = null;
+        render();
+        showToast('Backup importado com sucesso.');
+      }catch(e){
+        showToast('Não consegui ler esse arquivo — confira se é um backup válido do Vamo!.');
+      }
+    };
+    reader.onerror = ()=> showToast('Não consegui ler esse arquivo.');
+    reader.readAsText(file);
   });
 }
 
