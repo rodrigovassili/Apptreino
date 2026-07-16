@@ -161,13 +161,10 @@
   .remove-row-btn:hover{color:var(--danger);}
   .diff-pills{display:flex;gap:3px;flex-shrink:0;}
   .diff-pills.hidden{display:none;}
-  .diff-pill{border-radius:999px;border:1.3px solid var(--line);background:none;font-family:var(--mono);font-size:8.5px;font-weight:600;padding:6px 7px;color:var(--text-muted);letter-spacing:.2px;cursor:pointer;}
-  .diff-pill.facil{border-color:#5AB478;color:color-mix(in srgb, #5AB478 70%, var(--text-muted));}
-  .diff-pill.facil.active{color:#5AB478;border-width:2px;}
-  .diff-pill.medio{border-color:#FF9F40;color:color-mix(in srgb, #FF9F40 70%, var(--text-muted));}
-  .diff-pill.medio.active{color:#FF9F40;border-width:2px;}
-  .diff-pill.dificil{border-color:var(--danger);color:color-mix(in srgb, var(--danger) 70%, var(--text-muted));}
-  .diff-pill.dificil.active{color:var(--danger);border-width:2px;}
+  .diff-pill{border-radius:999px;border:1.3px solid transparent;background:var(--card-bg2);font-family:var(--mono);font-size:8.5px;font-weight:600;padding:6px 8px;color:var(--text-muted);letter-spacing:.2px;cursor:pointer;}
+  .diff-pill.facil.active{background:#5AB478;color:#06210F;}
+  .diff-pill.medio.active{background:#FF9F40;color:#2B1607;}
+  .diff-pill.dificil.active{background:var(--danger);color:#2B0808;}
   .empty-rows-hint{font-family:var(--mono);font-size:11.5px;color:var(--text-muted);margin:2px 0 10px;}
   .add-row-btn{display:inline-flex;align-items:center;gap:5px;background:none;border:none;color:var(--accent);font-family:var(--mono);font-size:11px;padding:6px 0;margin-top:2px;cursor:pointer;}
   .save-indicator{font-family:var(--mono);font-size:9.5px;color:var(--accent);opacity:0;transition:opacity .3s ease;margin-left:7px;vertical-align:middle;}
@@ -333,11 +330,12 @@
     0%,100%{transform:scaleY(1) scaleX(1) skewX(0deg);}
     50%{transform:scaleY(1.1) scaleX(0.95) skewX(-2deg);}
   }
-  .nav-timer-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--accent);transition:color .2s;}
-  .nav-timer-btn.idle{color:var(--text-muted);}
-  .nav-timer-btn .icon{width:15px;height:15px;}
-  .nav-timer-btn span{font-family:var(--mono);font-size:10.5px;font-weight:700;}
-  .nav-timer-btn.alert{animation:timer-alert 0.6s ease 3;}
+  .fab-wrap{position:fixed;inset:0;max-width:520px;margin:0 auto;pointer-events:none;z-index:45;}
+  .rest-fab{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(74px + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:60px;height:60px;border-radius:50%;background:var(--accent);border:none;color:#14171C;box-shadow:0 10px 26px rgba(0,0,0,.4);cursor:pointer;pointer-events:auto;transition:background .2s,color .2s;}
+  .rest-fab.idle{background:var(--card-bg2);color:var(--text-muted);}
+  .rest-fab .icon{width:16px;height:16px;}
+  .rest-fab span{font-family:var(--mono);font-size:11px;font-weight:700;}
+  .rest-fab.alert{animation:timer-alert 0.6s ease 3;}
 
   .rest-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:60;padding:20px;}
   .rest-overlay.show{opacity:1;pointer-events:auto;}
@@ -467,6 +465,13 @@
   </div>
 </div>
 
+<div class="fab-wrap">
+  <button class="rest-fab idle" id="rest-fab" data-action="open-rest-focus">
+    <svg class="icon" viewBox="0 0 24 24"><path d="M6 4l12 8-12 8V4z"/></svg>
+    <span class="rest-time-value">01:30</span>
+  </button>
+</div>
+
 <div class="rest-overlay" id="rest-overlay">
   <div class="rest-focus-card" id="rest-focus-card">
     <div class="rest-focus-label">Descanso</div>
@@ -489,10 +494,6 @@
     </button>
   </div>
   <button class="nav-btn" data-action="switch-tab" data-tab="stats">Estatística</button>
-  <button class="nav-btn nav-timer-btn idle" id="nav-timer-btn" data-action="open-rest-focus">
-    <svg class="icon" viewBox="0 0 24 24"><path d="M6 4l12 8-12 8V4z"/></svg>
-    <span class="rest-time-value">01:30</span>
-  </button>
 </nav>
 
 <script>
@@ -1939,8 +1940,8 @@ function toggleTotal(){
     totalStart = Date.now();
     totalRunning = true;
   }
-  const navTimerBtn = document.getElementById('nav-timer-btn');
-  if(navTimerBtn) navTimerBtn.classList.toggle('idle', !totalRunning);
+  const restFab = document.getElementById('rest-fab');
+  if(restFab) restFab.classList.toggle('idle', !totalRunning);
   if(!totalRunning){
     const overlay = document.getElementById('rest-overlay');
     if(overlay) overlay.classList.remove('show');
@@ -1986,7 +1987,7 @@ function resetRest(){
   restRunning = false;
   clearInterval(restInterval);
   restRemaining = restDefault;
-  document.querySelectorAll('.nav-timer-btn, .rest-focus-card').forEach(el=> el.classList.remove('alert'));
+  document.querySelectorAll('.rest-fab, .rest-focus-card').forEach(el=> el.classList.remove('alert'));
   updateRestDisplay();
 }
 function adjustRest(delta){
@@ -2000,7 +2001,7 @@ function adjustRest(delta){
   updateRestDisplay();
 }
 function onRestFinished(){
-  document.querySelectorAll('.nav-timer-btn, .rest-focus-card').forEach(el=>{
+  document.querySelectorAll('.rest-fab, .rest-focus-card').forEach(el=>{
     el.classList.add('alert');
     setTimeout(()=>el.classList.remove('alert'), 2000);
   });
@@ -2017,10 +2018,10 @@ function updateTimerButtons(){
 }
 
 function attachRestFocusEvents(){
-  const navTimerBtn = document.getElementById('nav-timer-btn');
+  const restFab = document.getElementById('rest-fab');
   const overlay = document.getElementById('rest-overlay');
-  if(!navTimerBtn || !overlay) return;
-  navTimerBtn.addEventListener('click', ()=> overlay.classList.add('show'));
+  if(!restFab || !overlay) return;
+  restFab.addEventListener('click', ()=> overlay.classList.add('show'));
   overlay.addEventListener('click', (e)=>{
     if(e.target===overlay) overlay.classList.remove('show');
   });
