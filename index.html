@@ -150,13 +150,14 @@
   .exercise-body-inner{overflow:hidden;}
   .exercise-body{padding:10px 0 0 38px;}
 
-  .set-row{display:flex;align-items:center;gap:5px;margin-bottom:8px;flex-wrap:nowrap;}
+  .set-row{display:flex;align-items:baseline;gap:5px;padding:10px 0;border-bottom:1px solid var(--line);flex-wrap:nowrap;}
+  .set-row:last-of-type{border-bottom:none;}
   .set-num{flex-shrink:0;width:11px;font-family:var(--mono);font-size:10px;color:var(--text-muted);text-align:center;}
-  .field{display:flex;align-items:baseline;background:var(--card-bg);border-radius:8px;padding:8px 7px;flex-shrink:0;}
-  .field input{background:none;border:none;color:var(--text);font-family:var(--mono);font-size:14px;width:26px;text-align:right;padding:0;}
-  .field input:focus{outline:none;}
-  .field input::placeholder{color:var(--text-muted);opacity:.6;}
-  .field-unit{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);margin-left:2px;flex-shrink:0;}
+  .set-field{display:flex;align-items:baseline;flex-shrink:0;border-bottom:1px solid var(--line);padding-bottom:2px;transition:border-color .15s ease;}
+  .set-field:focus-within{border-color:var(--accent);}
+  .set-field input{background:none;border:none;outline:none;color:var(--text);font-family:var(--display);font-weight:700;font-size:16px;width:28px;text-align:right;padding:0;}
+  .set-field input::placeholder{color:var(--text-muted);opacity:.5;}
+  .set-field-unit{font-family:var(--mono);font-size:10px;color:var(--text-muted);margin-left:3px;flex-shrink:0;}
   .remove-row-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;padding:3px;flex-shrink:0;display:flex;align-items:center;margin-left:auto;}
   .remove-row-btn:hover{color:var(--danger);}
   .diff-pills{display:flex;gap:3px;flex-shrink:0;}
@@ -330,24 +331,30 @@
     0%,100%{transform:scaleY(1) scaleX(1) skewX(0deg);}
     50%{transform:scaleY(1.1) scaleX(0.95) skewX(-2deg);}
   }
-  .fab-wrap{position:fixed;inset:0;max-width:520px;margin:0 auto;pointer-events:none;z-index:45;}
-  .rest-fab{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(74px + env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:60px;height:60px;border-radius:50%;background:var(--accent);border:none;color:#14171C;box-shadow:0 10px 26px rgba(0,0,0,.4);cursor:pointer;pointer-events:auto;transition:background .2s,color .2s;}
-  .rest-fab.idle{background:var(--card-bg2);color:var(--text-muted);}
-  .rest-fab .icon{width:16px;height:16px;}
-  .rest-fab span{font-family:var(--mono);font-size:11px;font-weight:700;}
-  .rest-fab.alert{animation:timer-alert 0.6s ease 3;}
+  .rest-pill-wrap{position:sticky;top:0;z-index:8;background:var(--bg);padding-bottom:10px;margin-bottom:6px;}
+  .rest-pill{display:inline-flex;align-items:center;gap:7px;background:var(--card-bg);border:1.3px solid var(--accent);border-radius:20px;padding:8px 14px;cursor:pointer;transition:opacity .2s;}
+  .rest-pill.idle{border-color:var(--line);opacity:.7;}
+  .rest-pill-icon{display:flex;flex-shrink:0;color:var(--accent);}
+  .rest-pill-icon .icon{width:14px;height:14px;}
+  .rest-pill.idle .rest-pill-icon{color:var(--text-muted);}
+  .rest-pill-text{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--accent);}
+  .rest-pill.idle .rest-pill-text{color:var(--text-muted);}
+  .rest-pill.alert{animation:timer-alert 0.6s ease 3;}
 
   .rest-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:60;padding:20px;}
   .rest-overlay.show{opacity:1;pointer-events:auto;}
   .rest-focus-card{background:var(--card-bg);border-radius:24px;padding:28px 26px calc(24px + env(safe-area-inset-bottom));text-align:center;width:100%;max-width:300px;transform:scale(.92);transition:transform .25s ease;box-shadow:0 20px 60px rgba(0,0,0,.4);}
   .rest-overlay.show .rest-focus-card{transform:scale(1);}
   .rest-focus-card.alert{animation:timer-alert 0.6s ease 3;}
-  .rest-focus-label{font-family:var(--mono);font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}
-  .rest-focus-time{font-family:var(--display);font-size:52px;font-weight:800;line-height:1;margin-bottom:22px;}
+  .rest-focus-label{font-family:var(--mono);font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:18px;}
+  .rest-ring{width:190px;height:190px;border-radius:50%;margin:0 auto 22px;display:flex;align-items:center;justify-content:center;background:conic-gradient(var(--accent) calc(var(--pct,50)*1%), var(--bg) 0);cursor:pointer;transition:background .2s linear;}
+  .rest-ring-inner{width:158px;height:158px;border-radius:50%;background:var(--card-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;}
+  .rest-focus-time{font-family:var(--display);font-size:42px;font-weight:800;line-height:1;color:var(--text);}
   .rest-time-value.warn{color:var(--accent);animation:pulse-dot 1s ease-in-out infinite;}
-  .rest-focus-ctrls{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:16px;}
-  .rest-focus-btn{width:48px;height:48px;border-radius:50%;background:var(--bg);border:none;color:var(--text);font-family:var(--mono);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;cursor:pointer;}
-  .rest-focus-btn.play{width:64px;height:64px;background:var(--accent);color:#14171C;font-size:20px;}
+  .ring-play-icon{width:22px;height:22px;color:var(--accent);}
+  .rest-focus-ctrls{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px;}
+  .rest-focus-btn{flex:1;padding:12px 8px;border-radius:14px;background:var(--bg);border:none;color:var(--text);font-family:var(--mono);font-size:12px;font-weight:600;cursor:pointer;}
+  .rest-focus-btn.skip{color:var(--danger);}
   .rest-close-hint{font-family:var(--mono);font-size:10px;color:var(--text-muted);}
 
   .generator-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(2px);z-index:70;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s ease;}
@@ -465,23 +472,20 @@
   </div>
 </div>
 
-<div class="fab-wrap">
-  <button class="rest-fab idle" id="rest-fab" data-action="open-rest-focus">
-    <svg class="icon" viewBox="0 0 24 24"><path d="M6 4l12 8-12 8V4z"/></svg>
-    <span class="rest-time-value">01:30</span>
-  </button>
-</div>
-
 <div class="rest-overlay" id="rest-overlay">
   <div class="rest-focus-card" id="rest-focus-card">
     <div class="rest-focus-label">Descanso</div>
-    <div class="rest-focus-time rest-time-value">01:30</div>
-    <div class="rest-focus-ctrls">
-      <button class="rest-focus-btn" data-action="rest-minus">−30s</button>
-      <button class="rest-focus-btn play inline-rest-toggle" data-action="rest-toggle">▶</button>
-      <button class="rest-focus-btn" data-action="rest-plus">+30s</button>
+    <div class="rest-ring" id="rest-ring" data-action="rest-toggle">
+      <div class="rest-ring-inner">
+        <span class="rest-focus-time rest-time-value">01:30</span>
+        <svg class="icon ring-play-icon inline-rest-toggle-icon" viewBox="0 0 24 24" id="ring-play-icon"><path d="M6 4l12 8-12 8V4z"/></svg>
+      </div>
     </div>
-    <div class="rest-close-hint">toque fora pra fechar</div>
+    <div class="rest-focus-ctrls">
+      <button class="rest-focus-btn" data-action="rest-plus">+30s</button>
+      <button class="rest-focus-btn skip" data-action="rest-skip">Pular</button>
+    </div>
+    <div class="rest-close-hint">toque fora pra fechar — continua correndo</div>
   </div>
 </div>
 
@@ -870,6 +874,7 @@ const ICONS = {
   activity: '<svg class="icon" viewBox="0 0 24 24"><path d="M3 12h4l2-8 4 16 2-8h6"/></svg>',
   pencil: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
   flame: '<svg class="icon" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 17c1 0 2-1 2-2 0-.6-.2-1-.5-1.5C11 12 10 10.5 10 8.5 10 5 13 3 13 3s0 3 2 5c2.5 2.5 3 5 3 7a5 5 0 0 1-10 0c0-1 .3-2 .8-3"/></svg>',
+  clock: '<svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
   user: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>',
   play: '<svg class="icon" viewBox="0 0 24 24"><path d="M6 4l12 8-12 8V4z"/></svg>',
   download: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 3v13"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>',
@@ -1342,13 +1347,13 @@ function renderExercise(dayKey, ex){
   const rowsHtml = rows.map((row, idx) => `
     <div class="set-row">
       <span class="set-num">${idx+1}</span>
-      <div class="field">
+      <div class="set-field">
         <input type="number" inputmode="decimal" step="0.5" placeholder="0" class="input-weight" data-exid="${ex.id}" data-rowidx="${idx}" value="${row.weight}">
-        <span class="field-unit">kg</span>
+        <span class="set-field-unit">kg</span>
       </div>
-      <div class="field">
+      <div class="set-field">
         <input type="number" inputmode="numeric" placeholder="0" class="input-reps" data-exid="${ex.id}" data-rowidx="${idx}" value="${row.reps}">
-        <span class="field-unit">reps</span>
+        <span class="set-field-unit">reps</span>
       </div>
       <div class="diff-pills ${row.reps===''?'hidden':''}" data-exid="${ex.id}" data-rowidx="${idx}">
         <button class="diff-pill facil ${row.difficulty==='facil'?'active':''}" data-action="set-difficulty" data-exid="${ex.id}" data-rowidx="${idx}" data-diff="facil">Fácil</button>
@@ -1458,6 +1463,12 @@ function renderDayDetail(day){
           ? `<input class="day-title-input detail-title-input" data-day="${day.key}" value="${data.title}" placeholder="Nome do treino">`
           : `<h2 class="detail-title-text">${data.title}</h2><button class="edit-title-btn" data-action="edit-day-title" data-day="${day.key}" title="Editar nome" aria-label="Editar nome">${ICONS.pencil}</button>`}
         ${workoutControlBtn}
+      </div>
+      <div class="rest-pill-wrap">
+        <button class="rest-pill idle" data-action="open-rest-focus">
+          <span class="rest-pill-icon">${ICONS.clock}</span>
+          <span class="rest-pill-text">Descanso: 01:30</span>
+        </button>
       </div>
       ${isCardioDay ? '' : exercisesHtml}
       ${dayTypeButtons}
@@ -1596,6 +1607,7 @@ function render(){
   renderEvolutionChart();
   renderProfileView();
   updateHeroGreeting();
+  updateRestDisplay();
   updateFlameNav();
 }
 
@@ -1700,11 +1712,14 @@ function attachEvents(){
     else if(action==='rest-reset'){
       resetRest();
     }
-    else if(action==='rest-minus'){
-      adjustRest(-30);
-    }
     else if(action==='rest-plus'){
       adjustRest(30);
+    }
+    else if(action==='rest-skip'){
+      skipRest();
+    }
+    else if(action==='open-rest-focus'){
+      document.getElementById('rest-overlay').classList.add('show');
     }
     else if(action==='toggle-day-done'){
       toggleDayDone();
@@ -1940,8 +1955,6 @@ function toggleTotal(){
     totalStart = Date.now();
     totalRunning = true;
   }
-  const restFab = document.getElementById('rest-fab');
-  if(restFab) restFab.classList.toggle('idle', !totalRunning);
   if(!totalRunning){
     const overlay = document.getElementById('rest-overlay');
     if(overlay) overlay.classList.remove('show');
@@ -1968,6 +1981,16 @@ function updateRestDisplay(){
     el.textContent = fmtTime(remaining);
     el.classList.toggle('warn', isWarn);
   });
+  const baseDur = restDefault>0 ? restDefault : 60;
+  const pct = Math.max(0, Math.min(100, (remaining/baseDur)*100));
+  const ring = document.getElementById('rest-ring');
+  if(ring) ring.style.setProperty('--pct', pct.toFixed(1));
+  document.querySelectorAll('.rest-pill').forEach(pill=>{
+    pill.classList.toggle('idle', !restRunning);
+  });
+  document.querySelectorAll('.rest-pill-text').forEach(el=>{
+    el.textContent = restRunning ? `Descanso: ${fmtTime(remaining)}` : `Descanso: ${fmtTime(restRemaining)}`;
+  });
   updateTimerButtons();
 }
 function toggleRest(){
@@ -1987,7 +2010,13 @@ function resetRest(){
   restRunning = false;
   clearInterval(restInterval);
   restRemaining = restDefault;
-  document.querySelectorAll('.rest-fab, .rest-focus-card').forEach(el=> el.classList.remove('alert'));
+  document.querySelectorAll('.rest-pill, .rest-focus-card').forEach(el=> el.classList.remove('alert'));
+  updateRestDisplay();
+}
+function skipRest(){
+  restRunning = false;
+  clearInterval(restInterval);
+  restRemaining = 0;
   updateRestDisplay();
 }
 function adjustRest(delta){
@@ -2001,7 +2030,7 @@ function adjustRest(delta){
   updateRestDisplay();
 }
 function onRestFinished(){
-  document.querySelectorAll('.rest-fab, .rest-focus-card').forEach(el=>{
+  document.querySelectorAll('.rest-pill, .rest-focus-card').forEach(el=>{
     el.classList.add('alert');
     setTimeout(()=>el.classList.remove('alert'), 2000);
   });
@@ -2012,16 +2041,17 @@ function onRestFinished(){
 }
 
 function updateTimerButtons(){
-  document.querySelectorAll('.inline-rest-toggle').forEach(btn=>{
-    btn.textContent = restRunning ? '⏸' : '▶';
-  });
+  const icon = document.getElementById('ring-play-icon');
+  if(icon){
+    icon.innerHTML = restRunning
+      ? '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>'
+      : '<path d="M6 4l12 8-12 8V4z"/>';
+  }
 }
 
 function attachRestFocusEvents(){
-  const restFab = document.getElementById('rest-fab');
   const overlay = document.getElementById('rest-overlay');
-  if(!restFab || !overlay) return;
-  restFab.addEventListener('click', ()=> overlay.classList.add('show'));
+  if(!overlay) return;
   overlay.addEventListener('click', (e)=>{
     if(e.target===overlay) overlay.classList.remove('show');
   });
@@ -2030,8 +2060,8 @@ function attachRestFocusEvents(){
     if(!el) return;
     const action = el.dataset.action;
     if(action==='rest-toggle') toggleRest();
-    else if(action==='rest-minus') adjustRest(-30);
     else if(action==='rest-plus') adjustRest(30);
+    else if(action==='rest-skip') skipRest();
   });
 }
 
