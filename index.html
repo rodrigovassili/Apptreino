@@ -320,6 +320,18 @@
   @keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:0.3;}}
   .inline-rest-controls{display:flex;align-items:center;justify-content:center;gap:8px;}
 
+  .flame-slot{flex:1;display:flex;justify-content:center;align-items:center;}
+  .flame-nav-btn{background:none;border:none;padding:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .flame-nav-icon{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transform-origin:50% 95%;transition:width .3s ease,height .3s ease,color .3s ease;}
+  .flame-nav-btn.lvl-0 .flame-nav-icon{width:16px;height:16px;color:var(--text-muted);opacity:.5;animation:none;}
+  .flame-nav-btn.lvl-1 .flame-nav-icon{width:20px;height:20px;color:var(--accent);opacity:.6;animation:flame-lick 3.2s ease-in-out infinite;}
+  .flame-nav-btn.lvl-2 .flame-nav-icon{width:25px;height:25px;color:var(--accent);animation:flame-lick 2.2s ease-in-out infinite;filter:drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 45%, transparent));}
+  .flame-nav-btn.lvl-3 .flame-nav-icon{width:30px;height:30px;color:var(--accent);animation:flame-lick 1.6s ease-in-out infinite;filter:drop-shadow(0 0 9px color-mix(in srgb, var(--accent) 60%, transparent));}
+  .flame-nav-btn.lvl-4 .flame-nav-icon{width:36px;height:36px;color:var(--accent);animation:flame-lick 1.3s ease-in-out infinite;filter:drop-shadow(0 0 13px color-mix(in srgb, var(--accent) 75%, transparent));}
+  @keyframes flame-lick{
+    0%,100%{transform:scaleY(1) scaleX(1) skewX(0deg);}
+    50%{transform:scaleY(1.1) scaleX(0.95) skewX(-2deg);}
+  }
   .nav-timer-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--accent);transition:color .2s;}
   .nav-timer-btn.idle{color:var(--text-muted);}
   .nav-timer-btn .icon{width:15px;height:15px;}
@@ -408,6 +420,11 @@
 <nav class="bottom-nav">
   <button class="nav-btn" data-action="switch-tab" data-tab="profile">Perfil</button>
   <button class="nav-btn active" data-action="switch-tab" data-tab="treinos">Treinos</button>
+  <div class="flame-slot">
+    <button class="flame-nav-btn lvl-0" id="flame-nav-btn" data-action="open-streak" title="Ver streak" aria-label="Ver streak">
+      <svg class="icon flame-nav-icon" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 17c1 0 2-1 2-2 0-.6-.2-1-.5-1.5C11 12 10 10.5 10 8.5 10 5 13 3 13 3s0 3 2 5c2.5 2.5 3 5 3 7a5 5 0 0 1-10 0c0-1 .3-2 .8-3"/></svg>
+    </button>
+  </div>
   <button class="nav-btn" data-action="switch-tab" data-tab="stats">Estatística</button>
   <button class="nav-btn nav-timer-btn idle" id="nav-timer-btn" data-action="open-rest-focus">
     <svg class="icon" viewBox="0 0 24 24"><path d="M6 4l12 8-12 8V4z"/></svg>
@@ -961,10 +978,23 @@ function attachNavEvents(){
   const nav = document.querySelector('.bottom-nav');
   if(!nav) return;
   nav.addEventListener('click', (e)=>{
-    const el = e.target.closest('[data-action="switch-tab"]');
-    if(!el) return;
-    switchTab(el.dataset.tab);
+    const tabEl = e.target.closest('[data-action="switch-tab"]');
+    if(tabEl){ switchTab(tabEl.dataset.tab); return; }
+    const flameEl = e.target.closest('[data-action="open-streak"]');
+    if(flameEl){ switchTab('stats'); }
   });
+}
+function updateFlameNav(){
+  const btn = document.getElementById('flame-nav-btn');
+  if(!btn || !completions || !plan) return;
+  const streak = computeStreak();
+  let lvl = 0;
+  if(streak >= 14) lvl = 4;
+  else if(streak >= 7) lvl = 3;
+  else if(streak >= 3) lvl = 2;
+  else if(streak >= 1) lvl = 1;
+  btn.className = 'flame-nav-btn lvl-' + lvl;
+  btn.title = streak > 0 ? `${streak} dia${streak===1?'':'s'} seguido${streak===1?'':'s'} — ver streak` : 'Ver streak';
 }
 
 function renderExercise(dayKey, ex){
@@ -1219,6 +1249,7 @@ function render(){
   renderEvolutionChart();
   renderProfileView();
   updateHeroGreeting();
+  updateFlameNav();
 }
 
 function attachEvents(){
