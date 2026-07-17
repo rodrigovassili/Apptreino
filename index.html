@@ -73,6 +73,7 @@
 
   .bottom-nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card-bg);backdrop-filter:blur(6px);border-top:1px solid var(--line);z-index:40;padding-bottom:max(env(safe-area-inset-bottom), 4px);}
   .nav-btn{flex:1;background:none;border:none;border-top:2px solid transparent;color:var(--text-muted);font-family:var(--mono);font-size:11px;letter-spacing:0.5px;text-transform:uppercase;padding:14px 4px 12px;cursor:pointer;}
+  .nav-btn#nav-timer-btn.running{color:var(--accent);}
   .nav-btn.active{color:var(--accent);border-top-color:var(--accent);}
 
   .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin:0 0 6px;}
@@ -392,6 +393,32 @@
   .gen-use-btn{display:block;width:100%;background:var(--accent);border:none;color:#14171C;border-radius:14px;padding:14px;font-family:var(--display);font-weight:700;font-size:14px;margin-top:16px;cursor:pointer;}
   .gen-regenerate-link{display:block;width:100%;text-align:center;margin-top:10px;background:none;border:none;color:var(--text-muted);font-family:var(--mono);font-size:11px;cursor:pointer;}
 
+  .week-card{background:var(--card-bg);border-radius:18px;padding:16px 14px;margin-bottom:6px;}
+  .week-card-head{display:flex;align-items:center;gap:10px;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid var(--line);}
+  .week-card-icon{width:32px;height:32px;border-radius:50%;background:var(--card-bg2);display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;}
+  .week-card-icon .icon{width:15px;height:15px;}
+  .week-card-title{font-family:var(--display);font-size:13.5px;font-weight:700;}
+  .week-card-row{display:flex;justify-content:space-between;}
+  .day-col{display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;}
+  .day-col-label{font-family:var(--mono);font-size:9px;color:var(--text-muted);}
+  .day-col-check{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;color:transparent;}
+  .day-col-check .icon{width:13px;height:13px;}
+  .day-col-check.done{background:var(--accent);border-color:var(--accent);color:#14171C;}
+  .day-col-dot{width:5px;height:5px;border-radius:50%;background:transparent;}
+  .day-col-dot.today{background:var(--accent);}
+
+  .today-hero-card{background:var(--card-bg);border-radius:18px;padding:18px;}
+  .today-hero-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+  .today-hero-tag{font-family:var(--mono);font-size:9.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
+  .today-hero-title{font-family:var(--display);font-size:19px;font-weight:800;margin-top:3px;}
+  .today-hero-badge{width:32px;height:32px;border-radius:50%;background:var(--card-bg2);display:flex;align-items:center;justify-content:center;color:var(--accent);font-family:var(--mono);font-size:9.5px;font-weight:700;flex-shrink:0;}
+  .today-hero-list{display:flex;flex-direction:column;gap:9px;margin-bottom:16px;}
+  .today-hero-ex{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11.5px;color:var(--text);}
+  .today-hero-ex .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+  .today-hero-rest{font-family:var(--mono);font-size:12px;color:var(--text-muted);margin:0 0 4px;line-height:1.6;}
+  .today-hero-btn{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;background:var(--accent);color:#14171C;border:none;border-radius:14px;padding:13px;font-family:var(--display);font-weight:700;font-size:13.5px;cursor:pointer;}
+  .today-hero-btn .icon{width:14px;height:14px;transform:rotate(-90deg);}
+
   .welcome-card{background:linear-gradient(155deg, color-mix(in srgb, var(--accent) 14%, var(--card-bg)), var(--card-bg));border:1px solid color-mix(in srgb, var(--accent) 30%, transparent);border-radius:20px;padding:20px;margin-bottom:16px;text-align:center;}
   .welcome-icon{width:44px;height:44px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;color:#14171C;}
   .welcome-title{font-family:var(--display);font-size:15.5px;font-weight:700;margin-bottom:6px;}
@@ -464,6 +491,7 @@
         </div>
       </div>
       <div class="rest-focus-ctrls">
+        <button class="rest-focus-btn" data-action="rest-minus">−30s</button>
         <button class="rest-focus-btn" data-action="rest-plus">+30s</button>
         <button class="rest-focus-btn skip" data-action="rest-skip">Pular</button>
       </div>
@@ -483,7 +511,7 @@
 
 <nav class="bottom-nav">
   <button class="nav-btn active" data-action="switch-tab" data-tab="treinos">Treinos</button>
-  <button class="nav-btn" data-action="switch-tab" data-tab="timer">Timer</button>
+  <button class="nav-btn" id="nav-timer-btn" data-action="switch-tab" data-tab="timer"><span id="nav-timer-label">Timer</span></button>
   <button class="nav-btn" data-action="switch-tab" data-tab="stats">Estatística</button>
 </nav>
 
@@ -1563,6 +1591,61 @@ function attachProfileEvents(){
   }, true);
 }
 
+function renderWeekStrip(){
+  if(isPlanEmpty()) return '';
+  const today = todayKey();
+  const cols = DAYS.map(d=>{
+    const start = getWeekStart(new Date());
+    const idx = DAYS.findIndex(x=>x.key===d.key);
+    const dateForDay = new Date(start);
+    dateForDay.setDate(start.getDate()+idx);
+    const key = fmtDateKey(dateForDay.getFullYear(), dateForDay.getMonth(), dateForDay.getDate());
+    const done = !!completions[key];
+    return `
+      <div class="day-col" data-action="open-day" data-day="${d.key}">
+        <span class="day-col-label">${d.badge}</span>
+        <div class="day-col-check ${done?'done':''}">${done ? ICONS.check : ''}</div>
+        <div class="day-col-dot ${d.key===today?'today':''}"></div>
+      </div>
+    `;
+  }).join('');
+  return `
+    <div class="week-card">
+      <div class="week-card-head">
+        <div class="week-card-icon">${ICONS.flame}</div>
+        <span class="week-card-title">Treinos na semana</span>
+      </div>
+      <div class="week-card-row">${cols}</div>
+    </div>
+  `;
+}
+function renderTodayHero(){
+  if(isPlanEmpty()) return '';
+  const key = todayKey();
+  const data = plan[key];
+  const day = DAYS.find(d=>d.key===key);
+  const isRest = !isTrainingDay(key);
+  return `
+    <p class="section-title" style="margin:18px 0 12px;">Treino de hoje</p>
+    <div class="today-hero-card">
+      <div class="today-hero-top">
+        <div>
+          <div class="today-hero-tag">${day.label} · Hoje</div>
+          <div class="today-hero-title">${data.title}</div>
+        </div>
+        <div class="today-hero-badge">${day.badge}</div>
+      </div>
+      ${isRest
+        ? `<p class="today-hero-rest">Hoje é dia de descanso. Aproveita pra recuperar. 💤</p>`
+        : `<div class="today-hero-list">
+            ${data.exercises.map(ex=>`<div class="today-hero-ex"><span class="dot"></span>${ex.name}</div>`).join('')}
+          </div>
+          <button class="today-hero-btn" data-action="start-today-workout">Iniciar treino${ICONS.chevron}</button>`
+      }
+    </div>
+  `;
+}
+
 function render(){
   const container = document.getElementById('days-container');
   if(activeDayKey && plan[activeDayKey]){
@@ -1577,7 +1660,7 @@ function render(){
         <button class="welcome-btn" data-action="open-generator">Montar meu treino</button>
       </div>
     ` : '';
-    container.innerHTML = welcomeHtml + DAYS.map(renderDayRow).join('');
+    container.innerHTML = welcomeHtml + renderWeekStrip() + renderTodayHero() + '<p class="section-title" style="margin:22px 0 12px;">Semana completa</p>' + DAYS.map(renderDayRow).join('');
   }
   renderCalendar();
   renderStreakCard();
@@ -1598,6 +1681,12 @@ function attachEvents(){
 
     if(action==='open-day'){
       activeDayKey = el.dataset.day;
+      render();
+      window.scrollTo(0,0);
+    }
+    else if(action==='start-today-workout'){
+      activeDayKey = todayKey();
+      if(!totalRunning) toggleTotal();
       render();
       window.scrollTo(0,0);
     }
@@ -1955,6 +2044,10 @@ function updateRestDisplay(){
   const pct = Math.max(0, Math.min(100, (remaining/baseDur)*100));
   const ring = document.getElementById('rest-ring');
   if(ring) ring.style.setProperty('--pct', pct.toFixed(1));
+  const navLabel = document.getElementById('nav-timer-label');
+  if(navLabel) navLabel.textContent = restRunning ? fmtTime(remaining) : 'Timer';
+  const navBtn = document.getElementById('nav-timer-btn');
+  if(navBtn) navBtn.classList.toggle('running', restRunning);
   updateTimerButtons();
 }
 function toggleRest(){
@@ -2019,6 +2112,7 @@ function attachTimerViewEvents(){
     if(!el) return;
     const action = el.dataset.action;
     if(action==='rest-toggle') toggleRest();
+    else if(action==='rest-minus') adjustRest(-30);
     else if(action==='rest-plus') adjustRest(30);
     else if(action==='rest-skip') skipRest();
   });
