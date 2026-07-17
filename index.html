@@ -155,7 +155,9 @@
   .set-num{flex-shrink:0;width:11px;font-family:var(--mono);font-size:10px;color:var(--text-muted);text-align:center;}
   .set-field{display:flex;align-items:baseline;flex-shrink:0;border-bottom:1px solid var(--line);padding-bottom:2px;transition:border-color .15s ease;}
   .set-field:focus-within{border-color:var(--accent);}
-  .set-field input{background:none;border:none;outline:none;color:var(--text);font-family:var(--display);font-weight:700;font-size:16px;width:28px;text-align:right;padding:0;}
+  .set-field input{background:none;border:none;outline:none;color:var(--text);font-family:var(--display);font-weight:700;font-size:16px;width:28px;text-align:right;padding:0;-moz-appearance:textfield;appearance:textfield;}
+  .set-field input::-webkit-outer-spin-button,
+  .set-field input::-webkit-inner-spin-button{-webkit-appearance:none;appearance:none;margin:0;}
   .set-field input::placeholder{color:var(--text-muted);opacity:.5;}
   .set-field-unit{font-family:var(--mono);font-size:10px;color:var(--text-muted);margin-left:3px;flex-shrink:0;}
   .remove-row-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;padding:3px;flex-shrink:0;display:flex;align-items:center;margin-left:auto;}
@@ -331,31 +333,20 @@
     0%,100%{transform:scaleY(1) scaleX(1) skewX(0deg);}
     50%{transform:scaleY(1.1) scaleX(0.95) skewX(-2deg);}
   }
-  .rest-pill-wrap{position:sticky;top:0;z-index:8;background:var(--bg);padding-bottom:10px;margin-bottom:6px;}
-  .rest-pill{display:inline-flex;align-items:center;gap:7px;background:var(--card-bg);border:1.3px solid var(--accent);border-radius:20px;padding:8px 14px;cursor:pointer;transition:opacity .2s;}
-  .rest-pill.idle{border-color:var(--line);opacity:.7;}
-  .rest-pill-icon{display:flex;flex-shrink:0;color:var(--accent);}
-  .rest-pill-icon .icon{width:14px;height:14px;}
-  .rest-pill.idle .rest-pill-icon{color:var(--text-muted);}
-  .rest-pill-text{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--accent);}
-  .rest-pill.idle .rest-pill-text{color:var(--text-muted);}
-  .rest-pill.alert{animation:timer-alert 0.6s ease 3;}
-
-  .rest-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:60;padding:20px;}
-  .rest-overlay.show{opacity:1;pointer-events:auto;}
-  .rest-focus-card{background:var(--card-bg);border-radius:24px;padding:28px 26px calc(24px + env(safe-area-inset-bottom));text-align:center;width:100%;max-width:300px;transform:scale(.92);transition:transform .25s ease;box-shadow:0 20px 60px rgba(0,0,0,.4);}
-  .rest-overlay.show .rest-focus-card{transform:scale(1);}
-  .rest-focus-card.alert{animation:timer-alert 0.6s ease 3;}
-  .rest-focus-label{font-family:var(--mono);font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:18px;}
-  .rest-ring{width:190px;height:190px;border-radius:50%;margin:0 auto 22px;display:flex;align-items:center;justify-content:center;background:conic-gradient(var(--accent) calc(var(--pct,50)*1%), var(--bg) 0);cursor:pointer;transition:background .2s linear;}
-  .rest-ring-inner{width:158px;height:158px;border-radius:50%;background:var(--card-bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;}
-  .rest-focus-time{font-family:var(--display);font-size:42px;font-weight:800;line-height:1;color:var(--text);}
+  .timer-page{padding-top:8px;text-align:center;}
+  .rest-ring{width:220px;height:220px;border-radius:50%;margin:16px auto 26px;display:flex;align-items:center;justify-content:center;background:conic-gradient(var(--accent) calc(var(--pct,50)*1%), var(--card-bg) 0);cursor:pointer;transition:background .2s linear;}
+  .rest-ring-inner{width:184px;height:184px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;}
+  .rest-focus-time{font-family:var(--display);font-size:48px;font-weight:800;line-height:1;color:var(--text);}
   .rest-time-value.warn{color:var(--accent);animation:pulse-dot 1s ease-in-out infinite;}
-  .ring-play-icon{width:22px;height:22px;color:var(--accent);}
-  .rest-focus-ctrls{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:16px;}
-  .rest-focus-btn{flex:1;padding:12px 8px;border-radius:14px;background:var(--bg);border:none;color:var(--text);font-family:var(--mono);font-size:12px;font-weight:600;cursor:pointer;}
+  .ring-play-icon{width:24px;height:24px;color:var(--accent);}
+  .rest-focus-ctrls{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:18px;max-width:280px;margin-left:auto;margin-right:auto;}
+  .rest-focus-btn{flex:1;padding:13px 8px;border-radius:14px;background:var(--card-bg);border:none;color:var(--text);font-family:var(--mono);font-size:12.5px;font-weight:600;cursor:pointer;}
   .rest-focus-btn.skip{color:var(--danger);}
-  .rest-close-hint{font-family:var(--mono);font-size:10px;color:var(--text-muted);}
+  .timer-page.alert .rest-ring{animation:timer-alert 0.6s ease 3;}
+  .timer-page-hint{font-family:var(--mono);font-size:10.5px;color:var(--text-muted);max-width:260px;margin:0 auto;line-height:1.6;}
+
+  .profile-icon-btn{position:absolute;top:2px;right:44px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card-bg);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .profile-icon-btn .icon{width:16px;height:16px;}
 
   .generator-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(2px);z-index:70;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s ease;}
   .generator-overlay.show{opacity:1;pointer-events:auto;}
@@ -422,6 +413,7 @@
 <div class="app">
   <div class="hero">
     <button class="theme-toggle-btn" id="theme-toggle-btn" title="Trocar tema" aria-label="Trocar tema">◐</button>
+    <button class="profile-icon-btn" data-action="switch-tab" data-tab="profile" title="Perfil" aria-label="Abrir perfil"><svg class="icon" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></button>
     <h1 id="hero-title">Vamo!</h1>
     <p id="hero-subtitle">toque no dia para abrir, monte o treino e registre cada série</p>
   </div>
@@ -461,6 +453,23 @@
       <input type="file" id="import-file-input" accept=".json,application/json" style="display:none;">
     </div>
   </div>
+
+  <div class="view hidden" id="view-timer">
+    <div class="timer-page">
+      <p class="section-title">Descanso</p>
+      <div class="rest-ring" id="rest-ring" data-action="rest-toggle">
+        <div class="rest-ring-inner">
+          <span class="rest-focus-time rest-time-value">01:30</span>
+          <svg class="icon ring-play-icon rest-toggle-icon" viewBox="0 0 24 24" id="ring-play-icon"><path d="M6 4l12 8-12 8V4z"/></svg>
+        </div>
+      </div>
+      <div class="rest-focus-ctrls">
+        <button class="rest-focus-btn" data-action="rest-plus">+30s</button>
+        <button class="rest-focus-btn skip" data-action="rest-skip">Pular</button>
+      </div>
+      <p class="timer-page-hint">Toque no anel pra iniciar ou pausar. Continua contando mesmo se você trocar de aba.</p>
+    </div>
+  </div>
 </div>
 <div id="toast" class="toast"></div>
 
@@ -472,31 +481,9 @@
   </div>
 </div>
 
-<div class="rest-overlay" id="rest-overlay">
-  <div class="rest-focus-card" id="rest-focus-card">
-    <div class="rest-focus-label">Descanso</div>
-    <div class="rest-ring" id="rest-ring" data-action="rest-toggle">
-      <div class="rest-ring-inner">
-        <span class="rest-focus-time rest-time-value">01:30</span>
-        <svg class="icon ring-play-icon inline-rest-toggle-icon" viewBox="0 0 24 24" id="ring-play-icon"><path d="M6 4l12 8-12 8V4z"/></svg>
-      </div>
-    </div>
-    <div class="rest-focus-ctrls">
-      <button class="rest-focus-btn" data-action="rest-plus">+30s</button>
-      <button class="rest-focus-btn skip" data-action="rest-skip">Pular</button>
-    </div>
-    <div class="rest-close-hint">toque fora pra fechar — continua correndo</div>
-  </div>
-</div>
-
 <nav class="bottom-nav">
-  <button class="nav-btn" data-action="switch-tab" data-tab="profile">Perfil</button>
   <button class="nav-btn active" data-action="switch-tab" data-tab="treinos">Treinos</button>
-  <div class="flame-slot">
-    <button class="flame-nav-btn lvl-0" id="flame-nav-btn" data-action="open-streak" title="Ver streak" aria-label="Ver streak">
-      <svg class="icon flame-nav-icon" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 17c1 0 2-1 2-2 0-.6-.2-1-.5-1.5C11 12 10 10.5 10 8.5 10 5 13 3 13 3s0 3 2 5c2.5 2.5 3 5 3 7a5 5 0 0 1-10 0c0-1 .3-2 .8-3"/></svg>
-    </button>
-  </div>
+  <button class="nav-btn" data-action="switch-tab" data-tab="timer">Timer</button>
   <button class="nav-btn" data-action="switch-tab" data-tab="stats">Estatística</button>
 </nav>
 
@@ -1293,7 +1280,7 @@ function attachCalendarEvents(){
 }
 
 function switchTab(tab){
-  ['treinos','stats','profile'].forEach(t=>{
+  ['treinos','stats','profile','timer'].forEach(t=>{
     const view = document.getElementById('view-'+t);
     if(view) view.classList.toggle('hidden', t!==tab);
   });
@@ -1306,13 +1293,9 @@ function switchTab(tab){
   }
 }
 function attachNavEvents(){
-  const nav = document.querySelector('.bottom-nav');
-  if(!nav) return;
-  nav.addEventListener('click', (e)=>{
+  document.addEventListener('click', (e)=>{
     const tabEl = e.target.closest('[data-action="switch-tab"]');
-    if(tabEl){ switchTab(tabEl.dataset.tab); return; }
-    const flameEl = e.target.closest('[data-action="open-streak"]');
-    if(flameEl){ switchTab('stats'); }
+    if(tabEl){ switchTab(tabEl.dataset.tab); }
   });
 }
 function updateFlameNav(){
@@ -1463,12 +1446,6 @@ function renderDayDetail(day){
           ? `<input class="day-title-input detail-title-input" data-day="${day.key}" value="${data.title}" placeholder="Nome do treino">`
           : `<h2 class="detail-title-text">${data.title}</h2><button class="edit-title-btn" data-action="edit-day-title" data-day="${day.key}" title="Editar nome" aria-label="Editar nome">${ICONS.pencil}</button>`}
         ${workoutControlBtn}
-      </div>
-      <div class="rest-pill-wrap">
-        <button class="rest-pill idle" data-action="open-rest-focus">
-          <span class="rest-pill-icon">${ICONS.clock}</span>
-          <span class="rest-pill-text">Descanso: 01:30</span>
-        </button>
       </div>
       ${isCardioDay ? '' : exercisesHtml}
       ${dayTypeButtons}
@@ -1718,9 +1695,6 @@ function attachEvents(){
     else if(action==='rest-skip'){
       skipRest();
     }
-    else if(action==='open-rest-focus'){
-      document.getElementById('rest-overlay').classList.add('show');
-    }
     else if(action==='toggle-day-done'){
       toggleDayDone();
     }
@@ -1955,10 +1929,6 @@ function toggleTotal(){
     totalStart = Date.now();
     totalRunning = true;
   }
-  if(!totalRunning){
-    const overlay = document.getElementById('rest-overlay');
-    if(overlay) overlay.classList.remove('show');
-  }
   render();
 }
 
@@ -1985,12 +1955,6 @@ function updateRestDisplay(){
   const pct = Math.max(0, Math.min(100, (remaining/baseDur)*100));
   const ring = document.getElementById('rest-ring');
   if(ring) ring.style.setProperty('--pct', pct.toFixed(1));
-  document.querySelectorAll('.rest-pill').forEach(pill=>{
-    pill.classList.toggle('idle', !restRunning);
-  });
-  document.querySelectorAll('.rest-pill-text').forEach(el=>{
-    el.textContent = restRunning ? `Descanso: ${fmtTime(remaining)}` : `Descanso: ${fmtTime(restRemaining)}`;
-  });
   updateTimerButtons();
 }
 function toggleRest(){
@@ -2010,7 +1974,7 @@ function resetRest(){
   restRunning = false;
   clearInterval(restInterval);
   restRemaining = restDefault;
-  document.querySelectorAll('.rest-pill, .rest-focus-card').forEach(el=> el.classList.remove('alert'));
+  document.querySelectorAll('.timer-page').forEach(el=> el.classList.remove('alert'));
   updateRestDisplay();
 }
 function skipRest(){
@@ -2030,7 +1994,7 @@ function adjustRest(delta){
   updateRestDisplay();
 }
 function onRestFinished(){
-  document.querySelectorAll('.rest-pill, .rest-focus-card').forEach(el=>{
+  document.querySelectorAll('.timer-page').forEach(el=>{
     el.classList.add('alert');
     setTimeout(()=>el.classList.remove('alert'), 2000);
   });
@@ -2041,21 +2005,16 @@ function onRestFinished(){
 }
 
 function updateTimerButtons(){
-  const icon = document.getElementById('ring-play-icon');
-  if(icon){
-    icon.innerHTML = restRunning
-      ? '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>'
-      : '<path d="M6 4l12 8-12 8V4z"/>';
-  }
+  const path = restRunning
+    ? '<rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/>'
+    : '<path d="M6 4l12 8-12 8V4z"/>';
+  document.querySelectorAll('.rest-toggle-icon').forEach(icon=>{ icon.innerHTML = path; });
 }
 
-function attachRestFocusEvents(){
-  const overlay = document.getElementById('rest-overlay');
-  if(!overlay) return;
-  overlay.addEventListener('click', (e)=>{
-    if(e.target===overlay) overlay.classList.remove('show');
-  });
-  overlay.addEventListener('click', (e)=>{
+function attachTimerViewEvents(){
+  const view = document.getElementById('view-timer');
+  if(!view) return;
+  view.addEventListener('click', (e)=>{
     const el = e.target.closest('[data-action]');
     if(!el) return;
     const action = el.dataset.action;
@@ -2067,7 +2026,7 @@ function attachRestFocusEvents(){
 
 function initTimers(){
   updateRestDisplay();
-  attachRestFocusEvents();
+  attachTimerViewEvents();
 }
 
 </script>
