@@ -72,7 +72,7 @@
   .profile-placeholder{color:var(--text-muted);font-family:var(--mono);font-size:13px;text-align:center;padding:60px 10px;line-height:1.6;}
 
   .bottom-nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card-bg);backdrop-filter:blur(6px);border-top:1px solid var(--line);z-index:40;padding-bottom:max(env(safe-area-inset-bottom), 4px);}
-  .nav-btn{flex:1;background:none;border:none;border-top:2px solid transparent;color:var(--text-muted);font-family:var(--mono);font-size:11px;letter-spacing:0.5px;text-transform:uppercase;padding:14px 4px 12px;cursor:pointer;}
+  .nav-btn{flex:1;background:none;border:none;border-top:2px solid transparent;color:var(--text-muted);font-family:var(--mono);font-size:9.5px;letter-spacing:0.2px;text-transform:uppercase;padding:14px 2px 12px;cursor:pointer;}
   .nav-btn#nav-timer-btn.running{color:var(--accent);}
   .nav-btn.active{color:var(--accent);border-top-color:var(--accent);}
 
@@ -340,9 +340,12 @@
   .rest-focus-time{font-family:var(--display);font-size:48px;font-weight:800;line-height:1;color:var(--text);}
   .rest-time-value.warn{color:var(--accent);animation:pulse-dot 1s ease-in-out infinite;}
   .ring-play-icon{width:24px;height:24px;color:var(--accent);}
-  .rest-focus-ctrls{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:18px;max-width:280px;margin-left:auto;margin-right:auto;}
-  .rest-focus-btn{flex:1;padding:13px 8px;border-radius:14px;background:var(--card-bg);border:none;color:var(--text);font-family:var(--mono);font-size:12.5px;font-weight:600;cursor:pointer;}
-  .rest-focus-btn.skip{color:var(--danger);}
+  .rest-ring-row{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px;}
+  .ring-side-btn{width:46px;height:46px;border-radius:50%;background:var(--card-bg);border:none;color:var(--text);font-family:var(--mono);font-size:10.5px;font-weight:600;cursor:pointer;flex-shrink:0;}
+  .rest-presets{display:flex;gap:10px;margin-bottom:12px;max-width:280px;margin-left:auto;margin-right:auto;}
+  .preset-btn{flex:1;padding:11px 6px;border-radius:12px;background:var(--card-bg);border:1.3px solid transparent;color:var(--text);font-family:var(--mono);font-size:12px;font-weight:600;cursor:pointer;}
+  .preset-btn.active{border-color:var(--accent);color:var(--accent);}
+  .rest-zero-btn{display:block;margin:0 auto 20px;background:none;border:none;color:var(--text-muted);font-family:var(--mono);font-size:11.5px;cursor:pointer;padding:6px 14px;}
   .timer-page.alert .rest-ring{animation:timer-alert 0.6s ease 3;}
   .timer-page-hint{font-family:var(--mono);font-size:10.5px;color:var(--text-muted);max-width:260px;margin:0 auto;line-height:1.6;}
 
@@ -409,13 +412,42 @@
 
   .today-hero-card{background:var(--card-bg);border-radius:18px;padding:18px;}
   .today-hero-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
-  .today-hero-tag{font-family:var(--mono);font-size:9.5px;color:var(--accent);text-transform:uppercase;letter-spacing:.5px;}
-  .today-hero-title{font-family:var(--display);font-size:19px;font-weight:800;margin-top:3px;}
+  .today-hero-tag{font-family:var(--mono);font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;}
+  .today-hero-title{font-family:var(--display);font-size:22px;font-weight:800;margin-top:4px;color:var(--accent);}
   .today-hero-badge{width:32px;height:32px;border-radius:50%;background:var(--card-bg2);display:flex;align-items:center;justify-content:center;color:var(--accent);font-family:var(--mono);font-size:9.5px;font-weight:700;flex-shrink:0;}
   .today-hero-list{display:flex;flex-direction:column;gap:9px;margin-bottom:16px;}
   .today-hero-ex{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11.5px;color:var(--text);}
   .today-hero-ex .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;}
   .today-hero-rest{font-family:var(--mono);font-size:12px;color:var(--text-muted);margin:0 0 4px;line-height:1.6;}
+  .collapsible-section-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:4px 0;}
+  .collapsible-section-head .chevron{transition:transform .25s ease;}
+  .collapsible-section-head .chevron.open{transform:rotate(180deg);color:var(--accent);}
+  .collapsible-wrapper{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease;}
+  .collapsible-wrapper.open{grid-template-rows:1fr;margin-top:8px;}
+  .collapsible-inner{overflow:hidden;}
+
+  .hoje-badge{display:inline-block;background:var(--accent);color:#14171C;padding:2px 8px;border-radius:8px;font-weight:800;margin-right:4px;}
+
+  .inicio-profile-card{display:flex;align-items:center;gap:12px;background:var(--card-bg);border-radius:16px;padding:16px;margin-bottom:18px;cursor:pointer;}
+  .inicio-avatar{width:44px;height:44px;border-radius:50%;background:var(--card-bg2);display:flex;align-items:center;justify-content:center;color:var(--text-muted);flex-shrink:0;}
+  .inicio-avatar .icon{width:20px;height:20px;}
+  .inicio-pname{font-family:var(--display);font-size:16px;font-weight:700;}
+  .inicio-pgoal{font-family:var(--mono);font-size:10.5px;color:var(--accent);margin-top:2px;}
+  .inicio-edit-icon{margin-left:auto;color:var(--text-muted);flex-shrink:0;}
+
+  .inicio-weight-card{background:var(--card-bg);border-radius:16px;padding:16px;margin-bottom:18px;}
+  .inicio-weight-row{display:flex;gap:20px;}
+  .inicio-weight-item{flex:1;}
+  .inicio-weight-num{font-family:var(--display);font-size:20px;font-weight:800;}
+  .inicio-weight-label{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);margin-top:2px;}
+  .inicio-weight-updated{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);margin-top:10px;}
+  .inicio-weight-empty{font-family:var(--mono);font-size:11.5px;color:var(--text-muted);line-height:1.5;}
+
+  .inicio-streak-card{display:flex;align-items:center;gap:12px;background:var(--card-bg);border-radius:16px;padding:16px;margin-bottom:18px;}
+  .inicio-streak-icon{width:38px;height:38px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#14171C;flex-shrink:0;}
+  .inicio-streak-num{font-family:var(--display);font-size:16px;font-weight:800;}
+  .inicio-streak-sub{font-family:var(--mono);font-size:10px;color:var(--text-muted);margin-top:2px;}
+
   .today-hero-btn{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;background:var(--accent);color:#14171C;border:none;border-radius:14px;padding:13px;font-family:var(--display);font-weight:700;font-size:13.5px;cursor:pointer;}
   .today-hero-btn .icon{width:14px;height:14px;transform:rotate(-90deg);}
 
@@ -445,6 +477,10 @@
     <p id="hero-subtitle">toque no dia para abrir, monte o treino e registre cada série</p>
   </div>
   <div class="tape"></div>
+
+  <div class="view hidden" id="view-inicio">
+    <div id="inicio-content"></div>
+  </div>
 
   <div class="view" id="view-treinos">
     <div class="storage-warning hidden" id="storage-warning">⚠ Esse navegador está bloqueando o armazenamento local aqui (pode ser modo anônimo/privado, ou você está vendo isso dentro do app do Claude). Abra o link publicado normalmente, fora de modo privado, pra os dados ficarem salvos.</div>
@@ -484,17 +520,22 @@
   <div class="view hidden" id="view-timer">
     <div class="timer-page">
       <p class="section-title">Descanso</p>
-      <div class="rest-ring" id="rest-ring" data-action="rest-toggle">
-        <div class="rest-ring-inner">
-          <span class="rest-focus-time rest-time-value">01:30</span>
-          <svg class="icon ring-play-icon rest-toggle-icon" viewBox="0 0 24 24" id="ring-play-icon"><path d="M6 4l12 8-12 8V4z"/></svg>
+      <div class="rest-ring-row">
+        <button class="ring-side-btn" data-action="rest-minus15">−15s</button>
+        <div class="rest-ring" id="rest-ring" data-action="rest-toggle">
+          <div class="rest-ring-inner">
+            <span class="rest-focus-time rest-time-value">01:30</span>
+            <svg class="icon ring-play-icon rest-toggle-icon" viewBox="0 0 24 24" id="ring-play-icon"><path d="M6 4l12 8-12 8V4z"/></svg>
+          </div>
         </div>
+        <button class="ring-side-btn" data-action="rest-plus15">+15s</button>
       </div>
-      <div class="rest-focus-ctrls">
-        <button class="rest-focus-btn" data-action="rest-minus">−30s</button>
-        <button class="rest-focus-btn" data-action="rest-plus">+30s</button>
-        <button class="rest-focus-btn skip" data-action="rest-skip">Pular</button>
+      <div class="rest-presets">
+        <button class="preset-btn" data-action="rest-preset" data-sec="45">45s</button>
+        <button class="preset-btn" data-action="rest-preset" data-sec="60">1min</button>
+        <button class="preset-btn" data-action="rest-preset" data-sec="120">2min</button>
       </div>
+      <button class="rest-zero-btn" data-action="rest-reset">Zerar</button>
       <p class="timer-page-hint">Toque no anel pra iniciar ou pausar. Continua contando mesmo se você trocar de aba.</p>
     </div>
   </div>
@@ -510,6 +551,7 @@
 </div>
 
 <nav class="bottom-nav">
+  <button class="nav-btn" data-action="switch-tab" data-tab="inicio">Início</button>
   <button class="nav-btn active" data-action="switch-tab" data-tab="treinos">Treinos</button>
   <button class="nav-btn" id="nav-timer-btn" data-action="switch-tab" data-tab="timer"><span id="nav-timer-label">Timer</span></button>
   <button class="nav-btn" data-action="switch-tab" data-tab="stats">Estatística</button>
@@ -1308,7 +1350,7 @@ function attachCalendarEvents(){
 }
 
 function switchTab(tab){
-  ['treinos','stats','profile','timer'].forEach(t=>{
+  ['treinos','stats','profile','timer','inicio'].forEach(t=>{
     const view = document.getElementById('view-'+t);
     if(view) view.classList.toggle('hidden', t!==tab);
   });
@@ -1421,6 +1463,7 @@ function renderLibrary(dayKey){
 }
 
 let activeDayKey = null;
+let weekListOpen = false;
 
 function renderDayRow(day){
   const data = plan[day.key];
@@ -1630,7 +1673,7 @@ function renderTodayHero(){
     <div class="today-hero-card">
       <div class="today-hero-top">
         <div>
-          <div class="today-hero-tag">${day.label} · Hoje</div>
+          <div class="today-hero-tag"><span class="hoje-badge">HOJE</span>${day.label}</div>
           <div class="today-hero-title">${data.title}</div>
         </div>
         <div class="today-hero-badge">${day.badge}</div>
@@ -1643,6 +1686,53 @@ function renderTodayHero(){
           <button class="today-hero-btn" data-action="start-today-workout">Iniciar treino${ICONS.chevron}</button>`
       }
     </div>
+  `;
+}
+
+function renderInicioView(){
+  const el = document.getElementById('inicio-content');
+  if(!el || !profile) return;
+
+  const goalLabel = (GOALS.find(g=>g.id===profile.goal) || {}).label || 'não definido';
+  const name = profile.name ? profile.name : 'Sem nome';
+
+  const weightHtml = (profile.weight || profile.bodyFat)
+    ? `<div class="inicio-weight-row">
+        <div class="inicio-weight-item"><div class="inicio-weight-num">${profile.weight || '—'}${profile.weight?'kg':''}</div><div class="inicio-weight-label">peso atual</div></div>
+        <div class="inicio-weight-item"><div class="inicio-weight-num">${profile.bodyFat || '—'}${profile.bodyFat?'%':''}</div><div class="inicio-weight-label">gordura</div></div>
+      </div>
+      <div class="inicio-weight-updated">${profile.updatedAt ? 'Última atualização: '+fmtDate(profile.updatedAt) : ''}</div>`
+    : `<p class="inicio-weight-empty">Nenhum registro ainda. Toque pra adicionar seu peso e % de gordura no Perfil.</p>`;
+
+  const streak = (completions && plan) ? computeStreak() : 0;
+  const goal = (completions && plan) ? weeklyGoal() : 0;
+  const weekCount = (completions && plan) ? currentWeekCount() : 0;
+
+  el.innerHTML = `
+    <div class="inicio-profile-card" data-action="switch-tab" data-tab="profile">
+      <div class="inicio-avatar">${ICONS.user}</div>
+      <div>
+        <div class="inicio-pname">${name}</div>
+        <div class="inicio-pgoal">Objetivo: ${goalLabel}</div>
+      </div>
+      <span class="inicio-edit-icon">${ICONS.pencil}</span>
+    </div>
+
+    <p class="section-title">Evolução corporal</p>
+    <div class="inicio-weight-card" data-action="switch-tab" data-tab="profile">
+      ${weightHtml}
+    </div>
+
+    <p class="section-title">Seu progresso</p>
+    <div class="inicio-streak-card" data-action="switch-tab" data-tab="stats">
+      <div class="inicio-streak-icon">${ICONS.flame}</div>
+      <div>
+        <div class="inicio-streak-num">${streak} dia${streak===1?'':'s'} seguido${streak===1?'':'s'}</div>
+        <div class="inicio-streak-sub">Você treinou ${weekCount} de ${goal} essa semana</div>
+      </div>
+    </div>
+
+    ${renderTodayHero()}
   `;
 }
 
@@ -1660,12 +1750,22 @@ function render(){
         <button class="welcome-btn" data-action="open-generator">Montar meu treino</button>
       </div>
     ` : '';
-    container.innerHTML = welcomeHtml + renderWeekStrip() + renderTodayHero() + '<p class="section-title" style="margin:22px 0 12px;">Semana completa</p>' + DAYS.map(renderDayRow).join('');
+    const weekListHtml = `
+      <div class="collapsible-section-head" data-action="toggle-week-list">
+        <p class="section-title" style="margin:22px 0 0;">Semana completa</p>
+        <span class="chevron ${weekListOpen?'open':''}">${ICONS.chevron}</span>
+      </div>
+      <div class="collapsible-wrapper ${weekListOpen?'open':''}"><div class="collapsible-inner">
+        ${DAYS.map(renderDayRow).join('')}
+      </div></div>
+    `;
+    container.innerHTML = welcomeHtml + renderWeekStrip() + renderTodayHero() + weekListHtml;
   }
   renderCalendar();
   renderStreakCard();
   renderEvolutionChart();
   renderProfileView();
+  renderInicioView();
   updateHeroGreeting();
   updateRestDisplay();
   updateFlameNav();
@@ -1692,6 +1792,10 @@ function attachEvents(){
     }
     else if(action==='open-generator'){
       genOpenOverlay();
+    }
+    else if(action==='toggle-week-list'){
+      weekListOpen = !weekListOpen;
+      render();
     }
     else if(action==='close-day-detail'){
       activeDayKey = null;
@@ -2046,6 +2150,9 @@ function updateRestDisplay(){
   if(ring) ring.style.setProperty('--pct', pct.toFixed(1));
   const navLabel = document.getElementById('nav-timer-label');
   if(navLabel) navLabel.textContent = restRunning ? fmtTime(remaining) : 'Timer';
+  document.querySelectorAll('.preset-btn').forEach(btn=>{
+    btn.classList.toggle('active', parseInt(btn.dataset.sec,10)===restDefault);
+  });
   const navBtn = document.getElementById('nav-timer-btn');
   if(navBtn) navBtn.classList.toggle('running', restRunning);
   updateTimerButtons();
@@ -2086,6 +2193,14 @@ function adjustRest(delta){
   }
   updateRestDisplay();
 }
+function setRestPreset(sec){
+  restDefault = sec;
+  restRemaining = sec;
+  if(restRunning){
+    restEnd = Date.now() + sec*1000;
+  }
+  updateRestDisplay();
+}
 function onRestFinished(){
   document.querySelectorAll('.timer-page').forEach(el=>{
     el.classList.add('alert');
@@ -2112,9 +2227,10 @@ function attachTimerViewEvents(){
     if(!el) return;
     const action = el.dataset.action;
     if(action==='rest-toggle') toggleRest();
-    else if(action==='rest-minus') adjustRest(-30);
-    else if(action==='rest-plus') adjustRest(30);
-    else if(action==='rest-skip') skipRest();
+    else if(action==='rest-minus15') adjustRest(-15);
+    else if(action==='rest-plus15') adjustRest(15);
+    else if(action==='rest-preset') setRestPreset(parseInt(el.dataset.sec,10));
+    else if(action==='rest-reset') resetRest();
   });
 }
 
