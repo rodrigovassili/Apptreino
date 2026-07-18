@@ -28,34 +28,6 @@
     --display:'Sora',sans-serif;
     --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
   }
-  :root[data-theme="d"]{
-    --bg:#241F38;
-    --card-bg:#332B4D;
-    --card-bg2:#3B3259;
-    --line:#453C63;
-    --text:#F5F1FA;
-    --text-muted:#B3ACC9;
-    --accent:#FF6B4A;
-    --accent-dim:#C74E32;
-    --danger:#C1443B;
-    --accent-text:#14171C;
-    --display:'Sora',sans-serif;
-    --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
-  }
-  :root[data-theme="mono"]{
-    --bg:#000000;
-    --card-bg:#000000;
-    --card-bg2:#0D0D0D;
-    --line:#262626;
-    --text:#FFFFFF;
-    --text-muted:#A3A3A3;
-    --accent:#FFFFFF;
-    --accent-dim:#C2C2C2;
-    --danger:#C1443B;
-    --accent-text:#14171C;
-    --display:'Sora',sans-serif;
-    --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
-  }
   :root[data-theme="saiyan"]{
     --bg:#0B132B;
     --card-bg:#1C2541;
@@ -66,20 +38,6 @@
     --accent:#FFD700;
     --accent-dim:#00FFFF;
     --danger:#C1443B;
-    --accent-text:#14171C;
-    --display:'Sora',sans-serif;
-    --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
-  }
-  :root[data-theme="caverna"]{
-    --bg:#1E251A;
-    --card-bg:#293224;
-    --card-bg2:#333D2C;
-    --line:#3C4736;
-    --text:#FFFFFF;
-    --text-muted:#A9B39F;
-    --accent:#FFCC00;
-    --accent-dim:#E50914;
-    --danger:#E50914;
     --accent-text:#14171C;
     --display:'Sora',sans-serif;
     --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
@@ -98,20 +56,6 @@
     --display:'Sora',sans-serif;
     --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
   }
-  :root[data-theme="rawpower"]{
-    --bg:#5C1A1A;
-    --card-bg:#6E2323;
-    --card-bg2:#7A2C2C;
-    --line:#8A3B3B;
-    --text:#FFFFFF;
-    --text-muted:#E0B8B8;
-    --accent:#F5F5F5;
-    --accent-dim:#C2C2C2;
-    --danger:#FFD700;
-    --accent-text:#3D0F0F;
-    --display:'Sora',sans-serif;
-    --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
-  }
   :root[data-theme="concreto"]{
     --bg:#37474F;
     --card-bg:#455A64;
@@ -126,20 +70,6 @@
     --display:'Sora',sans-serif;
     --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
   }
-  :root[data-theme="argila"]{
-    --bg:#D8A398;
-    --card-bg:#E3B7A9;
-    --card-bg2:#EAC6BA;
-    --line:#C8917F;
-    --text:#3D1F17;
-    --text-muted:#6B4A3D;
-    --accent:#8C4A3D;
-    --accent-dim:#6B3629;
-    --danger:#A13B2E;
-    --accent-text:#F7E3DC;
-    --display:'Sora',sans-serif;
-    --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
-  }
   :root[data-theme="oceanteal"]{
     --bg:#0F5E5C;
     --card-bg:#177572;
@@ -151,6 +81,34 @@
     --accent-dim:#D98177;
     --danger:#FFD166;
     --accent-text:#4A1712;
+    --display:'Sora',sans-serif;
+    --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
+  }
+  :root[data-theme="miami"]{
+    --bg:#120B24;
+    --card-bg:#1C1236;
+    --card-bg2:#241745;
+    --line:#2E1C57;
+    --text:#FFFFFF;
+    --text-muted:#A99AC7;
+    --accent:#FF2FB0;
+    --accent-dim:#00E5FF;
+    --danger:#FF6B6B;
+    --accent-text:#FFFFFF;
+    --display:'Sora',sans-serif;
+    --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
+  }
+  :root[data-theme="chrome"]{
+    --bg:#0A0A0A;
+    --card-bg:#121212;
+    --card-bg2:#1A1A1A;
+    --line:#2A2A2A;
+    --text:#FFFFFF;
+    --text-muted:#8C8C8C;
+    --accent:#D9D9D9;
+    --accent-dim:#A0A0A0;
+    --danger:#C1443B;
+    --accent-text:#0A0A0A;
     --display:'Sora',sans-serif;
     --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
   }
@@ -2156,8 +2114,8 @@ function attachBackupEvents(){
   });
 }
 
-const THEME_ORDER = ['e', 'd', 'mono', 'caverna', 'ironorange', 'saiyan', 'rawpower', 'concreto', 'argila', 'oceanteal'];
-const THEME_COLORS = { d: '#241F38', e: '#16303A', mono: '#000000', caverna: '#1E251A', ironorange: '#0F172A', saiyan: '#0B132B', rawpower: '#5C1A1A', concreto: '#37474F', argila: '#D8A398', oceanteal: '#0F5E5C' };
+const THEME_ORDER = ['e', 'ironorange', 'saiyan', 'concreto', 'oceanteal', 'miami', 'chrome'];
+const THEME_COLORS = { e: '#16303A', ironorange: '#0F172A', saiyan: '#0B132B', concreto: '#37474F', oceanteal: '#0F5E5C', miami: '#120B24', chrome: '#0A0A0A' };
 function attachThemeToggle(){
   const btn = document.getElementById('theme-toggle-btn');
   if(!btn) return;
