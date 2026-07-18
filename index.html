@@ -562,9 +562,228 @@
   .timer-btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-text);}
   .timer-btn.reset{color:var(--text-muted);font-size:16px;}
   .timer-btn:active{transform:scale(.94);}
+/* ===== RADAR DE SIMETRIA ===== */
+.radar-section-card{background:var(--card-bg);border-radius:18px;padding:16px;margin-bottom:14px;}
+.radar-section-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;}
+.radar-section-title{font-family:var(--display);font-size:15px;font-weight:700;}
+.radar-meta-date{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);}
+.radar-svg-wrap{display:flex;justify-content:center;margin:6px 0 2px;}
+.radar-drag-hint{text-align:center;font-size:10.5px;color:var(--text-muted);margin:2px 0 8px;transition:opacity .3s;}
+.radar-legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;}
+.radar-legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-muted);}
+.radar-legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.radar-legend-dot.base{background:var(--text-muted);}
+.radar-legend-dot.dyn{background:var(--accent);box-shadow:0 0 5px var(--accent);}
+.radar-symmetry-row{display:flex;align-items:center;gap:10px;background:var(--card-bg2);border-radius:12px;padding:10px 12px;margin-bottom:10px;}
+.radar-symmetry-num{font-family:var(--display);font-size:19px;font-weight:800;}
+.radar-symmetry-label{font-family:var(--mono);font-size:8.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--text-muted);}
+.radar-symmetry-trend{font-size:10.5px;font-weight:600;margin-top:1px;}
+.radar-trend-up{color:var(--accent);}
+.radar-trend-down{color:var(--danger);}
+.radar-trend-flat{color:var(--text-muted);}
+.radar-feedback{border-radius:12px;padding:11px 12px;font-size:11.5px;line-height:1.5;margin-bottom:10px;}
+.radar-feedback.positive{background:color-mix(in srgb, var(--accent) 10%, var(--card-bg));border:1px solid color-mix(in srgb, var(--accent) 40%, transparent);}
+.radar-feedback.warning{background:color-mix(in srgb, var(--danger) 10%, var(--card-bg));border:1px solid color-mix(in srgb, var(--danger) 40%, transparent);}
+.radar-recal-card{background:color-mix(in srgb, var(--danger) 10%, var(--card-bg));border:1px solid color-mix(in srgb, var(--danger) 40%, transparent);border-radius:12px;padding:11px 12px;margin-bottom:10px;font-size:11.5px;}
+.radar-recal-btn{background:var(--danger);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;margin-top:8px;cursor:pointer;}
+.radar-goto-btn{display:block;width:100%;background:none;border:1.5px solid var(--line);color:var(--text);border-radius:12px;padding:11px;font-size:12.5px;font-weight:600;cursor:pointer;text-align:center;}
+.radar-goto-btn:active{border-color:var(--accent-dim);}
+.radar-pending-card{background:color-mix(in srgb, var(--accent) 8%, var(--card-bg));border:1px solid color-mix(in srgb, var(--accent) 35%, transparent);border-radius:12px;padding:11px 12px;margin-bottom:10px;font-size:11.5px;line-height:1.5;}
+
+/* ===== ONBOARDING OVERLAY ===== */
+.onb-overlay{position:fixed;inset:0;background:var(--bg);z-index:1000;display:flex;flex-direction:column;}
+.onb-overlay.hidden{display:none;}
+.onb-progress{display:flex;gap:5px;padding:calc(env(safe-area-inset-top) + 16px) 20px 0;}
+.onb-progress.hidden{display:none;}
+.onb-seg{flex:1;height:4px;border-radius:4px;background:var(--line);}
+.onb-seg.done{background:var(--accent);}
+.onb-seg.active{background:var(--accent);opacity:.5;}
+.onb-screen{display:none;flex:1;flex-direction:column;padding:22px 20px 24px;overflow-y:auto;}
+.onb-screen.active{display:flex;}
+.onb-skip{position:absolute;top:calc(env(safe-area-inset-top) + 14px);right:20px;background:none;border:none;color:var(--text-muted);font-size:12px;cursor:pointer;}
+.onb-visual{flex:1;display:flex;align-items:center;justify-content:center;margin:16px 0;min-height:180px;}
+.onb-mock-card{background:var(--card-bg);border:1px solid var(--line);border-radius:20px;padding:20px;width:100%;max-width:260px;}
+.onb-title{font-family:var(--display);font-size:22px;font-weight:800;text-align:center;margin-bottom:8px;}
+.onb-sub{font-size:13px;color:var(--text-muted);text-align:center;line-height:1.6;padding:0 6px;margin-bottom:20px;}
+.onb-dots{display:flex;gap:6px;justify-content:center;margin-bottom:18px;}
+.onb-dot{width:6px;height:6px;border-radius:50%;background:var(--line);}
+.onb-dot.on{background:var(--accent);width:16px;border-radius:4px;}
+.onb-primary-btn{display:block;width:100%;background:var(--accent);color:var(--accent-text);border:none;border-radius:14px;padding:15px;font-family:var(--display);font-weight:700;font-size:14px;cursor:pointer;text-align:center;}
+.onb-primary-btn:disabled{opacity:.35;pointer-events:none;}
+.onb-ghost-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:none;border:1.5px solid var(--line);color:var(--text);border-radius:14px;padding:13px;font-size:13.5px;font-weight:600;cursor:pointer;margin-top:9px;}
+.onb-field-block{margin-bottom:16px;}
+.onb-field-label{font-size:12.5px;font-weight:600;margin-bottom:7px;display:block;}
+.onb-field-input{width:100%;background:var(--card-bg2);border:1.5px solid var(--line);color:var(--text);border-radius:12px;padding:12px 13px;font-size:14px;outline:none;}
+.onb-field-input:focus{border-color:var(--accent);}
+.onb-field-row{display:flex;gap:10px;}
+.onb-field-row .onb-field-block{flex:1;}
+.onb-step-label{font-family:var(--mono);font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--accent);margin-bottom:5px;}
+.onb-step-title{font-family:var(--display);font-size:18px;font-weight:800;margin-bottom:4px;}
+.onb-step-sub{font-size:12px;color:var(--text-muted);margin-bottom:20px;}
+.onb-qblock{margin-bottom:20px;}
+.onb-qtitle{font-size:13px;font-weight:600;margin-bottom:9px;}
+.onb-chip-row{display:flex;gap:7px;flex-wrap:wrap;}
+.onb-chip{background:var(--card-bg2);border:1.5px solid var(--line);color:var(--text);border-radius:11px;padding:10px 14px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.onb-chip.selected{background:color-mix(in srgb, var(--accent) 16%, var(--card-bg2));border-color:var(--accent);color:var(--accent);}
+.onb-chip-wide{width:100%;text-align:left;font-size:12px;}
+.onb-card{background:var(--card-bg);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;}
+.onb-opt{display:block;width:100%;text-align:left;background:var(--card-bg2);border:1.5px solid var(--line);color:var(--text);border-radius:10px;padding:10px 11px;font-size:11.5px;margin-bottom:6px;cursor:pointer;}
+.onb-opt.selected{border-color:var(--accent);background:color-mix(in srgb, var(--accent) 12%, var(--card-bg2));color:var(--accent);}
+.onb-spacer{flex:1;}
+.onb-gen-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;}
+.onb-gen-ring{width:80px;height:80px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--accent);animation:onb-spin 1s linear infinite;margin-bottom:18px;}
+@keyframes onb-spin{to{transform:rotate(360deg);}}
+.onb-gen-text{font-family:var(--mono);font-size:11px;color:var(--text-muted);}
+.onb-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;z-index:1100;padding:24px;}
+.onb-modal-overlay.show{display:flex;}
+.onb-achievement{background:var(--card-bg);border:1px solid var(--accent);border-radius:22px;padding:30px 22px 22px;text-align:center;max-width:300px;}
+.onb-trophy{font-size:48px;margin-bottom:6px;}
+.onb-ach-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:1.4px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+.onb-ach-title{font-family:var(--display);font-size:18px;font-weight:800;margin-bottom:8px;}
+.onb-ach-desc{font-size:12px;color:var(--text-muted);line-height:1.6;margin-bottom:20px;}
+.onb-ach-btn{display:block;width:100%;background:var(--accent);color:var(--accent-text);border:none;border-radius:14px;padding:13px;font-family:var(--display);font-weight:700;font-size:13px;cursor:pointer;}
 </style>
 </head>
 <body>
+<div class="onb-overlay hidden" id="onb-overlay">
+  <div class="onb-progress" id="onb-progress">
+    <div class="onb-seg" data-seg="0"></div>
+    <div class="onb-seg" data-seg="1"></div>
+    <div class="onb-seg" data-seg="2"></div>
+    <div class="onb-seg" data-seg="3"></div>
+    <div class="onb-seg" data-seg="4"></div>
+    <div class="onb-seg" data-seg="5"></div>
+  </div>
+
+  <!-- WELCOME SWIPE -->
+  <div class="onb-screen active" id="onb-welcome" style="position:relative;">
+    <button class="onb-skip" id="onb-skip-btn">Pular</button>
+    <div class="onb-visual" id="onb-welcome-visual"></div>
+    <div class="onb-title" id="onb-welcome-title"></div>
+    <div class="onb-sub" id="onb-welcome-sub"></div>
+    <div class="onb-dots" id="onb-welcome-dots">
+      <span class="onb-dot on"></span><span class="onb-dot"></span><span class="onb-dot"></span>
+    </div>
+    <button class="onb-primary-btn" id="onb-welcome-next-btn">Próximo</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="onb-screen" id="onb-login">
+    <div class="onb-spacer"></div>
+    <div style="text-align:center;">
+      <div style="width:72px;height:72px;border-radius:20px;background:var(--card-bg2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:28px;font-weight:800;color:var(--accent);margin:0 auto 16px;">V!</div>
+      <div class="onb-step-title" style="margin-bottom:4px;">Bem-vindo ao Vamo!</div>
+      <div class="onb-step-sub">Crie sua conta em um toque pra começar</div>
+    </div>
+    <button class="onb-ghost-btn" id="onb-google-btn"><span style="width:16px;height:16px;border-radius:50%;background:conic-gradient(#4285F4 0 25%, #34A853 25% 50%, #FBBC05 50% 75%, #EA4335 75% 100%);flex-shrink:0;"></span>Continuar com o Google</button>
+    <button class="onb-ghost-btn" id="onb-apple-btn">
+      <svg class="icon" viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px;"><path d="M16.5 1c.1 1.1-.3 2.2-1 3-.7.8-1.8 1.5-2.9 1.4-.1-1.1.4-2.2 1-3C14.4 1.6 15.5 1 16.5 1zM20.6 17.2c-.5 1.2-1.1 2.3-1.9 3.4-1 1.4-2.1 3.1-3.7 3.1-1.4 0-1.8-.9-3.4-.9s-2.1.9-3.4.9c-1.5 0-2.6-1.5-3.6-2.9-2-2.9-3.5-8.2-1.5-11.7 1-1.7 2.7-2.8 4.6-2.8 1.4 0 2.6.9 3.4.9.8 0 2.3-1.1 3.9-1 .7 0 2.5.3 3.7 2-.1.1-2.2 1.3-2.2 3.8 0 3 2.6 4 2.6 4.1z"/></svg>
+      Continuar com a Apple
+    </button>
+    <div class="onb-spacer"></div>
+  </div>
+
+  <!-- PERFIL: NOME (obrigatório) -->
+  <div class="onb-screen" id="onb-name">
+    <div class="onb-step-label">Etapa 2 · Sua Ficha</div>
+    <div class="onb-step-title">Quem é você nessa jornada?</div>
+    <div class="onb-step-sub">Só isso por enquanto — o resto a gente pergunta em seguida.</div>
+    <div class="onb-field-block">
+      <label class="onb-field-label">Como podemos te chamar?</label>
+      <input class="onb-field-input" type="text" id="onb-name-input" placeholder="Seu nome">
+    </div>
+    <div class="onb-spacer"></div>
+    <button class="onb-primary-btn" id="onb-name-next-btn" disabled>Próximo</button>
+  </div>
+
+  <!-- PERFIL: DADOS FÍSICOS (opcional, pulável) -->
+  <div class="onb-screen" id="onb-details">
+    <div class="onb-step-label">Etapa 3 · Seus Dados</div>
+    <div class="onb-step-title">Idade, altura e peso</div>
+    <div class="onb-step-sub">Usamos isso pra calcular seu IMC e personalizar sugestões. Se preferir, responde depois — sem problema.</div>
+    <div class="onb-field-row">
+      <div class="onb-field-block">
+        <label class="onb-field-label">Idade</label>
+        <input class="onb-field-input" type="number" id="onb-age-input" placeholder="anos" min="12" max="100">
+      </div>
+      <div class="onb-field-block">
+        <label class="onb-field-label">Altura</label>
+        <input class="onb-field-input" type="number" id="onb-height-input" placeholder="cm" min="100" max="250">
+      </div>
+    </div>
+    <div class="onb-field-block">
+      <label class="onb-field-label">Peso atual</label>
+      <input class="onb-field-input" type="number" id="onb-weight-input" placeholder="kg" min="30" max="300" step="0.1">
+    </div>
+    <div class="onb-spacer"></div>
+    <button class="onb-primary-btn" id="onb-details-next-btn">Responder agora</button>
+    <button class="onb-ghost-btn" id="onb-details-skip-btn">Prefiro responder depois</button>
+  </div>
+
+  <!-- CONTRATO -->
+  <div class="onb-screen" id="onb-contract">
+    <div class="onb-step-label">Etapa 4 · O Contrato</div>
+    <div class="onb-step-title">Vamos montar sua rotina</div>
+    <div class="onb-step-sub">Responde rápido, isso ajusta tudo no seu plano.</div>
+    <div class="onb-qblock">
+      <div class="onb-qtitle">Qual seu nível de experiência com treino?</div>
+      <div class="onb-chip-row" id="onb-level-row" style="flex-direction:column;">
+        <button class="onb-chip onb-chip-wide" data-val="iniciante">Iniciante — nunca treinei ou parei há muito tempo</button>
+        <button class="onb-chip onb-chip-wide" data-val="intermediario">Intermediário — treino há alguns meses</button>
+        <button class="onb-chip onb-chip-wide" data-val="avancado">Avançado — treino há anos, sei o que faço</button>
+      </div>
+    </div>
+    <div class="onb-qblock" id="onb-days-block">
+      <div class="onb-qtitle">Quantos dias você quer treinar por semana?</div>
+      <div class="onb-chip-row" id="onb-days-row">
+        <button class="onb-chip" data-val="3">3 dias</button>
+        <button class="onb-chip" data-val="4">4 dias</button>
+        <button class="onb-chip" data-val="5">5 dias</button>
+        <button class="onb-chip" data-val="6">6 dias</button>
+      </div>
+    </div>
+    <div class="onb-qblock">
+      <div class="onb-qtitle">Qual o seu foco principal? <span style="color:var(--text-muted);font-weight:400;">(pode marcar mais de um)</span></div>
+      <div class="onb-chip-row" id="onb-focus-row">
+        <button class="onb-chip" data-val="hipertrofia">Hipertrofia</button>
+        <button class="onb-chip" data-val="forca">Força Bruta</button>
+        <button class="onb-chip" data-val="resistencia">Resistência / Cardio</button>
+        <button class="onb-chip" data-val="emagrecimento">Emagrecimento</button>
+      </div>
+    </div>
+    <div class="onb-spacer"></div>
+    <button class="onb-primary-btn" id="onb-contract-next-btn" disabled>Próximo</button>
+  </div>
+
+  <!-- QUESTIONÁRIO DO RADAR -->
+  <div class="onb-screen" id="onb-shape">
+    <div class="onb-step-label">Etapa 5 · Shape Atual</div>
+    <div class="onb-step-title">Agora seu radar de simetria</div>
+    <div class="onb-step-sub">É isso que forma o gráfico que vai acompanhar sua evolução. Depois dá pra ajustar arrastando os pontos.</div>
+    <div id="onb-shape-questions-wrap"></div>
+    <button class="onb-primary-btn" id="onb-generate-btn" disabled>Gerar Meu Shape</button>
+  </div>
+
+  <!-- GERANDO -->
+  <div class="onb-screen" id="onb-generating">
+    <div class="onb-gen-wrap">
+      <div class="onb-gen-ring"></div>
+      <div class="onb-gen-text">Calculando sua simetria inicial...</div>
+    </div>
+  </div>
+</div>
+
+<div class="onb-modal-overlay" id="onb-achievement-overlay">
+  <div class="onb-achievement">
+    <div class="onb-trophy">🏆</div>
+    <div class="onb-ach-eyebrow">Conquista desbloqueada</div>
+    <div class="onb-ach-title">Primeiro Passo!</div>
+    <div class="onb-ach-desc">Você configurou sua rotina e gerou seu gráfico de simetria base. O jogo começou!</div>
+    <button class="onb-ach-btn" id="onb-ach-close-btn">Bora Treinar!</button>
+  </div>
+</div>
+
+
 <div class="app-header-fixed" id="app-header-fixed">
   <div class="hero">
     <button class="theme-toggle-btn" id="theme-toggle-btn" title="Trocar tema" aria-label="Trocar tema">◐</button>
@@ -1435,6 +1654,8 @@ function attachCalendarEvents(){
       calendarMonth++;
       if(calendarMonth>11){ calendarMonth=0; calendarYear++; }
       render();
+    }else if(action==='radar-reassess'){
+      onbOpenReassessment();
     }
   });
 }
@@ -1788,10 +2009,15 @@ function renderInicioView(){
   const goalLabel = (GOALS.find(g=>g.id===profile.goal) || {}).label || 'não definido';
   const name = profile.name ? profile.name : 'Sem nome';
 
+  const imcValue = (profile.weight && profile.height) ? (Number(profile.weight) / Math.pow(Number(profile.height)/100, 2)) : null;
+  const imcItemHtml = imcValue
+    ? `<div class="inicio-weight-item"><div class="inicio-weight-num">${imcValue.toFixed(1)}</div><div class="inicio-weight-label">IMC</div></div>`
+    : '';
   const weightHtml = (profile.weight || profile.bodyFat)
     ? `<div class="inicio-weight-row">
         <div class="inicio-weight-item"><div class="inicio-weight-num">${profile.weight || '—'}${profile.weight?'kg':''}</div><div class="inicio-weight-label">peso atual</div></div>
         <div class="inicio-weight-item"><div class="inicio-weight-num">${profile.bodyFat || '—'}${profile.bodyFat?'%':''}</div><div class="inicio-weight-label">gordura</div></div>
+        ${imcItemHtml}
       </div>
       <div class="inicio-weight-updated">${profile.updatedAt ? 'Última atualização: '+fmtDate(profile.updatedAt) : ''}</div>`
     : `<p class="inicio-weight-empty">Nenhum registro ainda. Toque pra adicionar seu peso e % de gordura no Perfil.</p>`;
@@ -1833,7 +2059,7 @@ function renderInicioView(){
       </div></div>
     </div>
 
-    ${renderTodayHero()}
+    ${radar && radar.shape ? renderRadarCard() : renderTodayHero()}
   `;
 }
 
@@ -1974,6 +2200,10 @@ function attachEvents(){
       if(!completions[todayStr()]){
         completions[todayStr()] = true;
         saveCompletions();
+      }
+      const todayKeyPlan = todayKey();
+      if(plan[todayKeyPlan] && isTrainingDay(todayKeyPlan)){
+        atualizarRadarPorTreino(plan[todayKeyPlan].exercises);
       }
       render();
     }
@@ -2167,6 +2397,504 @@ function attachThemeToggle(){
 let totalRunning=false, totalAccum=0, totalStart=0;
 let restRunning=false, restDefault=60, restRemaining=60, restEnd=0, restInterval=null;
 
+/* ========================================================================
+   RADAR DE SIMETRIA — modelo de dados, cálculo e renderização
+   ======================================================================== */
+const RADAR_ATTRS = [
+  { key:'upperPush',      label:'Peitoral & Ombros' },
+  { key:'upperPull',      label:'Dorsal & Trapézio' },
+  { key:'arms',           label:'Braços' },
+  { key:'lowerAnterior',  label:'Quadríceps & Glúteos' },
+  { key:'lowerPosterior', label:'Posteriores & Panturrilhas' },
+  { key:'core',           label:'Abdômen & Lombar' },
+];
+// mapeia os grupos musculares reais do app (EXERCISE_LIBRARY) pros 6 atributos do radar
+const MUSCLE_TO_RADAR = {
+  'Peito':'upperPush', 'Ombros':'upperPush',
+  'Costas':'upperPull', 'Trapézio':'upperPull',
+  'Bíceps':'arms', 'Tríceps':'arms', 'Antebraço':'arms',
+  'Quadríceps':'lowerAnterior', 'Glúteos':'lowerAnterior',
+  'Posterior de coxa':'lowerPosterior', 'Panturrilha':'lowerPosterior',
+  'Abdômen':'core',
+};
+const RADAR_REASSESS_DAYS = 60;
+
+let radar = null;
+async function loadRadar(){
+  try{
+    const raw = localStorage.getItem('vamo-radar');
+    radar = raw ? JSON.parse(raw) : null;
+  }catch(e){ radar = null; }
+  if(!radar){
+    radar = { shape:null, shapeAtLastAssessment:null, lastAssessmentDate:null };
+  }
+}
+function saveRadar(){
+  try{ localStorage.setItem('vamo-radar', JSON.stringify(radar)); }
+  catch(e){ console.error('Erro ao salvar radar', e); }
+}
+
+function calcularShapeBase(answers){
+  const shape = {};
+  RADAR_ATTRS.forEach(a=>{ shape[a.key] = Number(answers[a.key]); });
+  if(answers.strongest) shape[answers.strongest] = Math.min(100, shape[answers.strongest] + 8);
+  if(answers.proportion === 'lower'){
+    shape.lowerAnterior = Math.max(0, shape.lowerAnterior - 15);
+    shape.lowerPosterior = Math.max(0, shape.lowerPosterior - 15);
+  } else if(answers.proportion === 'upper'){
+    shape.upperPush = Math.max(0, shape.upperPush - 15);
+    shape.upperPull = Math.max(0, shape.upperPull - 15);
+    shape.arms = Math.max(0, shape.arms - 15);
+  }
+  return shape;
+}
+
+// chamado quando um treino é concluído (finish-workout) — soma estímulo nos
+// atributos correspondentes aos músculos trabalhados naquele dia
+function atualizarRadarPorTreino(exercisesDoDia){
+  if(!radar || !radar.shape || !Array.isArray(exercisesDoDia)) return;
+  const attrsTocados = new Set();
+  exercisesDoDia.forEach(ex=>{
+    const attr = MUSCLE_TO_RADAR[ex.muscle];
+    if(attr) attrsTocados.add(attr);
+  });
+  attrsTocados.forEach(attr=>{
+    radar.shape[attr] = Math.min(100, radar.shape[attr] + 10);
+  });
+  if(attrsTocados.size){ saveRadar(); }
+}
+
+function calcularIndiceSimetria(shape){
+  const vals = RADAR_ATTRS.map(a=>shape[a.key]);
+  const gap = Math.max(...vals) - Math.min(...vals);
+  return Math.max(0, Math.round(100 - gap));
+}
+function radarIsPristine(){
+  return RADAR_ATTRS.every(a => radar.shape[a.key] === radar.shapeAtLastAssessment[a.key]);
+}
+function radarDiasDesdeAvaliacao(){
+  if(!radar.lastAssessmentDate) return 0;
+  return Math.floor((Date.now() - radar.lastAssessmentDate)/86400000);
+}
+
+const RADAR_CX=110, RADAR_CY=110, RADAR_R=78;
+function radarPointsFor(values){
+  return RADAR_ATTRS.map((a,i)=>{
+    const angle = (Math.PI*2*i/RADAR_ATTRS.length) - Math.PI/2;
+    const r = (values[a.key]/100) * RADAR_R;
+    return [RADAR_CX + r*Math.cos(angle), RADAR_CY + r*Math.sin(angle)];
+  });
+}
+function radarSvgMarkup(){
+  let html = '';
+  [0.33,0.66,1].forEach(f=>{
+    const pts = RADAR_ATTRS.map((a,i)=>{
+      const angle=(Math.PI*2*i/RADAR_ATTRS.length)-Math.PI/2;
+      return `${RADAR_CX+RADAR_R*f*Math.cos(angle)},${RADAR_CY+RADAR_R*f*Math.sin(angle)}`;
+    }).join(' ');
+    html += `<polygon points="${pts}" fill="none" stroke="var(--line)" stroke-width="1"/>`;
+  });
+  RADAR_ATTRS.forEach((a,i)=>{
+    const angle=(Math.PI*2*i/RADAR_ATTRS.length)-Math.PI/2;
+    const x2=RADAR_CX+RADAR_R*Math.cos(angle), y2=RADAR_CY+RADAR_R*Math.sin(angle);
+    html += `<line x1="${RADAR_CX}" y1="${RADAR_CY}" x2="${x2}" y2="${y2}" stroke="var(--line)" stroke-width="1"/>`;
+    const lx=RADAR_CX+(RADAR_R+22)*Math.cos(angle), ly=RADAR_CY+(RADAR_R+22)*Math.sin(angle);
+    html += `<text x="${lx}" y="${ly}" fill="var(--text-muted)" font-size="7.5" font-family="Inter, sans-serif" text-anchor="middle" dominant-baseline="middle">${a.label.split(' & ').join(' &\n')}</text>`;
+  });
+  const refPts = radarPointsFor(radar.shapeAtLastAssessment).map(p=>p.join(',')).join(' ');
+  html += `<polygon points="${refPts}" fill="var(--text-muted)" fill-opacity="0.06" stroke="var(--text-muted)" stroke-width="1.2" stroke-dasharray="3,3"/>`;
+  const curPts = radarPointsFor(radar.shape).map(p=>p.join(',')).join(' ');
+  html += `<polygon points="${curPts}" fill="var(--accent)" fill-opacity="0.18" stroke="var(--accent)" stroke-width="2.2" style="filter:drop-shadow(0 0 4px var(--accent))"/>`;
+  RADAR_ATTRS.forEach((a,i)=>{
+    const angle=(Math.PI*2*i/RADAR_ATTRS.length)-Math.PI/2;
+    const r=(radar.shape[a.key]/100)*RADAR_R;
+    const x=RADAR_CX+r*Math.cos(angle), y=RADAR_CY+r*Math.sin(angle);
+    html += `<circle cx="${x}" cy="${y}" r="13" fill="transparent" data-radarkey="${a.key}" style="cursor:grab;touch-action:none;"/>`;
+    html += `<circle cx="${x}" cy="${y}" r="4" fill="var(--accent)" style="pointer-events:none;"/>`;
+  });
+  return html;
+}
+
+function renderRadarCard(){
+  if(!radar || !radar.shape) return '';
+  const current = calcularIndiceSimetria(radar.shape);
+  const inicial = calcularIndiceSimetria(radar.shapeAtLastAssessment);
+  const delta = current - inicial;
+  let trendClass='radar-trend-flat', trendTxt='igual à última avaliação';
+  if(delta>0){ trendClass='radar-trend-up'; trendTxt=`▲ +${delta} — assimetria diminuindo`; }
+  else if(delta<0){ trendClass='radar-trend-down'; trendTxt=`▼ ${delta} — assimetria aumentando`; }
+
+  const dias = radarDiasDesdeAvaliacao();
+  const restam = RADAR_REASSESS_DAYS - dias;
+  const recalHtml = restam<=0 ? `
+    <div class="radar-recal-card">
+      Já se passaram 2 meses desde sua última autoavaliação. Refaça o questionário pra recalibrar seu radar.
+      <button class="radar-recal-btn" data-action="radar-reassess">Refazer autoavaliação</button>
+    </div>` : '';
+
+  const ref = radar.shapeAtLastAssessment;
+  const avg = RADAR_ATTRS.reduce((s,a)=>s+ref[a.key],0)/RADAR_ATTRS.length;
+  const fracos = RADAR_ATTRS.filter(a => ref[a.key] <= avg-10);
+  const fortes = RADAR_ATTRS.filter(a => ref[a.key] >= avg+10);
+  const corrigindo = fracos.filter(a => radar.shape[a.key]-ref[a.key] >= 15);
+  const reforcandoForte = fortes.filter(a => radar.shape[a.key]-ref[a.key] >= 15);
+  let feedbackHtml = '';
+  if(corrigindo.length){
+    feedbackHtml = `<div class="radar-feedback positive">Ótimo trabalho! Você está corrigindo seu ponto fraco em <b>${corrigindo.map(a=>a.label).join(' e ')}</b> com o volume de treino recente.</div>`;
+  } else if(reforcandoForte.length && fracos.length){
+    feedbackHtml = `<div class="radar-feedback warning">Atenção: você está investindo volume extra em <b>${reforcandoForte.map(a=>a.label).join(' e ')}</b>, que já é ponto forte. Considere priorizar <b>${fracos.map(a=>a.label).join(' e ')}</b>.</div>`;
+  }
+
+  const dateLabel = radar.lastAssessmentDate ? new Date(radar.lastAssessmentDate).toLocaleDateString('pt-BR') : '—';
+
+  return `
+    <p class="section-title" style="margin:18px 0 12px;">Radar de simetria</p>
+    <div class="radar-section-card">
+      <div class="radar-section-top">
+        <span class="radar-meta-date">Avaliado em ${dateLabel}</span>
+      </div>
+      <div class="radar-svg-wrap">
+        <svg id="radar-svg" viewBox="0 0 220 220" width="210" height="210">${radarSvgMarkup()}</svg>
+      </div>
+      <p class="radar-drag-hint" id="radar-drag-hint">Toque e arraste qualquer ponto pra ajustar manualmente.</p>
+      <div class="radar-legend">
+        <div class="radar-legend-item"><span class="radar-legend-dot base"></span>Ponto de partida</div>
+        <div class="radar-legend-item"><span class="radar-legend-dot dyn"></span>Shape atual</div>
+      </div>
+      <div class="radar-symmetry-row">
+        <div class="radar-symmetry-num">${current}%</div>
+        <div style="flex:1;">
+          <div class="radar-symmetry-label">Índice de simetria</div>
+          <div class="radar-symmetry-trend ${trendClass}">${trendTxt}</div>
+        </div>
+      </div>
+      ${feedbackHtml}
+      ${recalHtml}
+      <button class="radar-goto-btn" data-action="switch-tab" data-tab="treinos">Ver treino de hoje</button>
+    </div>
+  `;
+}
+
+let radarDragKey = null;
+// delegação de pointerdown/move/up pro radar — anexada uma única vez no documento
+function radarSvgPointFromEvent(svg, evt){
+  const pt = svg.createSVGPoint();
+  pt.x = evt.clientX; pt.y = evt.clientY;
+  return pt.matrixTransform(svg.getScreenCTM().inverse());
+}
+function radarValueFromPointer(svg, key, evt){
+  const i = RADAR_ATTRS.findIndex(a=>a.key===key);
+  const angle = (Math.PI*2*i/RADAR_ATTRS.length) - Math.PI/2;
+  const dx = Math.cos(angle), dy = Math.sin(angle);
+  const p = radarSvgPointFromEvent(svg, evt);
+  const r = (p.x-RADAR_CX)*dx + (p.y-RADAR_CY)*dy;
+  const clamped = Math.max(0, Math.min(RADAR_R, r));
+  return Math.round((clamped/RADAR_R)*100);
+}
+document.addEventListener('pointerdown', (e)=>{
+  const key = e.target.dataset && e.target.dataset.radarkey;
+  if(!key) return;
+  radarDragKey = key;
+  const hint = document.getElementById('radar-drag-hint');
+  if(hint) hint.style.opacity = '0';
+  e.preventDefault();
+});
+document.addEventListener('pointermove', (e)=>{
+  if(!radarDragKey || !radar || !radar.shape) return;
+  const svg = document.getElementById('radar-svg');
+  if(!svg) return;
+  const val = radarValueFromPointer(svg, radarDragKey, e);
+  const pristine = radarIsPristine();
+  radar.shape[radarDragKey] = val;
+  if(pristine) radar.shapeAtLastAssessment[radarDragKey] = val;
+  svg.innerHTML = radarSvgMarkup();
+});
+document.addEventListener('pointerup', ()=>{
+  if(radarDragKey){ radarDragKey=null; saveRadar(); renderInicioView(); }
+});
+
+/* ========================================================================
+   ONBOARDING — primeiro acesso: welcome swipe, login, perfil, contrato,
+   questionário do radar e modal de conquista
+   ======================================================================== */
+const ONB_SCREENS = ['onb-welcome','onb-login','onb-name','onb-details','onb-contract','onb-shape','onb-generating'];
+const ONB_PROGRESS_MAP = { 'onb-welcome':0, 'onb-login':1, 'onb-name':2, 'onb-details':3, 'onb-contract':4, 'onb-shape':5 };
+let onbWelcomeSlide = 0;
+let onbProfile = { name:null, age:null, height:null, weight:null };
+let onbProfilePending = false;
+let onbContract = { level:null, days:null, focus:[] };
+let onbShapeAnswers = {};
+RADAR_ATTRS.forEach(a=>{ onbShapeAnswers[a.key]=null; });
+onbShapeAnswers.strongest = null;
+onbShapeAnswers.proportion = null;
+let onbMode = 'onboarding'; // 'onboarding' (fluxo completo) ou 'reassessment' (só refazer o radar)
+
+function onbShowScreen(id){
+  ONB_SCREENS.forEach(s=> document.getElementById(s).classList.toggle('active', s===id));
+  const bar = document.getElementById('onb-progress');
+  const hideBar = id==='onb-generating' || onbMode==='reassessment';
+  bar.classList.toggle('hidden', hideBar);
+  document.getElementById('onb-skip-btn').style.display = (id==='onb-welcome' && onbMode==='onboarding') ? 'block' : 'none';
+  if(!hideBar){
+    const current = ONB_PROGRESS_MAP[id];
+    document.querySelectorAll('.onb-seg').forEach(seg=>{
+      const i = Number(seg.dataset.seg);
+      seg.classList.toggle('done', i<current);
+      seg.classList.toggle('active', i===current);
+    });
+  }
+}
+
+const ONB_WELCOME_SLIDES = [
+  {
+    title:'Nunca mais perca o ritmo',
+    sub:'Estímulo diário, sequência de treinos e motivação pra você não parar no meio do caminho.',
+    mock:`<div class="onb-mock-card">
+      <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg, var(--accent), var(--accent-dim));display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 12px;">🔥</div>
+      <div style="font-family:var(--display);font-size:24px;font-weight:800;text-align:center;">12 dias</div>
+      <div style="font-size:11px;color:var(--text-muted);text-align:center;margin-bottom:14px;">de sequência ativa</div>
+      <div style="display:flex;gap:6px;justify-content:center;">
+        <div style="width:22px;height:22px;border-radius:7px;background:var(--accent);color:var(--accent-text);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;">S</div>
+        <div style="width:22px;height:22px;border-radius:7px;background:var(--accent);color:var(--accent-text);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;">T</div>
+        <div style="width:22px;height:22px;border-radius:7px;background:var(--accent);color:var(--accent-text);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;">Q</div>
+        <div style="width:22px;height:22px;border-radius:7px;background:var(--card-bg2);border:1px solid var(--line);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-size:9px;">Q</div>
+        <div style="width:22px;height:22px;border-radius:7px;background:var(--card-bg2);border:1px solid var(--line);color:var(--text-muted);display:flex;align-items:center;justify-content:center;font-size:9px;">S</div>
+      </div>
+    </div>`
+  },
+  {
+    title:'Veja seu shape evoluir',
+    sub:'Um gráfico de radar exclusivo mostra o equilíbrio do seu corpo e como cada treino o transforma.',
+    mock:`<div class="onb-mock-card">
+      <div style="font-size:11px;font-weight:600;text-align:center;margin-bottom:8px;color:var(--text-muted);">Radar de simetria</div>
+      <svg viewBox="0 0 200 200" width="100%">
+        <polygon points="100,30 165,72 148,148 52,148 35,72" fill="none" stroke="var(--line)" stroke-width="1"/>
+        <polygon points="100,60 138,88 128,140 72,140 62,88" fill="var(--accent)" fill-opacity="0.2" stroke="var(--accent)" stroke-width="2"/>
+      </svg>
+    </div>`
+  },
+  {
+    title:'Suba de nível a cada treino',
+    sub:'Conquistas, recordes pessoais e progresso gamificado que te mantêm no jogo.',
+    mock:`<div class="onb-mock-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="width:44px;height:44px;border-radius:12px;background:var(--card-bg2);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">⚡</div>
+        <div style="flex:1;height:8px;border-radius:8px;background:var(--card-bg2);overflow:hidden;"><div style="height:100%;width:64%;background:var(--accent);border-radius:8px;"></div></div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;">
+        <div style="width:36px;height:36px;border-radius:10px;background:var(--card-bg2);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:16px;">🏆</div>
+        <div style="width:36px;height:36px;border-radius:10px;background:var(--card-bg2);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:16px;">🔥</div>
+        <div style="width:36px;height:36px;border-radius:10px;background:var(--card-bg2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:16px;">💪</div>
+      </div>
+    </div>`
+  },
+];
+function onbRenderWelcomeSlide(){
+  const s = ONB_WELCOME_SLIDES[onbWelcomeSlide];
+  document.getElementById('onb-welcome-visual').innerHTML = s.mock;
+  document.getElementById('onb-welcome-title').textContent = s.title;
+  document.getElementById('onb-welcome-sub').textContent = s.sub;
+  document.querySelectorAll('#onb-welcome-dots .onb-dot').forEach((d,i)=> d.classList.toggle('on', i===onbWelcomeSlide));
+  document.getElementById('onb-welcome-next-btn').textContent = onbWelcomeSlide===ONB_WELCOME_SLIDES.length-1 ? 'Começar' : 'Próximo';
+}
+document.getElementById('onb-welcome-next-btn').addEventListener('click', ()=>{
+  if(onbWelcomeSlide < ONB_WELCOME_SLIDES.length-1){ onbWelcomeSlide++; onbRenderWelcomeSlide(); }
+  else { onbShowScreen('onb-login'); }
+});
+document.getElementById('onb-skip-btn').addEventListener('click', ()=> onbShowScreen('onb-login'));
+
+document.getElementById('onb-google-btn').addEventListener('click', ()=> onbShowScreen('onb-name'));
+document.getElementById('onb-apple-btn').addEventListener('click', ()=> onbShowScreen('onb-name'));
+
+document.getElementById('onb-name-input').addEventListener('input', (e)=>{
+  onbProfile.name = e.target.value;
+  document.getElementById('onb-name-next-btn').disabled = !(onbProfile.name && onbProfile.name.trim().length>0);
+});
+document.getElementById('onb-name-next-btn').addEventListener('click', ()=> onbShowScreen('onb-details'));
+
+['onb-age-input','onb-height-input','onb-weight-input'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', (e)=>{
+    const key = id.replace('onb-','').replace('-input','');
+    onbProfile[key] = e.target.value;
+  });
+});
+document.getElementById('onb-details-next-btn').addEventListener('click', ()=>{
+  onbProfilePending = !(onbProfile.age && onbProfile.height && onbProfile.weight);
+  onbShowScreen('onb-contract');
+});
+document.getElementById('onb-details-skip-btn').addEventListener('click', ()=>{
+  onbProfilePending = true;
+  onbShowScreen('onb-contract');
+});
+
+function onbCheckContractReady(){
+  document.getElementById('onb-contract-next-btn').disabled = !(onbContract.level && onbContract.days && onbContract.focus.length>0);
+}
+document.querySelectorAll('#onb-level-row .onb-chip').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    onbContract.level = btn.dataset.val;
+    document.querySelectorAll('#onb-level-row .onb-chip').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    onbRenderDaysBlock();
+  });
+});
+function onbRenderDaysBlock(){
+  const block = document.getElementById('onb-days-block');
+  if(onbContract.level === 'iniciante'){
+    onbContract.days = '3';
+    block.innerHTML = `
+      <div class="onb-qtitle">Quantos dias por semana</div>
+      <div class="onb-card" style="margin:0;">
+        <div style="font-size:12.5px;font-weight:600;margin-bottom:6px;">🎯 Sugestão pra você: 3 dias por semana</div>
+        <div style="font-size:11.5px;color:var(--text-muted);line-height:1.6;">Como você é iniciante, vamos começar com uma frequência menor pra seu corpo se acostumar com o estímulo. Mais pra frente, a gente aumenta os dias e aprofunda os treinos automaticamente.</div>
+      </div>
+    `;
+  } else {
+    const suggested = onbContract.level === 'intermediario' ? '4' : null;
+    onbContract.days = null;
+    block.innerHTML = `
+      <div class="onb-qtitle">Quantos dias você quer treinar por semana?</div>
+      <div class="onb-chip-row" id="onb-days-row">
+        ${['3','4','5','6'].map(d=>`<button class="onb-chip" data-val="${d}">${d} dias${d===suggested?' <span style="opacity:.65;font-size:9.5px;">(sugerido)</span>':''}</button>`).join('')}
+      </div>
+    `;
+    document.querySelectorAll('#onb-days-row .onb-chip').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        onbContract.days = btn.dataset.val;
+        document.querySelectorAll('#onb-days-row .onb-chip').forEach(b=>b.classList.remove('selected'));
+        btn.classList.add('selected');
+        onbCheckContractReady();
+      });
+    });
+  }
+  onbCheckContractReady();
+}
+document.querySelectorAll('#onb-focus-row .onb-chip').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const val = btn.dataset.val;
+    if(onbContract.focus.includes(val)){
+      onbContract.focus = onbContract.focus.filter(v=>v!==val);
+      btn.classList.remove('selected');
+    } else {
+      onbContract.focus.push(val);
+      btn.classList.add('selected');
+    }
+    onbCheckContractReady();
+  });
+});
+document.getElementById('onb-contract-next-btn').addEventListener('click', ()=> onbShowScreen('onb-shape'));
+
+// questionário do radar — 6 grupos + ponto forte + proporção geral
+const onbShapeWrap = document.getElementById('onb-shape-questions-wrap');
+RADAR_ATTRS.forEach((a,i)=>{
+  const card = document.createElement('div'); card.className='onb-card';
+  if(a.key==='core'){
+    card.innerHTML = `<div class="onb-qtitle" style="margin-bottom:8px;">${i+1}. ${a.label}</div>
+      <button class="onb-opt" data-q="${a.key}" data-val="30">Ainda tenho bastante gordura cobrindo, nenhuma definição aparece</button>
+      <button class="onb-opt" data-q="${a.key}" data-val="55">Já aparece um pouco de definição, mas não por completo</button>
+      <button class="onb-opt" data-q="${a.key}" data-val="75">Já tenho boa definição abdominal visível</button>`;
+  } else {
+    card.innerHTML = `<div class="onb-qtitle" style="margin-bottom:8px;">${i+1}. ${a.label}</div>
+      <button class="onb-opt" data-q="${a.key}" data-val="30">Pouco volume — preciso desenvolver bastante</button>
+      <button class="onb-opt" data-q="${a.key}" data-val="55">Bom volume — já tenho uma base sólida</button>
+      <button class="onb-opt" data-q="${a.key}" data-val="75">Grande volume — bem desenvolvido, mas quero aumentar</button>`;
+  }
+  onbShapeWrap.appendChild(card);
+});
+const onbStrongCard = document.createElement('div'); onbStrongCard.className='onb-card';
+onbStrongCard.innerHTML = `<div class="onb-qtitle" style="margin-bottom:8px;">${RADAR_ATTRS.length+1}. Qual é seu ponto mais forte?</div>
+  ${RADAR_ATTRS.map(a=>`<button class="onb-opt" data-q="strongest" data-val="${a.key}">${a.label}</button>`).join('')}`;
+onbShapeWrap.appendChild(onbStrongCard);
+const onbPropCard = document.createElement('div'); onbPropCard.className='onb-card';
+onbPropCard.innerHTML = `<div class="onb-qtitle" style="margin-bottom:8px;">${RADAR_ATTRS.length+2}. Proporção entre pernas e tronco?</div>
+  <button class="onb-opt" data-q="proportion" data-val="none">Sinto o corpo equilibrado</button>
+  <button class="onb-opt" data-q="proportion" data-val="lower">Pernas finas em relação ao tronco</button>
+  <button class="onb-opt" data-q="proportion" data-val="upper">Tronco estreito em relação às pernas</button>`;
+onbShapeWrap.appendChild(onbPropCard);
+onbShapeWrap.querySelectorAll('.onb-opt').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const q = btn.dataset.q;
+    onbShapeAnswers[q] = btn.dataset.val;
+    onbShapeWrap.querySelectorAll(`.onb-opt[data-q="${q}"]`).forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    onbCheckShapeReady();
+  });
+});
+function onbCheckShapeReady(){
+  const ready = RADAR_ATTRS.every(a=>onbShapeAnswers[a.key]!==null) && onbShapeAnswers.strongest && onbShapeAnswers.proportion;
+  document.getElementById('onb-generate-btn').disabled = !ready;
+}
+
+document.getElementById('onb-generate-btn').addEventListener('click', ()=>{
+  onbShowScreen('onb-generating');
+  setTimeout(()=>{
+    const novoShape = calcularShapeBase(onbShapeAnswers);
+
+    if(onbMode === 'reassessment'){
+      radar.shape = { ...novoShape };
+      radar.shapeAtLastAssessment = { ...novoShape };
+      radar.lastAssessmentDate = Date.now();
+      saveRadar();
+      document.getElementById('onb-overlay').classList.add('hidden');
+      render();
+      showToast('Radar recalibrado com sucesso.');
+      return;
+    }
+
+    radar.shape = { ...novoShape };
+    radar.shapeAtLastAssessment = { ...novoShape };
+    radar.lastAssessmentDate = Date.now();
+    saveRadar();
+
+    profile.name = onbProfile.name;
+    if(onbProfile.age) profile.age = onbProfile.age;
+    if(onbProfile.height) profile.height = onbProfile.height;
+    if(onbProfile.weight){
+      profile.weight = onbProfile.weight;
+      profile.updatedAt = todayStr();
+      profile.weightHistory.push({date: todayStr(), weight: onbProfile.weight, bodyFat: ''});
+    }
+    const FOCUS_TO_GOAL = ['hipertrofia','emagrecimento','forca','resistencia'];
+    const chosenGoal = FOCUS_TO_GOAL.find(f=> onbContract.focus.includes(f) && GOALS.some(g=>g.id===f));
+    profile.goal = chosenGoal || (onbContract.focus.includes('resistencia') || onbContract.focus.includes('forca') ? 'condicionamento' : 'hipertrofia');
+    profile.focusGoals = onbContract.focus;
+    profile.level = onbContract.level;
+    profile.daysPerWeek = onbContract.days;
+    saveProfile();
+
+    try{ localStorage.setItem('vamo-onboarded', '1'); }catch(e){}
+
+    document.getElementById('onb-overlay').classList.add('hidden');
+    render();
+    setTimeout(()=>{ document.getElementById('onb-achievement-overlay').classList.add('show'); }, 2800);
+  }, 1400);
+});
+document.getElementById('onb-ach-close-btn').addEventListener('click', ()=>{
+  document.getElementById('onb-achievement-overlay').classList.remove('show');
+});
+
+// abre só o questionário do radar, isolado, pra recalibração (chamado pelo botão "Refazer autoavaliação")
+function onbOpenReassessment(){
+  onbMode = 'reassessment';
+  RADAR_ATTRS.forEach(a=>{ onbShapeAnswers[a.key]=null; });
+  onbShapeAnswers.strongest = null;
+  onbShapeAnswers.proportion = null;
+  onbShapeWrap.querySelectorAll('.onb-opt').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('onb-generate-btn').disabled = true;
+  document.getElementById('onb-generate-btn').textContent = 'Recalcular Meu Shape';
+  document.getElementById('onb-overlay').classList.remove('hidden');
+  onbShowScreen('onb-shape');
+}
+
+function onbStartFullFlow(){
+  onbMode = 'onboarding';
+  document.getElementById('onb-generate-btn').textContent = 'Gerar Meu Shape';
+  onbRenderDaysBlock();
+  onbRenderWelcomeSlide();
+  document.getElementById('onb-overlay').classList.remove('hidden');
+  onbShowScreen('onb-welcome');
+}
+
 (async function init(){
   if(!localStorageAvailable()){
     const warning = document.getElementById('storage-warning');
@@ -2177,6 +2905,7 @@ let restRunning=false, restDefault=60, restRemaining=60, restEnd=0, restInterval
   await loadCompletions();
   await loadDurations();
   await loadProfile();
+  await loadRadar();
   attachEvents();
   attachBackupEvents();
   attachCalendarEvents();
@@ -2187,6 +2916,12 @@ let restRunning=false, restDefault=60, restRemaining=60, restEnd=0, restInterval
   attachGeneratorEvents();
   initTimers();
   render();
+
+  let onboarded = false;
+  try{ onboarded = localStorage.getItem('vamo-onboarded') === '1'; }catch(e){}
+  if(!onboarded){
+    onbStartFullFlow();
+  }
 })();
 
 function fmtTime(sec){
