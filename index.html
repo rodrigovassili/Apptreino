@@ -113,14 +113,38 @@
     --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
   }
   *{box-sizing:border-box;}
+  :root[data-theme="chrome"] .exercise-done-btn.done,
   :root[data-theme="chrome"] .day-done-btn.done,
   :root[data-theme="chrome"] .workout-control-btn.finish,
+  :root[data-theme="chrome"] .day-type-btn.active,
+  :root[data-theme="chrome"] .muscle-chip.active,
+  :root[data-theme="chrome"] .calendar-cell.done,
+  :root[data-theme="chrome"] .streak-icon,
+  :root[data-theme="chrome"] .evo-chip.active,
+  :root[data-theme="chrome"] .goal-chip.active,
+  :root[data-theme="chrome"] .rest-pill.active,
+  :root[data-theme="chrome"] .backup-action-btn.primary,
+  :root[data-theme="chrome"] .gen-opt-btn.selected .gen-opt-check,
+  :root[data-theme="chrome"] .gen-day-chip.selected,
+  :root[data-theme="chrome"] .gen-btn-next,
   :root[data-theme="chrome"] .gen-use-btn,
+  :root[data-theme="chrome"] .day-col-check.done,
+  :root[data-theme="chrome"] .hoje-badge,
+  :root[data-theme="chrome"] .inicio-streak-icon,
   :root[data-theme="chrome"] .today-hero-btn,
-  :root[data-theme="chrome"] .welcome-btn{
+  :root[data-theme="chrome"] .welcome-icon,
+  :root[data-theme="chrome"] .welcome-btn,
+  :root[data-theme="chrome"] .timer-btn.primary{
     background:transparent;
     border:1.5px solid var(--accent);
-    color:var(--text);
+    color:var(--accent);
+  }
+  :root[data-theme="chrome"] .toggle-switch.on{
+    background:transparent;
+    border:1.5px solid var(--accent);
+  }
+  :root[data-theme="chrome"] .toggle-switch.on::after{
+    background:var(--accent);
   }
   .icon{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;vertical-align:middle;flex-shrink:0;}
   html{background:var(--bg);}
