@@ -98,52 +98,90 @@
     --display:'Sora',sans-serif;
     --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
   }
-  :root[data-theme="chrome"]{
-    --bg:#0A0A0A;
-    --card-bg:#121212;
-    --card-bg2:#1A1A1A;
-    --line:#2A2A2A;
+  :root[data-theme="chumbo"]{
+    --bg:#202024;
+    --card-bg:#2B2B30;
+    --card-bg2:#35353B;
+    --line:#40404A;
     --text:#FFFFFF;
-    --text-muted:#8C8C8C;
-    --accent:#D9D9D9;
-    --accent-dim:#A0A0A0;
+    --text-muted:#9C9CA4;
+    --accent:#ACACB2;
+    --accent-dim:#84848A;
     --danger:#C1443B;
-    --accent-text:#0A0A0A;
+    --accent-text:#1A1A1D;
+    --display:'Sora',sans-serif;
+    --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
+  }
+  :root[data-theme="slatecool"]{
+    --bg:#1B2028;
+    --card-bg:#252C37;
+    --card-bg2:#2E3644;
+    --line:#3A4352;
+    --text:#EAF0F6;
+    --text-muted:#8B9AAC;
+    --accent:#8FA8C4;
+    --accent-dim:#6C87A3;
+    --danger:#C1443B;
+    --accent-text:#12161C;
     --display:'Sora',sans-serif;
     --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
   }
   *{box-sizing:border-box;}
-  :root[data-theme="chrome"] .exercise-done-btn.done,
-  :root[data-theme="chrome"] .day-done-btn.done,
-  :root[data-theme="chrome"] .workout-control-btn.finish,
-  :root[data-theme="chrome"] .day-type-btn.active,
-  :root[data-theme="chrome"] .muscle-chip.active,
-  :root[data-theme="chrome"] .calendar-cell.done,
-  :root[data-theme="chrome"] .streak-icon,
-  :root[data-theme="chrome"] .evo-chip.active,
-  :root[data-theme="chrome"] .goal-chip.active,
-  :root[data-theme="chrome"] .rest-pill.active,
-  :root[data-theme="chrome"] .backup-action-btn.primary,
-  :root[data-theme="chrome"] .gen-opt-btn.selected .gen-opt-check,
-  :root[data-theme="chrome"] .gen-day-chip.selected,
-  :root[data-theme="chrome"] .gen-btn-next,
-  :root[data-theme="chrome"] .gen-use-btn,
-  :root[data-theme="chrome"] .day-col-check.done,
-  :root[data-theme="chrome"] .hoje-badge,
-  :root[data-theme="chrome"] .inicio-streak-icon,
-  :root[data-theme="chrome"] .today-hero-btn,
-  :root[data-theme="chrome"] .welcome-icon,
-  :root[data-theme="chrome"] .welcome-btn,
-  :root[data-theme="chrome"] .timer-btn.primary{
+  :root[data-theme="chumbo"] .exercise-done-btn.done,
+  :root[data-theme="chumbo"] .day-done-btn.done,
+  :root[data-theme="chumbo"] .workout-control-btn.finish,
+  :root[data-theme="chumbo"] .day-type-btn.active,
+  :root[data-theme="chumbo"] .muscle-chip.active,
+  :root[data-theme="chumbo"] .calendar-cell.done,
+  :root[data-theme="chumbo"] .streak-icon,
+  :root[data-theme="chumbo"] .evo-chip.active,
+  :root[data-theme="chumbo"] .goal-chip.active,
+  :root[data-theme="chumbo"] .rest-pill.active,
+  :root[data-theme="chumbo"] .backup-action-btn.primary,
+  :root[data-theme="chumbo"] .gen-opt-btn.selected .gen-opt-check,
+  :root[data-theme="chumbo"] .gen-day-chip.selected,
+  :root[data-theme="chumbo"] .gen-btn-next,
+  :root[data-theme="chumbo"] .gen-use-btn,
+  :root[data-theme="chumbo"] .day-col-check.done,
+  :root[data-theme="chumbo"] .hoje-badge,
+  :root[data-theme="chumbo"] .inicio-streak-icon,
+  :root[data-theme="chumbo"] .today-hero-btn,
+  :root[data-theme="chumbo"] .welcome-icon,
+  :root[data-theme="chumbo"] .welcome-btn,
+  :root[data-theme="chumbo"] .timer-btn.primary,
+  :root[data-theme="slatecool"] .exercise-done-btn.done,
+  :root[data-theme="slatecool"] .day-done-btn.done,
+  :root[data-theme="slatecool"] .workout-control-btn.finish,
+  :root[data-theme="slatecool"] .day-type-btn.active,
+  :root[data-theme="slatecool"] .muscle-chip.active,
+  :root[data-theme="slatecool"] .calendar-cell.done,
+  :root[data-theme="slatecool"] .streak-icon,
+  :root[data-theme="slatecool"] .evo-chip.active,
+  :root[data-theme="slatecool"] .goal-chip.active,
+  :root[data-theme="slatecool"] .rest-pill.active,
+  :root[data-theme="slatecool"] .backup-action-btn.primary,
+  :root[data-theme="slatecool"] .gen-opt-btn.selected .gen-opt-check,
+  :root[data-theme="slatecool"] .gen-day-chip.selected,
+  :root[data-theme="slatecool"] .gen-btn-next,
+  :root[data-theme="slatecool"] .gen-use-btn,
+  :root[data-theme="slatecool"] .day-col-check.done,
+  :root[data-theme="slatecool"] .hoje-badge,
+  :root[data-theme="slatecool"] .inicio-streak-icon,
+  :root[data-theme="slatecool"] .today-hero-btn,
+  :root[data-theme="slatecool"] .welcome-icon,
+  :root[data-theme="slatecool"] .welcome-btn,
+  :root[data-theme="slatecool"] .timer-btn.primary{
     background:transparent;
     border:1.5px solid var(--accent);
     color:var(--accent);
   }
-  :root[data-theme="chrome"] .toggle-switch.on{
+  :root[data-theme="chumbo"] .toggle-switch.on,
+  :root[data-theme="slatecool"] .toggle-switch.on{
     background:transparent;
     border:1.5px solid var(--accent);
   }
-  :root[data-theme="chrome"] .toggle-switch.on::after{
+  :root[data-theme="chumbo"] .toggle-switch.on::after,
+  :root[data-theme="slatecool"] .toggle-switch.on::after{
     background:var(--accent);
   }
   .icon{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;vertical-align:middle;flex-shrink:0;}
@@ -563,28 +601,27 @@
   .timer-btn.reset{color:var(--text-muted);font-size:16px;}
   .timer-btn:active{transform:scale(.94);}
 /* ===== RADAR DE SIMETRIA ===== */
-.radar-section-card{background:var(--card-bg);border-radius:18px;padding:16px;margin-bottom:14px;}
-.radar-section-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px;}
+.radar-section-card{background:var(--card-bg);border-radius:18px;padding:16px;margin-bottom:12px;position:relative;}
+.radar-corner-badge{position:absolute;top:14px;right:14px;background:var(--card-bg2);border:1px solid var(--line);border-radius:10px;padding:5px 9px;display:flex;align-items:center;gap:5px;z-index:2;}
+.radar-corner-num{font-family:var(--display);font-size:12px;font-weight:800;}
+.radar-corner-trend{font-size:10px;font-weight:700;}
 .radar-section-title{font-family:var(--display);font-size:15px;font-weight:700;}
-.radar-meta-date{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);}
-.radar-svg-wrap{display:flex;justify-content:center;margin:6px 0 2px;}
+.radar-meta-date{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);display:block;margin-bottom:2px;}
+.radar-svg-wrap{display:flex;justify-content:center;margin:2px -4px 0;}
+.radar-svg-wrap svg{width:100%;height:auto;max-width:400px;}
 .radar-drag-hint{text-align:center;font-size:10.5px;color:var(--text-muted);margin:2px 0 8px;transition:opacity .3s;}
 .radar-legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;}
 .radar-legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-muted);}
 .radar-legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .radar-legend-dot.base{background:var(--text-muted);}
 .radar-legend-dot.dyn{background:var(--accent);box-shadow:0 0 5px var(--accent);}
-.radar-symmetry-row{display:flex;align-items:center;gap:10px;background:var(--card-bg2);border-radius:12px;padding:10px 12px;margin-bottom:10px;}
-.radar-symmetry-num{font-family:var(--display);font-size:19px;font-weight:800;}
-.radar-symmetry-label{font-family:var(--mono);font-size:8.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--text-muted);}
-.radar-symmetry-trend{font-size:10.5px;font-weight:600;margin-top:1px;}
 .radar-trend-up{color:var(--accent);}
 .radar-trend-down{color:var(--danger);}
 .radar-trend-flat{color:var(--text-muted);}
 .radar-feedback{border-radius:12px;padding:11px 12px;font-size:11.5px;line-height:1.5;margin-bottom:10px;}
 .radar-feedback.positive{background:color-mix(in srgb, var(--accent) 10%, var(--card-bg));border:1px solid color-mix(in srgb, var(--accent) 40%, transparent);}
 .radar-feedback.warning{background:color-mix(in srgb, var(--danger) 10%, var(--card-bg));border:1px solid color-mix(in srgb, var(--danger) 40%, transparent);}
-.radar-recal-card{background:color-mix(in srgb, var(--danger) 10%, var(--card-bg));border:1px solid color-mix(in srgb, var(--danger) 40%, transparent);border-radius:12px;padding:11px 12px;margin-bottom:10px;font-size:11.5px;}
+.radar-recal-card{background:color-mix(in srgb, var(--danger) 10%, var(--card-bg));border:1px solid color-mix(in srgb, var(--danger) 40%, transparent);border-radius:12px;padding:11px 12px;margin-bottom:0;font-size:11.5px;}
 .radar-recal-btn{background:var(--danger);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;margin-top:8px;cursor:pointer;}
 .radar-goto-btn{display:block;width:100%;background:none;border:1.5px solid var(--line);color:var(--text);border-radius:12px;padding:11px;font-size:12.5px;font-weight:600;cursor:pointer;text-align:center;}
 .radar-goto-btn:active{border-color:var(--accent-dim);}
@@ -2377,8 +2414,8 @@ function attachBackupEvents(){
   });
 }
 
-const THEME_ORDER = ['e', 'ironorange', 'saiyan', 'concreto', 'oceanteal', 'miami', 'chrome'];
-const THEME_COLORS = { e: '#16303A', ironorange: '#0F172A', saiyan: '#0B132B', concreto: '#37474F', oceanteal: '#0F5E5C', miami: '#120B24', chrome: '#0A0A0A' };
+const THEME_ORDER = ['e', 'ironorange', 'saiyan', 'concreto', 'oceanteal', 'miami', 'chumbo', 'slatecool'];
+const THEME_COLORS = { e: '#16303A', ironorange: '#0F172A', saiyan: '#0B132B', concreto: '#37474F', oceanteal: '#0F5E5C', miami: '#120B24', chumbo: '#202024', slatecool: '#1B2028' };
 function attachThemeToggle(){
   const btn = document.getElementById('theme-toggle-btn');
   if(!btn) return;
@@ -2477,13 +2514,21 @@ function radarDiasDesdeAvaliacao(){
   return Math.floor((Date.now() - radar.lastAssessmentDate)/86400000);
 }
 
-const RADAR_CX=110, RADAR_CY=110, RADAR_R=78;
+const RADAR_CX=180, RADAR_CY=180, RADAR_R=100;
 function radarPointsFor(values){
   return RADAR_ATTRS.map((a,i)=>{
     const angle = (Math.PI*2*i/RADAR_ATTRS.length) - Math.PI/2;
     const r = (values[a.key]/100) * RADAR_R;
     return [RADAR_CX + r*Math.cos(angle), RADAR_CY + r*Math.sin(angle)];
   });
+}
+// SVG <text> ignora \n — quebra de linha de verdade precisa de <tspan> com dy
+function radarLabelMarkup(label, x, y, anchor){
+  const parts = label.split(' & ');
+  const lineHeight = 11;
+  const startY = y - (lineHeight*(parts.length-1))/2;
+  const tspans = parts.map((p,i)=> `<tspan x="${x}" dy="${i===0?0:lineHeight}">${p}</tspan>`).join('');
+  return `<text fill="var(--text-muted)" font-size="10" font-weight="600" font-family="Inter, sans-serif" text-anchor="${anchor}" y="${startY}">${tspans}</text>`;
 }
 function radarSvgMarkup(){
   let html = '';
@@ -2498,19 +2543,21 @@ function radarSvgMarkup(){
     const angle=(Math.PI*2*i/RADAR_ATTRS.length)-Math.PI/2;
     const x2=RADAR_CX+RADAR_R*Math.cos(angle), y2=RADAR_CY+RADAR_R*Math.sin(angle);
     html += `<line x1="${RADAR_CX}" y1="${RADAR_CY}" x2="${x2}" y2="${y2}" stroke="var(--line)" stroke-width="1"/>`;
-    const lx=RADAR_CX+(RADAR_R+22)*Math.cos(angle), ly=RADAR_CY+(RADAR_R+22)*Math.sin(angle);
-    html += `<text x="${lx}" y="${ly}" fill="var(--text-muted)" font-size="7.5" font-family="Inter, sans-serif" text-anchor="middle" dominant-baseline="middle">${a.label.split(' & ').join(' &\n')}</text>`;
+    const cosA = Math.cos(angle);
+    const anchor = cosA > 0.3 ? 'start' : (cosA < -0.3 ? 'end' : 'middle');
+    const lx=RADAR_CX+(RADAR_R+14)*cosA, ly=RADAR_CY+(RADAR_R+30)*Math.sin(angle);
+    html += radarLabelMarkup(a.label, lx, ly, anchor);
   });
   const refPts = radarPointsFor(radar.shapeAtLastAssessment).map(p=>p.join(',')).join(' ');
   html += `<polygon points="${refPts}" fill="var(--text-muted)" fill-opacity="0.06" stroke="var(--text-muted)" stroke-width="1.2" stroke-dasharray="3,3"/>`;
   const curPts = radarPointsFor(radar.shape).map(p=>p.join(',')).join(' ');
-  html += `<polygon points="${curPts}" fill="var(--accent)" fill-opacity="0.18" stroke="var(--accent)" stroke-width="2.2" style="filter:drop-shadow(0 0 4px var(--accent))"/>`;
+  html += `<polygon points="${curPts}" fill="var(--accent)" fill-opacity="0.18" stroke="var(--accent)" stroke-width="2.5" style="filter:drop-shadow(0 0 5px var(--accent))"/>`;
   RADAR_ATTRS.forEach((a,i)=>{
     const angle=(Math.PI*2*i/RADAR_ATTRS.length)-Math.PI/2;
     const r=(radar.shape[a.key]/100)*RADAR_R;
     const x=RADAR_CX+r*Math.cos(angle), y=RADAR_CY+r*Math.sin(angle);
-    html += `<circle cx="${x}" cy="${y}" r="13" fill="transparent" data-radarkey="${a.key}" style="cursor:grab;touch-action:none;"/>`;
-    html += `<circle cx="${x}" cy="${y}" r="4" fill="var(--accent)" style="pointer-events:none;"/>`;
+    html += `<circle cx="${x}" cy="${y}" r="16" fill="transparent" data-radarkey="${a.key}" style="cursor:grab;touch-action:none;"/>`;
+    html += `<circle cx="${x}" cy="${y}" r="5" fill="var(--accent)" style="pointer-events:none;"/>`;
   });
   return html;
 }
@@ -2550,26 +2597,23 @@ function renderRadarCard(){
   return `
     <p class="section-title" style="margin:18px 0 12px;">Radar de simetria</p>
     <div class="radar-section-card">
-      <div class="radar-section-top">
-        <span class="radar-meta-date">Avaliado em ${dateLabel}</span>
+      <div class="radar-corner-badge">
+        <span class="radar-corner-num">${current}%</span>
+        <span class="radar-corner-trend ${trendClass}">${delta>0?'▲':delta<0?'▼':'—'}</span>
       </div>
+      <span class="radar-meta-date">Avaliado em ${dateLabel}</span>
       <div class="radar-svg-wrap">
-        <svg id="radar-svg" viewBox="0 0 220 220" width="210" height="210">${radarSvgMarkup()}</svg>
+        <svg id="radar-svg" viewBox="0 0 360 360" width="100%">${radarSvgMarkup()}</svg>
       </div>
       <p class="radar-drag-hint" id="radar-drag-hint">Toque e arraste qualquer ponto pra ajustar manualmente.</p>
       <div class="radar-legend">
         <div class="radar-legend-item"><span class="radar-legend-dot base"></span>Ponto de partida</div>
         <div class="radar-legend-item"><span class="radar-legend-dot dyn"></span>Shape atual</div>
       </div>
-      <div class="radar-symmetry-row">
-        <div class="radar-symmetry-num">${current}%</div>
-        <div style="flex:1;">
-          <div class="radar-symmetry-label">Índice de simetria</div>
-          <div class="radar-symmetry-trend ${trendClass}">${trendTxt}</div>
-        </div>
-      </div>
       ${feedbackHtml}
       ${recalHtml}
+    </div>
+    <div class="radar-section-card" style="padding:14px;">
       <button class="radar-goto-btn" data-action="switch-tab" data-tab="treinos">Ver treino de hoje</button>
     </div>
   `;
@@ -2888,6 +2932,9 @@ function onbOpenReassessment(){
 
 function onbStartFullFlow(){
   onbMode = 'onboarding';
+  // a cor oficial do app é o verde — o onboarding sempre abre nesse tema,
+  // independente de qualquer preferência de tema salva anteriormente
+  document.documentElement.setAttribute('data-theme', 'e');
   document.getElementById('onb-generate-btn').textContent = 'Gerar Meu Shape';
   onbRenderDaysBlock();
   onbRenderWelcomeSlide();
