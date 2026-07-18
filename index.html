@@ -170,6 +170,10 @@
   .bottom-nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card-bg);backdrop-filter:blur(6px);border-top:1px solid var(--line);z-index:40;padding-bottom:max(env(safe-area-inset-bottom), 4px);}
   .nav-btn{flex:1;background:none;border:none;border-top:2px solid transparent;color:var(--text-muted);font-family:var(--mono);font-size:9.5px;letter-spacing:0.2px;text-transform:uppercase;padding:14px 2px 12px;cursor:pointer;}
   .nav-btn#nav-timer-btn.running{color:var(--accent);}
+  .nav-btn#nav-timer-btn.running #nav-timer-label{
+    background:var(--accent);color:var(--accent-text);font-family:var(--mono);font-weight:800;
+    border-radius:9px;padding:2px 8px;box-shadow:0 0 8px var(--accent);
+  }
   .nav-btn.active{color:var(--accent);border-top-color:var(--accent);}
 
   .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:2px;color:var(--accent);text-transform:uppercase;margin:0 0 6px;}
@@ -446,8 +450,8 @@
   .timer-page.alert .rest-ring{animation:timer-alert 0.6s ease 3;}
   .timer-page-hint{font-family:var(--mono);font-size:10.5px;color:var(--text-muted);max-width:260px;margin:0 auto;line-height:1.6;}
 
-  .profile-icon-btn{position:absolute;top:2px;right:44px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card-bg);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;}
-  .profile-icon-btn .icon{width:16px;height:16px;}
+  .settings-icon-btn{position:absolute;top:2px;right:44px;width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card-bg);color:var(--text-muted);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .settings-icon-btn .icon{width:16px;height:16px;}
 
   .generator-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(2px);z-index:70;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .25s ease;}
   .generator-overlay.show{opacity:1;pointer-events:auto;}
@@ -591,6 +595,10 @@
 .radar-recal-btn{background:var(--danger);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;margin-top:8px;cursor:pointer;}
 .radar-goto-btn{display:block;width:100%;background:none;border:1.5px solid var(--line);color:var(--text);border-radius:12px;padding:11px;font-size:12.5px;font-weight:600;cursor:pointer;text-align:center;}
 .radar-goto-btn:active{border-color:var(--accent-dim);}
+.bodymap-card{background:var(--card-bg);border-radius:16px;padding:14px;margin:12px 0;}
+.bodymap-row{display:flex;gap:10px;justify-content:center;}
+.bodymap-col{flex:1;max-width:110px;display:flex;flex-direction:column;align-items:center;}
+.bodymap-label{font-family:var(--mono);font-size:8.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-muted);margin-top:2px;}
 .radar-pending-card{background:color-mix(in srgb, var(--accent) 8%, var(--card-bg));border:1px solid color-mix(in srgb, var(--accent) 35%, transparent);border-radius:12px;padding:11px 12px;margin-bottom:10px;font-size:11.5px;line-height:1.5;}
 
 /* ===== ONBOARDING OVERLAY ===== */
@@ -790,7 +798,7 @@
 <div class="app-header-fixed" id="app-header-fixed">
   <div class="hero">
     <button class="theme-toggle-btn" id="theme-toggle-btn" title="Trocar tema" aria-label="Trocar tema">◐</button>
-    <button class="profile-icon-btn" data-action="switch-tab" data-tab="profile" title="Perfil" aria-label="Abrir perfil"><svg class="icon" viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></button>
+    <button class="settings-icon-btn" data-action="open-settings" title="Configurações" aria-label="Abrir configurações"><svg class="icon" viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
     <h1 id="hero-title">Vamo!</h1>
     <p id="hero-subtitle">toque no dia para abrir, monte o treino e registre cada série</p>
   </div>
@@ -810,15 +818,32 @@
 
   <div class="view hidden" id="view-profile">
     <div id="profile-content"></div>
-    <button class="reset-btn" id="reset-btn">Limpar todos os dados</button>
-    <button class="backup-btn" id="backup-toggle-btn">Backup manual (exportar / importar)</button>
-    <div class="backup-panel hidden" id="backup-panel">
-      <p class="backup-hint">Os dados ficam salvos no navegador deste aparelho. Baixe um arquivo de backup de vez em quando, ou pra levar seus dados pra outro celular/navegador.</p>
-      <label class="backup-label">Seus dados atuais</label>
-      <button class="backup-action-btn primary" id="download-backup-btn"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3v13"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>Baixar arquivo de backup</button>
-      <label class="backup-label">Restaurar de um arquivo</label>
-      <button class="backup-action-btn" id="import-file-btn"><svg class="icon" viewBox="0 0 24 24"><path d="M12 21V8"/><path d="M7 13l5-5 5 5"/><path d="M4 20h16"/></svg>Escolher arquivo de backup</button>
-      <input type="file" id="import-file-input" accept=".json,application/json" style="display:none;">
+  </div>
+
+  <div class="generator-overlay" id="settings-overlay">
+    <div class="generator-sheet">
+      <button class="generator-close" data-action="close-settings" aria-label="Fechar">✕</button>
+      <p class="gen-eyebrow">Configurações</p>
+      <div id="settings-content"></div>
+      <button class="reset-btn" id="reset-btn">Limpar todos os dados</button>
+      <button class="backup-btn" id="backup-toggle-btn">Backup manual (exportar / importar)</button>
+      <div class="backup-panel hidden" id="backup-panel">
+        <p class="backup-hint">Os dados ficam salvos no navegador deste aparelho. Baixe um arquivo de backup de vez em quando, ou pra levar seus dados pra outro celular/navegador.</p>
+        <label class="backup-label">Seus dados atuais</label>
+        <button class="backup-action-btn primary" id="download-backup-btn"><svg class="icon" viewBox="0 0 24 24"><path d="M12 3v13"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>Baixar arquivo de backup</button>
+        <label class="backup-label">Restaurar de um arquivo</label>
+        <button class="backup-action-btn" id="import-file-btn"><svg class="icon" viewBox="0 0 24 24"><path d="M12 21V8"/><path d="M7 13l5-5 5 5"/><path d="M4 20h16"/></svg>Escolher arquivo de backup</button>
+        <input type="file" id="import-file-input" accept=".json,application/json" style="display:none;">
+      </div>
+    </div>
+  </div>
+
+  <div class="generator-overlay" id="history-overlay">
+    <div class="generator-sheet">
+      <button class="generator-close" data-action="close-history" aria-label="Fechar">✕</button>
+      <p class="gen-eyebrow">Histórico de treinos</p>
+      <h2 class="gen-h1" style="margin-bottom:14px;">Treinos salvos</h2>
+      <div id="history-list"></div>
     </div>
   </div>
 
@@ -950,6 +975,10 @@ function genPickExercises(groupKey, equip, count){
   }
   return picked.slice(0,count);
 }
+const GEN_FOCUS_ALIAS = {
+  'Braços': ['Bíceps','Tríceps'],
+  'Pernas': ['Quadríceps','Posterior de coxa','Glúteos','Panturrilha'],
+};
 function genBuildWeekPlan(answers){
   const orderedSelected = DAYS.map(d=>d.key).filter(k=>answers.dias.includes(k));
   const split = GEN_SPLIT_BY_COUNT[orderedSelected.length];
@@ -965,6 +994,32 @@ function genBuildWeekPlan(answers){
       forceTraining: false,
     };
   });
+
+  // foco em grupo específico: reforça com 1 exercício a mais no primeiro dia que já treina esse grupo
+  if(answers.foco && answers.foco!=='nenhum'){
+    const candidateMuscles = GEN_FOCUS_ALIAS[answers.foco] || [answers.foco];
+    for(const dayKey of orderedSelected){
+      const day = newPlan[dayKey];
+      const matchedMuscle = candidateMuscles.find(m => day.exercises.some(e=>e.muscle===m));
+      if(matchedMuscle){
+        const usedNames = new Set(day.exercises.map(e=>e.name));
+        const options = (EXERCISE_LIBRARY[matchedMuscle]||[]).filter(n=>!usedNames.has(n) && genFitsEquipment(n, answers.equipamento));
+        if(options.length){
+          day.exercises.push({id:uid(), name:options[0], muscle:matchedMuscle});
+        }
+        break;
+      }
+    }
+  }
+
+  // cardio: se pedido, um dos dias que sobrou fora da seleção vira dia de cardio
+  if(answers.cardio === 'sim'){
+    const restDayKey = DAYS.map(d=>d.key).find(k => !orderedSelected.includes(k));
+    if(restDayKey){
+      newPlan[restDayKey] = { title:'Cardio', exercises:[], forceTraining:true };
+    }
+  }
+
   return newPlan;
 }
 function isPlanEmpty(){
@@ -979,7 +1034,7 @@ const GEN_LABELS = {
 };
 let genAnswers = {};
 let genStep = 1;
-const GEN_TOTAL_STEPS = 5;
+const GEN_TOTAL_STEPS = 7;
 
 function genReset(){
   genAnswers = { dias: [] };
@@ -994,7 +1049,7 @@ function genCloseOverlay(){
   document.getElementById('generator-overlay').classList.remove('show');
 }
 function genStepQuestionKey(step){
-  return {2:'objetivo', 3:'experiencia', 4:'equipamento'}[step];
+  return {2:'objetivo', 3:'experiencia', 4:'equipamento', 5:'cardio', 6:'foco'}[step];
 }
 function genIsStepValid(step){
   if(step===1) return genAnswers.dias.length>=2 && genAnswers.dias.length<=6;
@@ -1004,7 +1059,7 @@ function genIsStepValid(step){
 function renderGenStep(){
   const progressEl = document.getElementById('gen-progress');
   progressEl.innerHTML = '';
-  for(let i=1;i<=4;i++){
+  for(let i=1;i<=6;i++){
     const dot = document.createElement('div');
     dot.className = 'gen-dot' + (i<=genStep ? ' done' : '');
     progressEl.appendChild(dot);
@@ -1013,7 +1068,7 @@ function renderGenStep(){
   const stepsEl = document.getElementById('gen-steps');
   if(genStep===1){
     stepsEl.innerHTML = `
-      <p class="gen-eyebrow">Passo 1 de 4</p>
+      <p class="gen-eyebrow">Passo 1 de 6</p>
       <h2 class="gen-h1">Em quais dias da semana você vai treinar?</h2>
       <p class="gen-hint">Toque nos dias — escolha entre 2 e 6</p>
       <div class="gen-week-grid" id="gen-week-grid">
@@ -1024,7 +1079,7 @@ function renderGenStep(){
     `;
   }else if(genStep===2){
     stepsEl.innerHTML = `
-      <p class="gen-eyebrow">Passo 2 de 4</p>
+      <p class="gen-eyebrow">Passo 2 de 6</p>
       <h2 class="gen-h1">Qual seu objetivo principal?</h2>
       <div class="gen-opt-grid" data-question="objetivo">
         ${genOptBtn('objetivo','hipertrofia','Hipertrofia','ganhar massa muscular')}
@@ -1036,7 +1091,7 @@ function renderGenStep(){
     `;
   }else if(genStep===3){
     stepsEl.innerHTML = `
-      <p class="gen-eyebrow">Passo 3 de 4</p>
+      <p class="gen-eyebrow">Passo 3 de 6</p>
       <h2 class="gen-h1">Qual sua experiência com musculação?</h2>
       <div class="gen-opt-grid" data-question="experiencia">
         ${genOptBtn('experiencia','iniciante','Iniciante','nunca treinei ou parei há muito tempo')}
@@ -1047,7 +1102,7 @@ function renderGenStep(){
     `;
   }else if(genStep===4){
     stepsEl.innerHTML = `
-      <p class="gen-eyebrow">Passo 4 de 4</p>
+      <p class="gen-eyebrow">Passo 4 de 6</p>
       <h2 class="gen-h1">Onde você vai treinar?</h2>
       <div class="gen-opt-grid" data-question="equipamento">
         ${genOptBtn('equipamento','academia','Academia completa','todos os aparelhos e pesos')}
@@ -1058,6 +1113,33 @@ function renderGenStep(){
       ${genNavRowHtml()}
     `;
   }else if(genStep===5){
+    stepsEl.innerHTML = `
+      <p class="gen-eyebrow">Passo 5 de 6</p>
+      <h2 class="gen-h1">Quer incluir cardio no treino?</h2>
+      <p class="gen-hint">Se topar, um dos dias livres da semana vira um dia de cardio</p>
+      <div class="gen-opt-grid" data-question="cardio">
+        ${genOptBtn('cardio','sim','Sim, quero cardio','um dia livre vira dia de cardio')}
+        ${genOptBtn('cardio','nao','Não, só musculação','manter os dias livres como descanso')}
+      </div>
+      ${genNavRowHtml()}
+    `;
+  }else if(genStep===6){
+    stepsEl.innerHTML = `
+      <p class="gen-eyebrow">Passo 6 de 6</p>
+      <h2 class="gen-h1">Quer focar em algum grupo específico?</h2>
+      <p class="gen-hint">Esse grupo ganha um exercício a mais no dia que já treina ele</p>
+      <div class="gen-opt-grid" data-question="foco">
+        ${genOptBtn('foco','nenhum','Nenhum foco extra','manter tudo equilibrado')}
+        ${genOptBtn('foco','Peito','Peito','')}
+        ${genOptBtn('foco','Costas','Costas','')}
+        ${genOptBtn('foco','Ombros','Ombros','')}
+        ${genOptBtn('foco','Braços','Braços','bíceps e tríceps')}
+        ${genOptBtn('foco','Pernas','Pernas','quadríceps, posterior, glúteos')}
+        ${genOptBtn('foco','Abdômen','Abdômen','')}
+      </div>
+      ${genNavRowHtml()}
+    `;
+  }else if(genStep===7){
     const weekPlan = genBuildWeekPlan(genAnswers);
     genAnswers._generatedPlan = weekPlan;
     stepsEl.innerHTML = `
@@ -1068,6 +1150,8 @@ function renderGenStep(){
         <span class="gen-summary-tag">${GEN_LABELS.objetivo[genAnswers.objetivo]}</span>
         <span class="gen-summary-tag">${GEN_LABELS.experiencia[genAnswers.experiencia]}</span>
         <span class="gen-summary-tag">${GEN_LABELS.equipamento[genAnswers.equipamento]}</span>
+        ${genAnswers.cardio==='sim' ? '<span class="gen-summary-tag">+ Cardio</span>' : ''}
+        ${genAnswers.foco && genAnswers.foco!=='nenhum' ? `<span class="gen-summary-tag">Foco em ${genAnswers.foco}</span>` : ''}
       </div>
       <div>
         ${DAYS.map(d=>{
@@ -1091,7 +1175,7 @@ function renderGenStep(){
     document.getElementById('gen-regenerate-btn').addEventListener('click', renderGenStep);
   }
 
-  if(genStep!==5){
+  if(genStep!==7){
     stepsEl.querySelectorAll('.gen-day-chip').forEach(chip=>{
       chip.addEventListener('click', ()=>{
         const day = chip.dataset.day;
@@ -1126,26 +1210,18 @@ function genNavRowHtml(){
   return `
     <div class="gen-nav-row">
       <button class="gen-btn-back" id="gen-back-btn" style="visibility:${genStep===1?'hidden':'visible'};">Voltar</button>
-      <button class="gen-btn-next ${valid?'enabled':''}" id="gen-next-btn">${genStep===4?'Montar meu treino':'Continuar'}</button>
+      <button class="gen-btn-next ${valid?'enabled':''}" id="gen-next-btn">${genStep===6?'Montar meu treino':'Continuar'}</button>
     </div>
   `;
 }
 function genApplyPlan(){
-  const proceed = ()=>{
-    plan = genAnswers._generatedPlan;
-    savePlan();
-    activeDayKey = null;
-    genCloseOverlay();
-    render();
-    showToast('Treino gerado e aplicado na sua semana.');
-  };
-  if(!isPlanEmpty()){
-    if(confirm('Isso vai substituir todo o treino atual pela nova semana gerada. Continuar?')){
-      proceed();
+  applyNewPlan(genAnswers._generatedPlan, {
+    confirmMsg: 'Isso vai substituir todo o treino atual pela nova semana gerada. O treino de agora fica salvo no histórico. Continuar?',
+    onDone: ()=>{
+      genCloseOverlay();
+      showToast('Treino gerado e aplicado na sua semana.');
     }
-  }else{
-    proceed();
-  }
+  });
 }
 function attachGeneratorEvents(){
   document.getElementById('generator-close-btn').addEventListener('click', genCloseOverlay);
@@ -1260,6 +1336,12 @@ function getRows(exId){
       const previous = allEntries.filter(e=>e.date!==todayStr()).sort((a,b)=> a.date < b.date ? 1 : -1)[0];
       entry = previous || null;
     }
+    if(!entry){
+      // exercício com ID novo (treino trocado/gerado de novo) — busca pelo NOME
+      // no histórico entre todos os treinos já feitos, não só no ID atual
+      const name = findExerciseNameById(exId);
+      if(name && nameHistory[name]) entry = nameHistory[name];
+    }
     const rows = entry ? entry.sets.map(s=>({reps:String(s.reps), weight:String(s.weight), difficulty:s.difficulty||null})) : [];
     while(rows.length < 3) rows.push({reps:'',weight:'',difficulty:null});
     pendingRows[exId] = rows;
@@ -1350,6 +1432,148 @@ function saveDurations(){
   }
 }
 
+let planHistory = [];
+async function loadPlanHistory(){
+  try{
+    const raw = localStorage.getItem('vamo-plan-history');
+    planHistory = raw ? JSON.parse(raw) : [];
+  }catch(e){ planHistory = []; }
+}
+function savePlanHistory(){
+  try{ localStorage.setItem('vamo-plan-history', JSON.stringify(planHistory)); }
+  catch(e){ console.error('Erro ao salvar histórico de treinos', e); }
+}
+
+// nameHistory guarda, por NOME do exercício (não por ID), a última sessão registrada —
+// isso sobrevive a trocas de treino, já que cada treino novo gera IDs novos pros exercícios
+let nameHistory = {};
+async function loadNameHistory(){
+  try{
+    const raw = localStorage.getItem('vamo-name-history');
+    nameHistory = raw ? JSON.parse(raw) : {};
+  }catch(e){ nameHistory = {}; }
+}
+function saveNameHistory(){
+  try{ localStorage.setItem('vamo-name-history', JSON.stringify(nameHistory)); }
+  catch(e){ console.error('Erro ao salvar histórico por exercício', e); }
+}
+function findExerciseNameById(exId){
+  for(const d of DAYS){
+    const ex = (plan[d.key].exercises||[]).find(e=>e.id===exId);
+    if(ex) return ex.name;
+  }
+  return null;
+}
+
+// Arquiva o treino ativo (com os logs que existirem) no histórico, se houver algo relevante
+function archiveCurrentPlanIfNeeded(){
+  if(isPlanEmpty()) return;
+  const activeTitles = DAYS.map(d=>plan[d.key]).filter(d=>d.exercises.length>0 || d.forceTraining).map(d=>d.title);
+  const name = activeTitles.length ? [...new Set(activeTitles)].join(', ') : 'Treino sem nome';
+  const bundledLogs = {};
+  DAYS.forEach(d=>{
+    (plan[d.key].exercises||[]).forEach(ex=>{
+      if(logs[ex.id]) bundledLogs[ex.id] = logs[ex.id];
+    });
+  });
+  planHistory.unshift({
+    id: uid(),
+    name,
+    archivedAt: todayStr(),
+    plan: JSON.parse(JSON.stringify(plan)),
+    logs: JSON.parse(JSON.stringify(bundledLogs)),
+  });
+  savePlanHistory();
+}
+
+// Ponto único de troca de treino — usado pela Sugestão de treino, Montar meu treino,
+// Treino Consultoria (futuro) e reativação pelo Histórico. Sempre confirma, sempre arquiva.
+function applyNewPlan(newPlan, opts){
+  opts = opts || {};
+  const proceed = ()=>{
+    archiveCurrentPlanIfNeeded();
+    plan = newPlan;
+    savePlan();
+    activeDayKey = null;
+    pendingRows = {};
+    render();
+    if(opts.onDone) opts.onDone();
+  };
+  if(!isPlanEmpty()){
+    if(confirm(opts.confirmMsg || 'Isso vai substituir seu treino atual. O treino de agora fica salvo no histórico, com todas as cargas registradas. Continuar?')){
+      proceed();
+    }
+  }else{
+    proceed();
+  }
+}
+
+// Montar meu treino: começa uma semana em branco (via o mesmo mecanismo de confirmação+arquivo)
+function startMontarMeuTreino(){
+  const blankPlan = {};
+  DAYS.forEach(d=>{ blankPlan[d.key] = {title:'Descanso', exercises:[], forceTraining:false}; });
+  applyNewPlan(blankPlan, {
+    confirmMsg: 'Isso vai substituir seu treino atual por uma semana em branco pra você montar. O treino de agora fica salvo no histórico. Continuar?',
+    onDone: ()=>{
+      switchTab('treinos');
+      showToast('Semana em branco pronta — escolha os dias de treino e adicione seus exercícios.');
+    }
+  });
+}
+
+// Histórico de treinos
+function renderHistoryList(){
+  const el = document.getElementById('history-list');
+  if(!el) return;
+  if(!planHistory.length){
+    el.innerHTML = `<p class="gen-hint">Nenhum treino salvo ainda. Toda vez que você trocar de treino, o anterior fica guardado aqui, com todas as cargas registradas.</p>`;
+    return;
+  }
+  el.innerHTML = planHistory.map(h=>{
+    const exCount = Object.values(h.plan).reduce((s,d)=> s + (d.exercises ? d.exercises.length : 0), 0);
+    return `
+      <div class="card" style="margin-bottom:12px;">
+        <div class="gen-result-title">${h.name}</div>
+        <div class="gen-result-sub" style="margin-bottom:10px;">arquivado em ${fmtDate(h.archivedAt)} · ${exCount} exercício${exCount===1?'':'s'}</div>
+        <button class="radar-goto-btn" data-action="reactivate-history" data-id="${h.id}">Usar esse treino</button>
+      </div>
+    `;
+  }).join('');
+}
+function openHistoryOverlay(){
+  renderHistoryList();
+  document.getElementById('history-overlay').classList.add('show');
+}
+function closeHistoryOverlay(){
+  document.getElementById('history-overlay').classList.remove('show');
+}
+function reactivateHistoryEntry(entryId){
+  const entry = planHistory.find(h=>h.id===entryId);
+  if(!entry) return;
+  applyNewPlan(JSON.parse(JSON.stringify(entry.plan)), {
+    confirmMsg: `Isso vai substituir seu treino atual por "${entry.name}". O treino de agora fica salvo no histórico. Continuar?`,
+    onDone: ()=>{
+      Object.assign(logs, JSON.parse(JSON.stringify(entry.logs)));
+      saveLogs();
+      closeHistoryOverlay();
+      switchTab('treinos');
+      showToast(`"${entry.name}" reativado, com as cargas de quando você usou ele.`);
+    }
+  });
+}
+function attachHistoryEvents(){
+  const overlay = document.getElementById('history-overlay');
+  if(!overlay) return;
+  overlay.addEventListener('click', (e)=>{
+    if(e.target.id === 'history-overlay'){ closeHistoryOverlay(); return; }
+    const btn = e.target.closest('[data-action]');
+    if(!btn) return;
+    const action = btn.dataset.action;
+    if(action==='close-history'){ closeHistoryOverlay(); }
+    else if(action==='reactivate-history'){ reactivateHistoryEntry(btn.dataset.id); }
+  });
+}
+
 let profile = null;
 async function loadProfile(){
   try{
@@ -1388,6 +1612,11 @@ function commitRows(exId){
     let entry = logs[exId].find(e=>e.date===todayStr());
     if(!entry){ entry = {date: todayStr(), sets: []}; logs[exId].push(entry); }
     entry.sets = validSets;
+    const exName = findExerciseNameById(exId);
+    if(exName){
+      nameHistory[exName] = { date: todayStr(), sets: validSets.map(s=>({...s})) };
+      saveNameHistory();
+    }
   }else if(logs[exId]){
     const entry = logs[exId].find(e=>e.date===todayStr());
     if(entry){
@@ -1666,6 +1895,14 @@ function attachCalendarEvents(){
       render();
     }else if(action==='radar-reassess'){
       onbOpenReassessment();
+    }else if(action==='open-generator'){
+      genOpenOverlay();
+    }else if(action==='open-consultoria'){
+      showToast('Em breve — seu personal vai poder enviar treinos direto pro seu app.');
+    }else if(action==='open-montar-treino'){
+      startMontarMeuTreino();
+    }else if(action==='open-history'){
+      openHistoryOverlay();
     }
   });
 }
@@ -1687,6 +1924,8 @@ function attachNavEvents(){
   document.addEventListener('click', (e)=>{
     const tabEl = e.target.closest('[data-action="switch-tab"]');
     if(tabEl){ switchTab(tabEl.dataset.tab); }
+    const settingsEl = e.target.closest('[data-action="open-settings"]');
+    if(settingsEl){ openSettings(); }
   });
 }
 function updateFlameNav(){
@@ -1839,6 +2078,7 @@ function renderDayDetail(day){
           : `<h2 class="detail-title-text">${data.title}</h2><button class="edit-title-btn" data-action="edit-day-title" data-day="${day.key}" title="Editar nome" aria-label="Editar nome">${ICONS.pencil}</button>`}
         ${workoutControlBtn}
       </div>
+      ${isCardioDay ? '' : renderDayBodyMap(data.exercises)}
       ${isCardioDay ? '' : exercisesHtml}
       ${dayTypeButtons}
       ${isCardioDay ? '' : `<button class="add-exercise-btn" data-action="toggle-library" data-day="${day.key}">${ICONS.plus}Adicionar exercício</button>${renderLibrary(day.key)}`}
@@ -1859,9 +2099,6 @@ function renderProfileView(){
   const goalChipsHtml = GOALS.map(g =>
     `<div class="goal-chip ${g.id===profile.goal?'active':''}" data-action="set-goal" data-goal="${g.id}">${g.label}</div>`
   ).join('');
-  const restPillsHtml = REST_OPTIONS.map(sec =>
-    `<button class="rest-pill ${profile.restDefault===sec?'active':''}" data-action="set-rest-default" data-sec="${sec}">${sec}s</button>`
-  ).join('');
   const hint = profile.updatedAt
     ? `Última atualização: ${fmtDate(profile.updatedAt)}`
     : 'Ainda sem registro de peso/gordura';
@@ -1875,27 +2112,36 @@ function renderProfileView(){
       </div>
     </div>
 
-    <div class="gen-btn-row" data-action="open-generator">
-      <div>
-        <div class="gen-btn-text">Gerar novo treino</div>
-        <span class="gen-btn-sub">monta uma semana nova do zero</span>
-      </div>
-      <span style="color:var(--accent);display:flex;transform:rotate(-90deg);">${ICONS.chevron}</span>
-    </div>
-
     <p class="section-title">Objetivo atual</p>
     <div class="card"><div class="goal-row">${goalChipsHtml}</div></div>
 
-    <p class="section-title">Evolução corporal</p>
+    <p class="section-title">Dados pessoais</p>
+    <div class="card">
+      <div class="field-row">
+        <div class="field"><label>Data de nascimento</label><input type="date" id="profile-birthdate-input" value="${profile.birthdate || ''}"></div>
+      </div>
+    </div>
+
+    <p class="section-title">Informações corporais</p>
     <div class="card">
       <div class="field-row">
         <div class="field"><label>Peso atual (kg)</label><input type="number" inputmode="decimal" step="0.1" id="profile-weight-input" value="${profile.weight || ''}" placeholder="0"></div>
         <div class="field"><label>% de gordura</label><input type="number" inputmode="decimal" step="0.1" id="profile-bodyfat-input" value="${profile.bodyFat || ''}" placeholder="0"></div>
       </div>
+      <div class="field-row">
+        <div class="field"><label>Altura (cm)</label><input type="number" inputmode="numeric" id="profile-height-input" value="${profile.height || ''}" placeholder="0"></div>
+      </div>
       <div class="field-hint">${hint}</div>
     </div>
-
-    <p class="section-title">Configurações</p>
+  `;
+}
+function renderSettingsView(){
+  const el = document.getElementById('settings-content');
+  if(!el || !profile) return;
+  const restPillsHtml = REST_OPTIONS.map(sec =>
+    `<button class="rest-pill ${profile.restDefault===sec?'active':''}" data-action="set-rest-default" data-sec="${sec}">${sec}s</button>`
+  ).join('');
+  el.innerHTML = `
     <div class="card">
       <div class="setting-row">
         <span class="setting-label">Descanso padrão</span>
@@ -1907,6 +2153,36 @@ function renderProfileView(){
       </div>
     </div>
   `;
+}
+function openSettings(){
+  renderSettingsView();
+  document.getElementById('settings-overlay').classList.add('show');
+}
+function closeSettings(){
+  document.getElementById('settings-overlay').classList.remove('show');
+}
+function attachSettingsEvents(){
+  const overlay = document.getElementById('settings-overlay');
+  if(!overlay) return;
+  overlay.addEventListener('click', (e)=>{
+    if(e.target.id === 'settings-overlay'){ closeSettings(); return; }
+    const btn = e.target.closest('[data-action]');
+    if(!btn) return;
+    const action = btn.dataset.action;
+    if(action==='close-settings'){
+      closeSettings();
+    }else if(action==='set-rest-default'){
+      const sec = parseInt(btn.dataset.sec, 10);
+      profile.restDefault = sec;
+      saveProfile();
+      if(!restRunning){ restDefault = sec; restRemaining = sec; updateRestDisplay(); }
+      renderSettingsView();
+    }else if(action==='toggle-alerts'){
+      profile.alertsEnabled = !profile.alertsEnabled;
+      saveProfile();
+      renderSettingsView();
+    }
+  });
 }
 function attachProfileEvents(){
   const el = document.getElementById('profile-content');
@@ -1920,24 +2196,20 @@ function attachProfileEvents(){
       profile.goal = btn.dataset.goal;
       saveProfile();
       renderProfileView();
-    }else if(action==='set-rest-default'){
-      const sec = parseInt(btn.dataset.sec, 10);
-      profile.restDefault = sec;
-      saveProfile();
-      if(!restRunning){ restDefault = sec; restRemaining = sec; updateRestDisplay(); }
-      renderProfileView();
-    }else if(action==='toggle-alerts'){
-      profile.alertsEnabled = !profile.alertsEnabled;
-      saveProfile();
-      renderProfileView();
-    }else if(action==='open-generator'){
-      genOpenOverlay();
     }
   });
 
   el.addEventListener('blur', (e)=>{
     if(e.target.id==='profile-name-input'){
       profile.name = e.target.value.trim();
+      saveProfile();
+    }
+    if(e.target.id==='profile-birthdate-input'){
+      profile.birthdate = e.target.value;
+      saveProfile();
+    }
+    if(e.target.id==='profile-height-input'){
+      profile.height = e.target.value;
       saveProfile();
     }
     if(e.target.id==='profile-weight-input' || e.target.id==='profile-bodyfat-input'){
@@ -2067,6 +2339,26 @@ function renderInicioView(){
           <div class="calendar-body" id="calendar-body"></div>
         </div>
       </div></div>
+    </div>
+
+    <p class="section-title">Treino</p>
+    <div class="card" style="padding:14px;">
+      <div class="gen-btn-row" style="margin-bottom:10px;" data-action="open-generator">
+        <div><div class="gen-btn-text">Sugestão de treino</div><span class="gen-btn-sub">o app monta pra você, do zero</span></div>
+        <span style="color:var(--accent);display:flex;transform:rotate(-90deg);">${ICONS.chevron}</span>
+      </div>
+      <div class="gen-btn-row" style="margin-bottom:10px;" data-action="open-consultoria">
+        <div><div class="gen-btn-text">Treino Consultoria</div><span class="gen-btn-sub">em breve — treino do seu personal</span></div>
+        <span style="color:var(--text-muted);display:flex;transform:rotate(-90deg);">${ICONS.chevron}</span>
+      </div>
+      <div class="gen-btn-row" style="margin-bottom:10px;" data-action="open-montar-treino">
+        <div><div class="gen-btn-text">Montar meu treino</div><span class="gen-btn-sub">você planeja cada exercício</span></div>
+        <span style="color:var(--accent);display:flex;transform:rotate(-90deg);">${ICONS.chevron}</span>
+      </div>
+      <div class="gen-btn-row" style="margin-bottom:0;" data-action="open-history">
+        <div><div class="gen-btn-text">Histórico de treinos</div><span class="gen-btn-sub">${planHistory.length} treino${planHistory.length===1?'':'s'} salvo${planHistory.length===1?'':'s'}</span></div>
+        <span style="color:var(--accent);display:flex;transform:rotate(-90deg);">${ICONS.chevron}</span>
+      </div>
     </div>
 
     ${radar && radar.shape ? renderRadarCard() : renderTodayHero()}
@@ -2339,7 +2631,7 @@ function attachBackupEvents(){
   });
 
   document.getElementById('download-backup-btn').addEventListener('click', ()=>{
-    const data = JSON.stringify({plan, logs, completions, durations}, null, 2);
+    const data = JSON.stringify({plan, logs, completions, durations, profile, radar, planHistory, nameHistory}, null, 2);
     const blob = new Blob([data], {type: 'application/json'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -2369,10 +2661,18 @@ function attachBackupEvents(){
         logs = data.logs;
         completions = data.completions || {};
         durations = data.durations || {};
+        if(data.profile) profile = data.profile;
+        if(data.radar) radar = data.radar;
+        if(Array.isArray(data.planHistory)) planHistory = data.planHistory;
+        if(data.nameHistory) nameHistory = data.nameHistory;
         await savePlan();
         await saveLogs();
         saveCompletions();
         saveDurations();
+        if(data.profile) saveProfile();
+        if(data.radar) saveRadar();
+        if(Array.isArray(data.planHistory)) savePlanHistory();
+        if(data.nameHistory) saveNameHistory();
         openLibrary.clear(); openHistory.clear(); openExercises.clear();
         Object.keys(pendingRows).forEach(k => delete pendingRows[k]);
         activeDayKey = null;
@@ -2427,6 +2727,54 @@ const MUSCLE_TO_RADAR = {
   'Posterior de coxa':'lowerPosterior', 'Panturrilha':'lowerPosterior',
   'Abdômen':'core',
 };
+
+/* ========================================================================
+   MAPA MUSCULAR NO CORPO — polígonos anatômicos adaptados da biblioteca
+   open-source "body-highlighter" (lahaxearnaud/body-highlighter, MIT License,
+   https://github.com/lahaxearnaud/body-highlighter). viewBox original 0 0 100 200.
+   ======================================================================== */
+const BODY_MAP_FRONT = {
+  'Peito': ['51.8367347 41.6326531 51.0204082 55.1020408 57.9591837 57.9591837 67.755102 55.5102041 70.6122449 47.3469388 62.0408163 41.6326531','29.7959184 46.5306122 31.4285714 55.5102041 40.8163265 57.9591837 48.1632653 55.1020408 47.755102 42.0408163 37.5510204 42.0408163'],
+  'Ombros': ['78.3673469 53.0612245 79.5918367 47.755102 79.1836735 41.2244898 75.9183673 37.9591837 71.0204082 36.3265306 72.244898 42.8571429 71.4285714 47.3469388','28.1632653 47.3469388 21.2244898 53.0612245 20 47.755102 20.4081633 40.8163265 24.4897959 37.1428571 28.5714286 37.1428571 26.9387755 43.2653061'],
+  'Bíceps': ['16.7346939 68.1632653 17.9591837 71.4285714 22.8571429 66.122449 28.9795918 53.877551 27.755102 49.3877551 20.4081633 55.9183673','71.4285714 49.3877551 70.2040816 54.6938776 76.3265306 66.122449 81.6326531 71.8367347 82.8571429 68.9795918 78.7755102 55.5102041'],
+  'Tríceps': ['69.3877551 55.5102041 69.3877551 61.6326531 75.9183673 72.6530612 77.5510204 70.2040816 75.5102041 67.3469388','22.4489796 69.3877551 29.7959184 55.5102041 29.7959184 60.8163265 22.8571429 73.0612245'],
+  'Abdômen': ['56.3265306 59.1836735 57.9591837 64.0816327 58.3673469 77.9591837 58.3673469 92.6530612 56.3265306 98.3673469 55.1020408 104.081633 51.4285714 107.755102 51.0204082 84.4897959 50.6122449 67.3469388 51.0204082 57.1428571','43.6734694 58.7755102 48.5714286 57.1428571 48.9795918 67.3469388 48.5714286 84.4897959 48.1632653 107.346939 44.4897959 103.673469 40.8163265 91.4285714 40.8163265 78.3673469 41.2244898 64.4897959'],
+  'Quadríceps': ['34.6938776 98.7755102 37.1428571 108.163265 37.1428571 127.755102 34.2857143 137.142857 31.0204082 132.653061 29.3877551 120 28.1632653 111.428571 29.3877551 100.816327 32.244898 94.6938776','63.2653061 105.714286 64.4897959 100 66.9387755 94.6938776 70.2040816 101.22449 71.0204082 111.836735 68.1632653 133.061224 65.3061224 137.55102 62.4489796 128.571429 62.0408163 111.428571','38.7755102 129.387755 38.3673469 112.244898 41.2244898 118.367347 44.4897959 129.387755 42.8571429 135.102041 40 146.122449 36.3265306 146.530612 35.5102041 140','59.5918367 145.714286 55.5102041 128.979592 60.8163265 113.877551 61.2244898 130.204082 64.0816327 139.591837 62.8571429 146.530612','32.6530612 138.367347 26.5306122 145.714286 25.7142857 136.734694 25.7142857 127.346939 26.9387755 114.285714 29.3877551 133.469388','71.8367347 113.061224 73.877551 124.081633 73.877551 140.408163 72.6530612 145.714286 66.5306122 138.367347 70.2040816 133.469388'],
+  'Panturrilha': ['71.4285714 160.408163 73.4693878 153.469388 76.7346939 161.22449 79.5918367 167.755102 78.3673469 187.755102 79.5918367 195.510204 74.6938776 195.510204','24.8979592 194.693878 27.755102 164.897959 28.1632653 160.408163 26.122449 154.285714 24.8979592 157.55102 22.4489796 161.632653 20.8163265 167.755102 22.0408163 188.163265 20.8163265 195.510204','72.6530612 195.102041 69.7959184 159.183673 65.3061224 158.367347 64.0816327 162.44898 64.0816327 165.306122 65.7142857 177.142857','35.5102041 158.367347 35.9183673 162.44898 35.9183673 166.938776 35.1020408 172.244898 35.1020408 176.734694 32.244898 182.040816 30.6122449 187.346939 26.9387755 194.693878 27.3469388 187.755102 28.1632653 180.408163 28.5714286 175.510204 28.9795918 169.795918 29.7959184 164.081633 30.2040816 158.77551'],
+  'Antebraço': ['6.12244898 88.5714286 10.2040816 75.1020408 14.6938776 70.2040816 16.3265306 74.2857143 19.1836735 73.4693878 4.48979592 97.5510204 0 100','84.4897959 69.7959184 83.2653061 73.4693878 80 73.0612245 95.1020408 98.3673469 100 100.408163 93.4693878 89.3877551 89.7959184 76.3265306','77.5510204 72.244898 77.5510204 77.5510204 80.4081633 84.0816327 85.3061224 89.7959184 92.244898 101.22449 94.6938776 99.5918367','6.93877551 101.22449 13.4693878 90.6122449 18.7755102 84.0816327 21.6326531 77.1428571 21.2244898 71.8367347 4.89795918 98.7755102'],
+};
+const BODY_MAP_BACK = {
+  'Trapézio': ['44.6808511 21.7021277 47.6595745 21.7021277 47.2340426 38.2978723 47.6595745 64.6808511 38.2978723 53.1914894 35.3191489 40.8510638 31.0638298 36.5957447 39.1489362 33.1914894 43.8297872 27.2340426','52.3404255 21.7021277 55.7446809 21.7021277 56.5957447 27.2340426 60.8510638 32.7659574 68.9361702 36.5957447 64.6808511 40.4255319 61.7021277 53.1914894 52.3404255 64.6808511 53.1914894 38.2978723'],
+  'Ombros': ['29.3617021 37.0212766 22.9787234 39.1489362 17.4468085 44.2553191 18.2978723 53.6170213 24.2553191 49.3617021 27.2340426 46.3829787','71.0638298 37.0212766 78.2978723 39.5744681 82.5531915 44.6808511 81.7021277 53.6170213 74.893617 48.9361702 72.3404255 45.106383'],
+  'Costas': ['31.0638298 38.7234043 28.0851064 48.9361702 28.5106383 55.3191489 34.0425532 75.3191489 47.2340426 71.0638298 47.2340426 66.3829787 36.5957447 54.0425532 33.6170213 41.2765957','68.9361702 38.7234043 71.9148936 49.3617021 71.4893617 56.1702128 65.9574468 75.3191489 52.7659574 71.0638298 52.7659574 66.3829787 63.4042553 54.4680851 66.3829787 41.7021277','47.6595745 72.7659574 34.4680851 77.0212766 35.3191489 83.4042553 49.3617021 102.12766 46.8085106 82.9787234','52.3404255 72.7659574 65.5319149 77.0212766 64.6808511 83.4042553 50.6382979 102.12766 53.1914894 83.8297872'],
+  'Tríceps': ['26.8085106 49.787234 17.8723404 55.7446809 14.4680851 72.3404255 16.5957447 81.7021277 21.7021277 63.8297872 26.8085106 55.7446809','73.6170213 50.212766 82.1276596 55.7446809 85.9574468 73.1914894 83.4042553 82.1276596 77.8723404 62.9787234 73.1914894 55.7446809','26.8085106 58.2978723 26.8085106 68.5106383 22.9787234 75.3191489 19.1489362 77.4468085 22.5531915 65.5319149','72.7659574 58.2978723 77.0212766 64.6808511 80.4255319 77.4468085 76.5957447 75.3191489 72.7659574 68.9361702'],
+  'Antebraço': ['86.3829787 75.7446809 91.0638298 83.4042553 93.1914894 94.0425532 100 106.382979 96.1702128 104.255319 88.0851064 89.3617021 84.2553191 83.8297872','13.6170213 75.7446809 8.93617021 83.8297872 6.80851064 93.6170213 0 106.382979 3.82978723 104.255319 12.3404255 88.5106383 15.7446809 82.9787234','81.2765957 79.5744681 77.4468085 77.8723404 79.1489362 84.6808511 91.0638298 103.829787 93.1914894 108.93617 94.4680851 104.680851','18.7234043 79.5744681 22.1276596 77.8723404 20.8510638 84.2553191 9.36170213 102.978723 6.80851064 108.510638 5.10638298 104.680851'],
+  'Glúteos': ['44.6808511 99.5744681 30.212766 108.510638 29.787234 118.723404 31.4893617 125.957447 47.2340426 121.276596 49.3617021 114.893617','55.3191489 99.1489362 51.0638298 114.468085 52.3404255 120.851064 68.0851064 125.957447 69.787234 119.148936 69.3617021 108.510638'],
+  'Posterior de coxa': ['28.9361702 122.12766 31.0638298 129.361702 36.5957447 125.957447 35.3191489 135.319149 34.4680851 150.212766 29.3617021 158.297872 28.9361702 146.808511 27.6595745 141.276596 27.2340426 131.489362','71.4893617 121.702128 69.3617021 128.93617 63.8297872 125.957447 65.5319149 136.595745 66.3829787 150.212766 71.0638298 158.297872 71.4893617 147.659574 72.7659574 142.12766 73.6170213 131.914894','38.7234043 125.531915 44.2553191 145.957447 40.4255319 166.808511 36.1702128 152.765957 37.0212766 135.319149','61.7021277 125.531915 63.4042553 136.170213 64.2553191 153.191489 60 166.808511 56.1702128 146.382979'],
+  'Panturrilha': ['29.3617021 160.425532 28.5106383 167.234043 24.6808511 179.574468 23.8297872 192.765957 25.5319149 197.021277 28.5106383 193.191489 29.787234 180 31.9148936 171.06383 31.9148936 166.808511','37.4468085 165.106383 35.3191489 167.659574 33.1914894 171.914894 31.0638298 180.425532 30.212766 191.914894 34.0425532 200 38.7234043 190.638298 39.1489362 168.93617','62.9787234 165.106383 61.2765957 168.510638 61.7021277 190.638298 66.3829787 199.574468 70.6382979 191.914894 68.9361702 179.574468 66.8085106 170.212766','70.6382979 160.425532 72.3404255 168.510638 75.7446809 179.148936 76.5957447 192.765957 74.4680851 196.595745 72.3404255 193.617021 70.6382979 179.574468 68.0851064 168.085106'],
+};
+function renderBodyMapSvg(map, activeMuscles){
+  const polys = Object.entries(map).map(([muscle, pointsArr])=>{
+    const isActive = activeMuscles.has(muscle);
+    return pointsArr.map(pts=>
+      `<polygon points="${pts}" fill="${isActive ? 'var(--accent)' : 'var(--card-bg2)'}" ${isActive?'style="filter:drop-shadow(0 0 2px var(--accent))"':''}/>`
+    ).join('');
+  }).join('');
+  return `<svg viewBox="0 0 100 200" width="100%">${polys}</svg>`;
+}
+function renderDayBodyMap(exercises){
+  if(!exercises || !exercises.length) return '';
+  const activeMuscles = new Set(exercises.map(ex=>ex.muscle).filter(Boolean));
+  if(!activeMuscles.size) return '';
+  return `
+    <div class="bodymap-card">
+      <div class="bodymap-row">
+        <div class="bodymap-col">${renderBodyMapSvg(BODY_MAP_FRONT, activeMuscles)}<span class="bodymap-label">frente</span></div>
+        <div class="bodymap-col">${renderBodyMapSvg(BODY_MAP_BACK, activeMuscles)}<span class="bodymap-label">costas</span></div>
+      </div>
+    </div>
+  `;
+}
 const RADAR_REASSESS_DAYS = 60;
 
 let radar = null;
@@ -2510,12 +2858,12 @@ function radarSvgMarkup(){
       const angle=(Math.PI*2*i/RADAR_ATTRS.length)-Math.PI/2;
       return `${RADAR_CX+RADAR_R*f*Math.cos(angle)},${RADAR_CY+RADAR_R*f*Math.sin(angle)}`;
     }).join(' ');
-    html += `<polygon points="${pts}" fill="none" stroke="var(--line)" stroke-width="1"/>`;
+    html += `<polygon points="${pts}" fill="none" stroke="color-mix(in srgb, var(--text) 22%, transparent)" stroke-width="1"/>`;
   });
   RADAR_ATTRS.forEach((a,i)=>{
     const angle=(Math.PI*2*i/RADAR_ATTRS.length)-Math.PI/2;
     const x2=RADAR_CX+RADAR_R*Math.cos(angle), y2=RADAR_CY+RADAR_R*Math.sin(angle);
-    html += `<line x1="${RADAR_CX}" y1="${RADAR_CY}" x2="${x2}" y2="${y2}" stroke="var(--line)" stroke-width="1"/>`;
+    html += `<line x1="${RADAR_CX}" y1="${RADAR_CY}" x2="${x2}" y2="${y2}" stroke="color-mix(in srgb, var(--text) 22%, transparent)" stroke-width="1"/>`;
     const cosA = Math.cos(angle);
     const anchor = cosA > 0.3 ? 'start' : (cosA < -0.3 ? 'end' : 'middle');
     const lx=RADAR_CX+(RADAR_R+14)*cosA, ly=RADAR_CY+(RADAR_R+30)*Math.sin(angle);
@@ -2926,12 +3274,16 @@ function onbStartFullFlow(){
   await loadDurations();
   await loadProfile();
   await loadRadar();
+  await loadPlanHistory();
+  await loadNameHistory();
   attachEvents();
   attachBackupEvents();
   attachCalendarEvents();
   attachNavEvents();
   attachThemeToggle();
   attachProfileEvents();
+  attachSettingsEvents();
+  attachHistoryEvents();
   attachStatsEvents();
   attachGeneratorEvents();
   initTimers();
