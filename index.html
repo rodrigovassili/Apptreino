@@ -113,6 +113,15 @@
     --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
   }
   *{box-sizing:border-box;}
+  :root[data-theme="chrome"] .day-done-btn.done,
+  :root[data-theme="chrome"] .workout-control-btn.finish,
+  :root[data-theme="chrome"] .gen-use-btn,
+  :root[data-theme="chrome"] .today-hero-btn,
+  :root[data-theme="chrome"] .welcome-btn{
+    background:transparent;
+    border:1.5px solid var(--accent);
+    color:var(--text);
+  }
   .icon{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;vertical-align:middle;flex-shrink:0;}
   html{background:var(--bg);}
   body{
