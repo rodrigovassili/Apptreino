@@ -90,7 +90,7 @@
     --card-bg2:#241745;
     --line:#2E1C57;
     --text:#FFFFFF;
-    --text-muted:#A99AC7;
+    --text-muted:#2DD9CF;
     --accent:#FF2FB0;
     --accent-dim:#00E5FF;
     --danger:#FF6B6B;
@@ -109,20 +109,6 @@
     --accent-dim:#84848A;
     --danger:#C1443B;
     --accent-text:#1A1A1D;
-    --display:'Sora',sans-serif;
-    --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
-  }
-  :root[data-theme="slatecool"]{
-    --bg:#1B2028;
-    --card-bg:#252C37;
-    --card-bg2:#2E3644;
-    --line:#3A4352;
-    --text:#EAF0F6;
-    --text-muted:#8B9AAC;
-    --accent:#8FA8C4;
-    --accent-dim:#6C87A3;
-    --danger:#C1443B;
-    --accent-text:#12161C;
     --display:'Sora',sans-serif;
     --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
   }
@@ -148,40 +134,16 @@
   :root[data-theme="chumbo"] .today-hero-btn,
   :root[data-theme="chumbo"] .welcome-icon,
   :root[data-theme="chumbo"] .welcome-btn,
-  :root[data-theme="chumbo"] .timer-btn.primary,
-  :root[data-theme="slatecool"] .exercise-done-btn.done,
-  :root[data-theme="slatecool"] .day-done-btn.done,
-  :root[data-theme="slatecool"] .workout-control-btn.finish,
-  :root[data-theme="slatecool"] .day-type-btn.active,
-  :root[data-theme="slatecool"] .muscle-chip.active,
-  :root[data-theme="slatecool"] .calendar-cell.done,
-  :root[data-theme="slatecool"] .streak-icon,
-  :root[data-theme="slatecool"] .evo-chip.active,
-  :root[data-theme="slatecool"] .goal-chip.active,
-  :root[data-theme="slatecool"] .rest-pill.active,
-  :root[data-theme="slatecool"] .backup-action-btn.primary,
-  :root[data-theme="slatecool"] .gen-opt-btn.selected .gen-opt-check,
-  :root[data-theme="slatecool"] .gen-day-chip.selected,
-  :root[data-theme="slatecool"] .gen-btn-next,
-  :root[data-theme="slatecool"] .gen-use-btn,
-  :root[data-theme="slatecool"] .day-col-check.done,
-  :root[data-theme="slatecool"] .hoje-badge,
-  :root[data-theme="slatecool"] .inicio-streak-icon,
-  :root[data-theme="slatecool"] .today-hero-btn,
-  :root[data-theme="slatecool"] .welcome-icon,
-  :root[data-theme="slatecool"] .welcome-btn,
-  :root[data-theme="slatecool"] .timer-btn.primary{
+  :root[data-theme="chumbo"] .timer-btn.primary{
     background:transparent;
     border:1.5px solid var(--accent);
     color:var(--accent);
   }
-  :root[data-theme="chumbo"] .toggle-switch.on,
-  :root[data-theme="slatecool"] .toggle-switch.on{
+  :root[data-theme="chumbo"] .toggle-switch.on{
     background:transparent;
     border:1.5px solid var(--accent);
   }
-  :root[data-theme="chumbo"] .toggle-switch.on::after,
-  :root[data-theme="slatecool"] .toggle-switch.on::after{
+  :root[data-theme="chumbo"] .toggle-switch.on::after{
     background:var(--accent);
   }
   .icon{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:inline-block;vertical-align:middle;flex-shrink:0;}
@@ -1286,7 +1248,14 @@ const ICONS = {
 
 function getRows(exId){
   if(!pendingRows[exId]){
-    const entry = (logs[exId]||[]).find(e=>e.date===todayStr());
+    const allEntries = logs[exId]||[];
+    let entry = allEntries.find(e=>e.date===todayStr());
+    if(!entry){
+      // sem registro de hoje ainda — usa a última sessão anterior como referência de carga,
+      // pra nunca perder o parâmetro de peso/reps de uma vez pra outra
+      const previous = allEntries.filter(e=>e.date!==todayStr()).sort((a,b)=> a.date < b.date ? 1 : -1)[0];
+      entry = previous || null;
+    }
     const rows = entry ? entry.sets.map(s=>({reps:String(s.reps), weight:String(s.weight), difficulty:s.difficulty||null})) : [];
     while(rows.length < 3) rows.push({reps:'',weight:'',difficulty:null});
     pendingRows[exId] = rows;
@@ -2414,8 +2383,8 @@ function attachBackupEvents(){
   });
 }
 
-const THEME_ORDER = ['e', 'ironorange', 'saiyan', 'concreto', 'oceanteal', 'miami', 'chumbo', 'slatecool'];
-const THEME_COLORS = { e: '#16303A', ironorange: '#0F172A', saiyan: '#0B132B', concreto: '#37474F', oceanteal: '#0F5E5C', miami: '#120B24', chumbo: '#202024', slatecool: '#1B2028' };
+const THEME_ORDER = ['e', 'ironorange', 'saiyan', 'concreto', 'oceanteal', 'miami', 'chumbo'];
+const THEME_COLORS = { e: '#16303A', ironorange: '#0F172A', saiyan: '#0B132B', concreto: '#37474F', oceanteal: '#0F5E5C', miami: '#120B24', chumbo: '#202024' };
 function attachThemeToggle(){
   const btn = document.getElementById('theme-toggle-btn');
   if(!btn) return;
