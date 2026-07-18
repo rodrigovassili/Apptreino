@@ -41,14 +41,53 @@
     --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
   }
   :root[data-theme="mono"]{
-    --bg:#0A0A0C;
-    --card-bg:#161618;
-    --card-bg2:#1E1E20;
-    --line:rgba(255,255,255,0.1);
-    --text:#F5F5F5;
-    --text-muted:#7A7A7E;
-    --accent:#F5F5F5;
-    --accent-dim:#B8B8BC;
+    --bg:#000000;
+    --card-bg:#000000;
+    --card-bg2:#0D0D0D;
+    --line:#262626;
+    --text:#FFFFFF;
+    --text-muted:#A3A3A3;
+    --accent:#FFFFFF;
+    --accent-dim:#C2C2C2;
+    --danger:#C1443B;
+    --display:'Sora',sans-serif;
+    --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
+  }
+  :root[data-theme="saiyan"]{
+    --bg:#0B132B;
+    --card-bg:#1C2541;
+    --card-bg2:#243056;
+    --line:#2C3A63;
+    --text:#FFFFFF;
+    --text-muted:#8FA3C7;
+    --accent:#FFD700;
+    --accent-dim:#00FFFF;
+    --danger:#C1443B;
+    --display:'Sora',sans-serif;
+    --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
+  }
+  :root[data-theme="caverna"]{
+    --bg:#1E251A;
+    --card-bg:#293224;
+    --card-bg2:#333D2C;
+    --line:#3C4736;
+    --text:#FFFFFF;
+    --text-muted:#A9B39F;
+    --accent:#FFCC00;
+    --accent-dim:#E50914;
+    --danger:#E50914;
+    --display:'Sora',sans-serif;
+    --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
+  }
+  :root[data-theme="ironorange"]{
+    --bg:#0F172A;
+    --card-bg:#1E293B;
+    --card-bg2:#28374C;
+    --line:#334155;
+    --text:#FFFFFF;
+    --text-muted:#94A3B8;
+    --accent:#FF6B00;
+    --accent-dim:#C25400;
     --danger:#C1443B;
     --display:'Sora',sans-serif;
     --mono:'IBM Plex Mono',SFMono-Regular,Consolas,monospace;
@@ -2055,8 +2094,8 @@ function attachBackupEvents(){
   });
 }
 
-const THEME_ORDER = ['e', 'd', 'mono'];
-const THEME_COLORS = { d: '#241F38', e: '#16303A', mono: '#0A0A0C' };
+const THEME_ORDER = ['e', 'd', 'mono', 'caverna', 'ironorange', 'saiyan'];
+const THEME_COLORS = { d: '#241F38', e: '#16303A', mono: '#000000', caverna: '#1E251A', ironorange: '#0F172A', saiyan: '#0B132B' };
 function attachThemeToggle(){
   const btn = document.getElementById('theme-toggle-btn');
   if(!btn) return;
