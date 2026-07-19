@@ -859,6 +859,30 @@
     </div>
   </div>
 
+  <div class="generator-overlay" id="meus-treinos-overlay">
+    <div class="generator-sheet">
+      <button class="generator-close" data-action="close-meus-treinos" aria-label="Fechar">✕</button>
+      <p class="gen-eyebrow">Meus Treinos</p>
+      <h2 class="gen-h1" style="margin-bottom:14px;">Como você quer treinar?</h2>
+      <div class="gen-btn-row" style="margin-bottom:10px;" data-action="open-generator">
+        <div><div class="gen-btn-text">Sugestão de treino</div><span class="gen-btn-sub">o app monta pra você, do zero</span></div>
+        <span style="color:var(--accent);display:flex;transform:rotate(-90deg);"><svg class="icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
+      </div>
+      <div class="gen-btn-row" style="margin-bottom:10px;" data-action="open-consultoria">
+        <div><div class="gen-btn-text">Treino Consultoria</div><span class="gen-btn-sub">em breve — treino do seu personal</span></div>
+        <span style="color:var(--text-muted);display:flex;transform:rotate(-90deg);"><svg class="icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
+      </div>
+      <div class="gen-btn-row" style="margin-bottom:10px;" data-action="open-montar-treino">
+        <div><div class="gen-btn-text">Montar meu treino</div><span class="gen-btn-sub">você planeja cada exercício</span></div>
+        <span style="color:var(--accent);display:flex;transform:rotate(-90deg);"><svg class="icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
+      </div>
+      <div class="gen-btn-row" style="margin-bottom:0;" data-action="open-history">
+        <div><div class="gen-btn-text">Histórico de treinos</div><span class="gen-btn-sub" id="meus-treinos-history-sub">salvos</span></div>
+        <span style="color:var(--accent);display:flex;transform:rotate(-90deg);"><svg class="icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
+      </div>
+    </div>
+  </div>
+
   <div class="view hidden" id="view-timer">
     <div class="timer-page">
       <p class="section-title">Descanso</p>
@@ -1520,6 +1544,30 @@ function applyNewPlan(newPlan, opts){
   }
 }
 
+function openMeusTreinosOverlay(){
+  const sub = document.getElementById('meus-treinos-history-sub');
+  if(sub) sub.textContent = `${planHistory.length} treino${planHistory.length===1?'':'s'} salvo${planHistory.length===1?'':'s'}`;
+  document.getElementById('meus-treinos-overlay').classList.add('show');
+}
+function closeMeusTreinosOverlay(){
+  document.getElementById('meus-treinos-overlay').classList.remove('show');
+}
+function attachMeusTreinosEvents(){
+  const overlay = document.getElementById('meus-treinos-overlay');
+  if(!overlay) return;
+  overlay.addEventListener('click', (e)=>{
+    if(e.target.id === 'meus-treinos-overlay'){ closeMeusTreinosOverlay(); return; }
+    const btn = e.target.closest('[data-action]');
+    if(!btn) return;
+    const action = btn.dataset.action;
+    if(action==='close-meus-treinos'){ closeMeusTreinosOverlay(); }
+    else if(action==='open-generator'){ closeMeusTreinosOverlay(); genOpenOverlay(); }
+    else if(action==='open-consultoria'){ showToast('Em breve — seu personal vai poder enviar treinos direto pro seu app.'); }
+    else if(action==='open-montar-treino'){ closeMeusTreinosOverlay(); startMontarMeuTreino(); }
+    else if(action==='open-history'){ closeMeusTreinosOverlay(); openHistoryOverlay(); }
+  });
+}
+
 // Montar meu treino: começa uma semana em branco (via o mesmo mecanismo de confirmação+arquivo)
 function startMontarMeuTreino(){
   const blankPlan = {};
@@ -2037,14 +2085,8 @@ function attachCalendarEvents(){
       render();
     }else if(action==='radar-reassess'){
       onbOpenReassessment();
-    }else if(action==='open-generator'){
-      genOpenOverlay();
-    }else if(action==='open-consultoria'){
-      showToast('Em breve — seu personal vai poder enviar treinos direto pro seu app.');
-    }else if(action==='open-montar-treino'){
-      startMontarMeuTreino();
-    }else if(action==='open-history'){
-      openHistoryOverlay();
+    }else if(action==='open-meus-treinos'){
+      openMeusTreinosOverlay();
     }else if(action==='hydration-plus'){
       adjustHydration(HYDRATION_STEP);
     }else if(action==='hydration-minus'){
@@ -2490,23 +2532,9 @@ function renderInicioView(){
     ${renderHydrationCard()}
 
     <p class="section-title">Meus Treinos</p>
-    <div class="card" style="padding:14px;">
-      <div class="gen-btn-row" style="margin-bottom:10px;" data-action="open-generator">
-        <div><div class="gen-btn-text">Sugestão de treino</div><span class="gen-btn-sub">o app monta pra você, do zero</span></div>
-        <span style="color:var(--accent);display:flex;transform:rotate(-90deg);">${ICONS.chevron}</span>
-      </div>
-      <div class="gen-btn-row" style="margin-bottom:10px;" data-action="open-consultoria">
-        <div><div class="gen-btn-text">Treino Consultoria</div><span class="gen-btn-sub">em breve — treino do seu personal</span></div>
-        <span style="color:var(--text-muted);display:flex;transform:rotate(-90deg);">${ICONS.chevron}</span>
-      </div>
-      <div class="gen-btn-row" style="margin-bottom:10px;" data-action="open-montar-treino">
-        <div><div class="gen-btn-text">Montar meu treino</div><span class="gen-btn-sub">você planeja cada exercício</span></div>
-        <span style="color:var(--accent);display:flex;transform:rotate(-90deg);">${ICONS.chevron}</span>
-      </div>
-      <div class="gen-btn-row" style="margin-bottom:0;" data-action="open-history">
-        <div><div class="gen-btn-text">Histórico de treinos</div><span class="gen-btn-sub">${planHistory.length} treino${planHistory.length===1?'':'s'} salvo${planHistory.length===1?'':'s'}</span></div>
-        <span style="color:var(--accent);display:flex;transform:rotate(-90deg);">${ICONS.chevron}</span>
-      </div>
+    <div class="gen-btn-row" style="margin-bottom:14px;" data-action="open-meus-treinos">
+      <div><div class="gen-btn-text">Gerenciar meu treino</div><span class="gen-btn-sub">sugestão, consultoria, montar do zero ou histórico</span></div>
+      <span style="color:var(--accent);display:flex;transform:rotate(-90deg);">${ICONS.chevron}</span>
     </div>
 
     ${radar && radar.shape ? renderRadarCard() : renderTodayHero()}
@@ -3437,6 +3465,7 @@ function onbStartFullFlow(){
   attachProfileEvents();
   attachSettingsEvents();
   attachHistoryEvents();
+  attachMeusTreinosEvents();
   attachStatsEvents();
   attachGeneratorEvents();
   initTimers();
