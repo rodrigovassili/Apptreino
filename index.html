@@ -258,15 +258,14 @@
 
   .exercise-item{padding:12px 0;border-bottom:1px solid var(--line);}
   .exercise-item:last-child{border-bottom:none;}
-  .exercise-header{display:flex;align-items:stretch;justify-content:space-between;gap:10px;cursor:pointer;user-select:none;}
+  .exercise-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;cursor:pointer;user-select:none;}
   .exercise-header-left{flex:1;min-width:0;}
-  .exercise-title-row{display:flex;align-items:center;gap:7px;}
-  .exercise-name{font-weight:500;font-size:14px;}
-  .exercise-muscle{font-family:var(--mono);font-size:9px;letter-spacing:0.3px;text-transform:uppercase;color:var(--text-muted);}
-  .exercise-suggestion{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);margin-top:4px;margin-left:33px;}
-  .exercise-divider{width:1px;background:var(--line);flex-shrink:0;align-self:stretch;}
-  .exercise-rm-badge{display:flex;align-items:center;font-family:var(--mono);font-size:10px;color:var(--accent);background:color-mix(in srgb, var(--accent) 12%, transparent);padding:0 9px;border-radius:6px;flex-shrink:0;white-space:nowrap;}
-  .exercise-header-actions{display:flex;align-items:center;gap:2px;flex-shrink:0;}
+  .exercise-name{font-weight:500;font-size:14px;white-space:nowrap;}
+  .exercise-suggestion{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);margin-top:4px;}
+  .exercise-side{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;margin-top:1px;}
+  .exercise-rm-badge{font-family:var(--mono);font-size:10px;color:var(--accent);background:color-mix(in srgb, var(--accent) 12%, transparent);padding:3px 9px;border-radius:6px;white-space:nowrap;}
+  .exercise-muscle{font-family:var(--mono);font-size:9px;letter-spacing:0.3px;text-transform:uppercase;color:var(--text-muted);white-space:nowrap;}
+  .exercise-header-actions{display:flex;align-items:center;gap:2px;flex-shrink:0;margin-top:1px;}
   .exercise-done-btn{width:26px;height:26px;border-radius:8px;border:none;background:var(--card-bg2);color:transparent;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
   .exercise-done-btn.done{background:var(--accent);color:var(--accent-text);}
   .exercise-chevron{color:var(--text-muted);transition:transform .25s ease;flex-shrink:0;padding:4px;display:flex;}
@@ -301,13 +300,6 @@
   .save-indicator{font-family:var(--mono);font-size:9.5px;color:var(--accent);opacity:0;transition:opacity .3s ease;margin-left:7px;vertical-align:middle;}
   .save-indicator.show{opacity:1;}
 
-  .history-toggle{background:none;border:none;color:var(--text-muted);font-family:var(--mono);font-size:11.5px;cursor:pointer;padding:10px 0;letter-spacing:0.3px;}
-  .history-toggle:hover{color:var(--accent);}
-  .history-list{margin-top:6px;display:flex;flex-direction:column;gap:6px;}
-  .history-list.hidden{display:none;}
-  .history-entry{font-family:var(--mono);font-size:12px;color:var(--text-muted);display:flex;gap:8px;}
-  .history-date{color:var(--accent-dim);min-width:46px;flex-shrink:0;}
-  .no-history{font-family:var(--mono);font-size:12px;color:var(--text-muted);}
 
   .add-exercise-btn{display:inline-flex;align-items:center;gap:6px;width:auto;margin-top:8px;background:none;border:none;color:var(--accent);padding:6px 0;font-family:var(--mono);font-size:11.5px;cursor:pointer;}
 
@@ -1294,7 +1286,6 @@ let completions = null;
 let durations = null;
 const openDays = new Set();
 const openLibrary = new Set();
-const openHistory = new Set();
 const openExercises = new Set();
 const editingTitles = new Set();
 const selectedMuscle = {};
@@ -2203,16 +2194,6 @@ function renderExercise(dayKey, ex){
   const todayEntry = (logs[ex.id]||[]).find(e=>e.date===todayStr());
   const isDone = !!(todayEntry && todayEntry.completed);
   const isCollapsed = !openExercises.has(ex.id);
-  const history = (logs[ex.id]||[]).filter(e=>e.date!==todayStr()).sort((a,b)=> a.date < b.date ? 1 : -1);
-  const historyOpen = openHistory.has(ex.id);
-
-  const historyHtml = history.length
-    ? history.map(e=>{
-        const diffLabel = {facil:'fácil',medio:'médio',dificil:'difícil'};
-        const setsTxt = e.sets.map(s=>`${s.weight}kg×${s.reps}${s.difficulty?` (${diffLabel[s.difficulty]})`:''}`).join(', ');
-        return `<div class="history-entry"><span class="history-date">${fmtDate(e.date)}</span><span>${setsTxt}</span></div>`;
-      }).join('')
-    : '<div class="no-history">Sem registros anteriores</div>';
 
   const rows = getRows(ex.id);
   const rowsHtml = rows.map((row, idx) => `
@@ -2241,22 +2222,22 @@ function renderExercise(dayKey, ex){
   const rm = ultimo1RM(ex.id);
   const sugestao = rm!==null ? sugerirCarga(ex.id) : null;
   const suggestionHtml = sugestao
-    ? `<div class="exercise-suggestion">próximo treino: ${sugestao.weight}kg total · ${sugestao.repsMin} a ${sugestao.repsMax} reps</div>`
+    ? `<div class="exercise-suggestion">sugestão de carga: ${sugestao.weight}kg total · ${sugestao.repsMin} a ${sugestao.repsMax} reps</div>`
     : '';
-  const rmSideHtml = rm!==null
-    ? `<div class="exercise-divider"></div><div class="exercise-rm-badge">1RM ${rm}kg</div>`
-    : '';
+  const rmSideHtml = `
+    <div class="exercise-side">
+      ${rm!==null ? `<span class="exercise-rm-badge">1RM ${rm}kg</span>` : ''}
+      <span class="exercise-muscle">${ex.muscle}</span>
+    </div>
+  `;
 
   return `
     <div class="exercise-item ${isCollapsed?'':'open'}">
       <div class="exercise-header" data-action="toggle-exercise-collapse" data-exid="${ex.id}">
+        <button class="exercise-done-btn ${isDone?'done':''}" data-action="toggle-exercise-done" data-exid="${ex.id}" title="Marcar exercício como concluído">${ICONS.check}</button>
         <div class="exercise-header-left">
-          <div class="exercise-title-row">
-            <button class="exercise-done-btn ${isDone?'done':''}" data-action="toggle-exercise-done" data-exid="${ex.id}" title="Marcar exercício como concluído">${ICONS.check}</button>
-            <span class="exercise-name">${ex.name}</span>
-            <span class="exercise-muscle">${ex.muscle}</span>
-            <span class="save-indicator" id="save-ind-${ex.id}">✓ salvo</span>
-          </div>
+          <span class="exercise-name">${ex.name}</span>
+          <span class="save-indicator" id="save-ind-${ex.id}">✓ salvo</span>
           ${suggestionHtml}
         </div>
         ${rmSideHtml}
@@ -2268,8 +2249,6 @@ function renderExercise(dayKey, ex){
       <div class="exercise-body-wrapper"><div class="exercise-body-inner"><div class="exercise-body">
         ${rowsSection}
         <button class="add-row-btn" data-action="add-row" data-exid="${ex.id}">${ICONS.plus}série</button>
-        <button class="history-toggle" data-action="toggle-history" data-exid="${ex.id}">${historyOpen ? '▴ Ocultar histórico' : '▾ Histórico'}</button>
-        <div class="history-list ${historyOpen ? '' : 'hidden'}">${historyHtml}</div>
       </div></div></div>
     </div>
   `;
@@ -2860,11 +2839,6 @@ function attachEvents(){
       commitRows(exId);
       render();
     }
-    else if(action==='toggle-history'){
-      const exId = el.dataset.exid;
-      openHistory.has(exId) ? openHistory.delete(exId) : openHistory.add(exId);
-      render();
-    }
   });
 
   container.addEventListener('input', (e)=>{
@@ -2931,7 +2905,7 @@ function attachEvents(){
     await saveLogs();
     saveCompletions();
     saveDurations();
-    openLibrary.clear(); openHistory.clear(); openExercises.clear();
+    openLibrary.clear(); openExercises.clear();
     Object.keys(pendingRows).forEach(k => delete pendingRows[k]);
     activeDayKey = null;
     render();
@@ -2992,7 +2966,7 @@ function attachBackupEvents(){
         if(Array.isArray(data.planHistory)) savePlanHistory();
         if(data.nameHistory) saveNameHistory();
         if(data.hydration) saveHydration();
-        openLibrary.clear(); openHistory.clear(); openExercises.clear();
+        openLibrary.clear(); openExercises.clear();
         Object.keys(pendingRows).forEach(k => delete pendingRows[k]);
         activeDayKey = null;
         render();
