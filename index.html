@@ -261,7 +261,7 @@
   .exercise-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;cursor:pointer;user-select:none;}
   .exercise-header-left{flex:1;min-width:0;}
   .exercise-name{font-weight:500;font-size:14px;line-height:1.3;}
-  .exercise-muscle{font-family:var(--mono);font-size:9px;letter-spacing:0.3px;text-transform:uppercase;color:var(--text-muted);margin-top:2px;}
+  .exercise-muscle{font-family:var(--mono);font-size:7.5px;letter-spacing:0.5px;text-transform:uppercase;color:var(--text-muted);opacity:0.55;margin-bottom:3px;}
   .exercise-side{background:var(--card-bg2);border-radius:10px;padding:6px 10px;flex-shrink:0;margin-top:1px;}
   .exercise-ref-line{display:table;width:100%;}
   .exercise-ref-label{display:table-cell;font-family:var(--mono);font-size:8px;color:var(--text-muted);width:28px;white-space:nowrap;}
@@ -2478,9 +2478,9 @@ function renderExercise(dayKey, ex){
       <div class="exercise-header" data-action="toggle-exercise-collapse" data-exid="${ex.id}">
         <button class="exercise-done-btn ${isDone?'done':''}" data-action="toggle-exercise-done" data-exid="${ex.id}" title="Marcar exercício como concluído">${ICONS.check}</button>
         <div class="exercise-header-left">
+          <div class="exercise-muscle">${ex.muscle}</div>
           <span class="exercise-name">${ex.name}</span>
           <span class="save-indicator" id="save-ind-${ex.id}">✓ salvo</span>
-          <div class="exercise-muscle">${ex.muscle}</div>
         </div>
         ${rmSideHtml}
         <div class="exercise-header-actions">
