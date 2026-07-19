@@ -262,12 +262,8 @@
   .exercise-header-left{flex:1;min-width:0;}
   .exercise-name{font-weight:500;font-size:14px;line-height:1.3;}
   .exercise-muscle{font-family:var(--mono);font-size:7.5px;letter-spacing:0.5px;text-transform:uppercase;color:var(--text-muted);opacity:0.55;margin-bottom:3px;}
-  .exercise-side{flex-shrink:0;margin-top:1px;}
-  .exercise-ref-line{display:table;width:100%;}
-  .exercise-ref-label{display:table-cell;font-family:var(--mono);font-size:8px;color:var(--text-muted);width:28px;white-space:nowrap;}
-  .exercise-ref-value{display:table-cell;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--text);text-align:right;white-space:nowrap;}
-  .exercise-ref-value.accent{color:var(--accent);}
-  .exercise-ref-divider{border-top:1px solid var(--line);margin:3px 0;opacity:0.5;}
+  .exercise-ref-inline{font-family:var(--mono);font-size:10.5px;color:var(--text-muted);margin-top:4px;}
+  .exercise-ref-inline .accent{color:var(--accent);font-weight:700;}
   .exercise-header-actions{display:flex;align-items:center;gap:2px;flex-shrink:0;margin-top:1px;}
   .exercise-done-btn{width:26px;height:26px;border-radius:8px;border:none;background:var(--card-bg2);color:transparent;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
   .exercise-done-btn.done{background:var(--accent);color:var(--accent-text);}
@@ -2467,11 +2463,8 @@ function renderExercise(dayKey, ex){
 
   const rm = ultimo1RM(ex.id);
   const ref = rm!==null ? referenciaCarga(ex.id) : null;
-  const rmSideHtml = rm!==null
-    ? `<div class="exercise-side">
-        <div class="exercise-ref-line"><span class="exercise-ref-label">1RM</span><span class="exercise-ref-value accent">${rm}kg</span></div>
-        ${ref ? `<div class="exercise-ref-divider"></div><div class="exercise-ref-line"><span class="exercise-ref-label">${ref.pctLabel}</span><span class="exercise-ref-value">${ref.weight}kg</span></div>` : ''}
-      </div>`
+  const refLineHtml = rm!==null
+    ? `<div class="exercise-ref-inline">1RM <span class="accent">${rm}kg</span>${ref ? ` · ${ref.pctLabel} <span class="accent">${ref.weight}kg</span>` : ''}</div>`
     : '';
 
   return `
@@ -2482,8 +2475,8 @@ function renderExercise(dayKey, ex){
           <div class="exercise-muscle">${ex.muscle}</div>
           <span class="exercise-name">${ex.name}</span>
           <span class="save-indicator" id="save-ind-${ex.id}">✓ salvo</span>
+          ${refLineHtml}
         </div>
-        ${rmSideHtml}
         <div class="exercise-header-actions">
           <span class="exercise-chevron">${ICONS.chevron}</span>
           <button class="remove-exercise-btn" data-action="remove-exercise" data-day="${dayKey}" data-exid="${ex.id}" title="Remover exercício">${ICONS.x}</button>
