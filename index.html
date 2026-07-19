@@ -595,6 +595,18 @@
 .radar-recal-btn{background:var(--danger);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;margin-top:8px;cursor:pointer;}
 .radar-goto-btn{display:block;width:100%;background:none;border:1.5px solid var(--line);color:var(--text);border-radius:12px;padding:11px;font-size:12.5px;font-weight:600;cursor:pointer;text-align:center;}
 .radar-goto-btn:active{border-color:var(--accent-dim);}
+.hyd-title{font-family:var(--display);font-size:14px;font-weight:700;}
+.hyd-sub{font-size:10.5px;color:var(--text-muted);margin-bottom:4px;}
+.hyd-readout{text-align:center;margin-top:6px;}
+.hyd-num{font-family:var(--mono);font-size:32px;font-weight:700;color:var(--accent);letter-spacing:.5px;}
+.hyd-unit{font-family:var(--mono);font-size:13px;color:var(--text-muted);margin-left:2px;}
+.hyd-goal-label{font-size:10.5px;color:var(--text-muted);text-align:center;margin-top:2px;}
+.hyd-gauge-wrap{display:flex;justify-content:center;margin-top:4px;}
+.hyd-btn-row{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:2px;}
+.hyd-step-btn{width:50px;height:50px;border-radius:50%;background:var(--card-bg2);border:1.5px solid var(--line);color:var(--text);font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.hyd-step-btn:active{border-color:var(--accent);transform:scale(.96);}
+.hyd-step-btn.minus{color:var(--text-muted);}
+.hyd-step-label{text-align:center;font-family:var(--mono);font-size:8.5px;color:var(--text-muted);margin-top:4px;text-transform:uppercase;letter-spacing:.5px;}
 .bodymap-card{background:var(--card-bg);border-radius:16px;padding:14px;margin:12px 0;}
 .bodymap-row{display:flex;gap:10px;justify-content:center;}
 .bodymap-col{flex:1;max-width:110px;display:flex;flex-direction:column;align-items:center;}
@@ -1574,6 +1586,136 @@ function attachHistoryEvents(){
   });
 }
 
+/* ========================================================================
+   HIDRATAÇÃO — medidor tipo velocímetro, meta calculada pelo peso
+   ======================================================================== */
+const HYDRATION_STEP = 250; // ml por toque no + / -
+let hydration = {};
+async function loadHydration(){
+  try{
+    const raw = localStorage.getItem('vamo-hydration');
+    hydration = raw ? JSON.parse(raw) : {};
+  }catch(e){ hydration = {}; }
+}
+function saveHydration(){
+  try{ localStorage.setItem('vamo-hydration', JSON.stringify(hydration)); }
+  catch(e){ console.error('Erro ao salvar hidratação', e); }
+}
+function getTodayHydrationMl(){
+  return hydration[todayStr()] || 0;
+}
+function getHydrationGoalMl(){
+  if(profile && profile.weight && Number(profile.weight) > 0){
+    return Math.round(Number(profile.weight) * 35);
+  }
+  return 2000; // padrão razoável enquanto não há peso cadastrado
+}
+function adjustHydration(deltaMl){
+  const key = todayStr();
+  const goal = getHydrationGoalMl();
+  const current = hydration[key] || 0;
+  hydration[key] = Math.max(0, Math.min(goal + 1000, current + deltaMl));
+  saveHydration();
+  render();
+}
+
+// geometria do medidor (0 a 180 graus, arco superior)
+function hydAngleForPct(pct){
+  const clamped = Math.max(0, Math.min(100, pct));
+  return 180 - (clamped/100)*180;
+}
+function hydPolarToXY(cx, cy, r, angleDeg){
+  const rad = (angleDeg * Math.PI)/180;
+  return { x: cx + r*Math.cos(rad), y: cy - r*Math.sin(rad) };
+}
+function hydDescribeArc(cx, cy, r, startAngle, endAngle){
+  const start = hydPolarToXY(cx, cy, r, startAngle);
+  const end = hydPolarToXY(cx, cy, r, endAngle);
+  const largeArc = (startAngle-endAngle) > 180 ? 1 : 0;
+  return `M${start.x},${start.y} A${r},${r} 0 ${largeArc} 1 ${end.x},${end.y}`;
+}
+function hydFormatValue(v){
+  if(v < 1000) return { num: String(Math.round(v)), unit: 'ml' };
+  const liters = v/1000;
+  let str = liters.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
+  return { num: str, unit: 'L' };
+}
+function hydNiceStep(goal){
+  if(goal <= 1000) return 100;
+  if(goal <= 2000) return 250;
+  if(goal <= 4000) return 500;
+  return 1000;
+}
+function renderHydrationGaugeSvg(currentMl, goalMl){
+  const CX=110, CY=120, R_OUTER=90, R_TICK_IN=78, R_TICK_LABEL=64, R_NEEDLE=68;
+  let html = '';
+  html += `<path d="${hydDescribeArc(CX,CY,R_OUTER,180,0)}" fill="none" stroke="var(--line)" stroke-width="14" stroke-linecap="round"/>`;
+  const pct = Math.round((currentMl/goalMl)*100);
+  const angle = hydAngleForPct(pct);
+  html += `<path d="${hydDescribeArc(CX,CY,R_OUTER,180,angle)}" fill="none" stroke="var(--accent)" stroke-width="14" stroke-linecap="round" style="filter:drop-shadow(0 0 4px var(--accent));"/>`;
+
+  const step = hydNiceStep(goalMl);
+  const majorValues = [];
+  for(let v=0; v<=goalMl; v+=step) majorValues.push(v);
+  majorValues.forEach(v=>{
+    const a = hydAngleForPct((v/goalMl)*100);
+    const p1 = hydPolarToXY(CX,CY,R_OUTER+9,a);
+    const p2 = hydPolarToXY(CX,CY,R_TICK_IN,a);
+    html += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="var(--text-muted)" stroke-width="2"/>`;
+    const labelPos = hydPolarToXY(CX,CY,R_TICK_LABEL,a);
+    const fv = hydFormatValue(v);
+    const labelTxt = v===0 ? '0' : (fv.unit==='L' ? fv.num+'L' : fv.num);
+    html += `<text x="${labelPos.x}" y="${labelPos.y}" text-anchor="middle" dominant-baseline="middle" style="font-family:var(--mono);font-size:7.5px;fill:var(--text-muted);">${labelTxt}</text>`;
+  });
+  const minorStep = step/4;
+  for(let v=0; v<=goalMl; v+=minorStep){
+    if(v % step === 0) continue;
+    const a = hydAngleForPct((v/goalMl)*100);
+    const p1 = hydPolarToXY(CX,CY,R_OUTER+9,a);
+    const p2 = hydPolarToXY(CX,CY,R_OUTER+2,a);
+    html += `<line x1="${p1.x}" y1="${p1.y}" x2="${p2.x}" y2="${p2.y}" stroke="var(--line)" stroke-width="1.5"/>`;
+  }
+
+  const needleEnd = hydPolarToXY(CX,CY,R_NEEDLE,angle);
+  html += `<line x1="${CX}" y1="${CY}" x2="${needleEnd.x}" y2="${needleEnd.y}" stroke="var(--text)" stroke-width="3" stroke-linecap="round"/>`;
+  html += `<circle cx="${CX}" cy="${CY}" r="7" fill="var(--text)"/>`;
+  return `<svg viewBox="0 0 220 140" width="100%">${html}</svg>`;
+}
+function renderHydrationCard(){
+  const currentMl = getTodayHydrationMl();
+  const goalMl = getHydrationGoalMl();
+  const pct = Math.round((currentMl/goalMl)*100);
+  const cur = hydFormatValue(currentMl);
+  const goal = hydFormatValue(goalMl);
+  const goalNote = (profile && profile.weight)
+    ? `meta calculada: ${profile.weight}kg × 35ml`
+    : 'meta padrão — cadastre seu peso no Perfil pra calcular a meta certa';
+
+  return `
+    <p class="section-title">Hidratação</p>
+    <div class="card" style="padding:16px;">
+      <div class="hyd-title">Hidratação anabólica</div>
+      <div class="hyd-sub">${goalNote}</div>
+      <div class="hyd-readout">
+        <span class="hyd-num">${cur.num}</span><span class="hyd-unit">${cur.unit}</span>
+      </div>
+      <div class="hyd-goal-label">de ${goal.num}${goal.unit} hoje · ${pct}%</div>
+      <div class="hyd-gauge-wrap">${renderHydrationGaugeSvg(currentMl, goalMl)}</div>
+      <div class="hyd-btn-row">
+        <div>
+          <button class="hyd-step-btn minus" data-action="hydration-minus" aria-label="Remover ${HYDRATION_STEP}ml">−</button>
+          <div class="hyd-step-label">−${HYDRATION_STEP}ml</div>
+        </div>
+        <div style="flex:1;"></div>
+        <div>
+          <button class="hyd-step-btn" data-action="hydration-plus" aria-label="Adicionar ${HYDRATION_STEP}ml">+</button>
+          <div class="hyd-step-label">+${HYDRATION_STEP}ml</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 let profile = null;
 async function loadProfile(){
   try{
@@ -1903,6 +2045,10 @@ function attachCalendarEvents(){
       startMontarMeuTreino();
     }else if(action==='open-history'){
       openHistoryOverlay();
+    }else if(action==='hydration-plus'){
+      adjustHydration(HYDRATION_STEP);
+    }else if(action==='hydration-minus'){
+      adjustHydration(-HYDRATION_STEP);
     }
   });
 }
@@ -2341,7 +2487,9 @@ function renderInicioView(){
       </div></div>
     </div>
 
-    <p class="section-title">Treino</p>
+    ${renderHydrationCard()}
+
+    <p class="section-title">Meus Treinos</p>
     <div class="card" style="padding:14px;">
       <div class="gen-btn-row" style="margin-bottom:10px;" data-action="open-generator">
         <div><div class="gen-btn-text">Sugestão de treino</div><span class="gen-btn-sub">o app monta pra você, do zero</span></div>
@@ -2380,13 +2528,15 @@ function render(){
       </div>
     ` : '';
     const weekListHtml = `
-      <div class="collapsible-section-head" data-action="toggle-week-list">
-        <p class="section-title" style="margin:22px 0 0;">Semana completa</p>
-        <span class="chevron ${weekListOpen?'open':''}">${ICONS.chevron}</span>
+      <div class="card" style="margin-top:22px;padding:14px 16px;">
+        <div class="collapsible-section-head" data-action="toggle-week-list">
+          <p class="section-title" style="margin:0;">Semana completa</p>
+          <span class="chevron ${weekListOpen?'open':''}">${ICONS.chevron}</span>
+        </div>
+        <div class="collapsible-wrapper ${weekListOpen?'open':''}"><div class="collapsible-inner">
+          ${DAYS.map(renderDayRow).join('')}
+        </div></div>
       </div>
-      <div class="collapsible-wrapper ${weekListOpen?'open':''}"><div class="collapsible-inner">
-        ${DAYS.map(renderDayRow).join('')}
-      </div></div>
     `;
     container.innerHTML = welcomeHtml + renderWeekStrip() + renderTodayHero() + weekListHtml;
   }
@@ -2631,7 +2781,7 @@ function attachBackupEvents(){
   });
 
   document.getElementById('download-backup-btn').addEventListener('click', ()=>{
-    const data = JSON.stringify({plan, logs, completions, durations, profile, radar, planHistory, nameHistory}, null, 2);
+    const data = JSON.stringify({plan, logs, completions, durations, profile, radar, planHistory, nameHistory, hydration}, null, 2);
     const blob = new Blob([data], {type: 'application/json'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -2665,6 +2815,7 @@ function attachBackupEvents(){
         if(data.radar) radar = data.radar;
         if(Array.isArray(data.planHistory)) planHistory = data.planHistory;
         if(data.nameHistory) nameHistory = data.nameHistory;
+        if(data.hydration) hydration = data.hydration;
         await savePlan();
         await saveLogs();
         saveCompletions();
@@ -2673,6 +2824,7 @@ function attachBackupEvents(){
         if(data.radar) saveRadar();
         if(Array.isArray(data.planHistory)) savePlanHistory();
         if(data.nameHistory) saveNameHistory();
+        if(data.hydration) saveHydration();
         openLibrary.clear(); openHistory.clear(); openExercises.clear();
         Object.keys(pendingRows).forEach(k => delete pendingRows[k]);
         activeDayKey = null;
@@ -3276,6 +3428,7 @@ function onbStartFullFlow(){
   await loadRadar();
   await loadPlanHistory();
   await loadNameHistory();
+  await loadHydration();
   attachEvents();
   attachBackupEvents();
   attachCalendarEvents();
