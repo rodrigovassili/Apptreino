@@ -214,6 +214,27 @@
   .day-meta{display:block;font-family:var(--mono);font-size:11px;color:var(--text-muted);margin-top:3px;}
   .day-meta .today-tag{color:var(--accent);}
   .chevron{color:var(--text-muted);transition:transform .25s ease;flex-shrink:0;display:flex;}
+  .chevron.open{transform:rotate(180deg);}
+  .corpo-card{background:var(--card-bg);border-radius:16px;padding:16px;margin-bottom:18px;}
+  .corpo-comp-row{display:flex;gap:16px;cursor:pointer;}
+  .corpo-comp-item{flex:1;}
+  .corpo-comp-num{font-family:var(--display);font-size:18px;font-weight:800;}
+  .corpo-comp-label{font-family:var(--mono);font-size:9px;color:var(--text-muted);margin-top:2px;}
+  .corpo-comp-hint{font-family:var(--mono);font-size:9px;color:var(--text-muted);margin-top:8px;display:flex;align-items:center;gap:4px;cursor:pointer;}
+  .corpo-divider{border-top:1px solid var(--line);margin:14px 0 12px;}
+  .corpo-shape-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:4px;}
+  .corpo-shape-title{font-family:var(--mono);font-size:10px;letter-spacing:.03em;text-transform:uppercase;color:var(--accent);font-weight:700;}
+  .corpo-shape-trend{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);}
+  .hyd-compact{display:flex;align-items:center;gap:10px;background:var(--card-bg);border-radius:16px;padding:12px 14px;margin-bottom:8px;}
+  .hyd-compact-mid{flex:1;cursor:pointer;min-width:0;}
+  .hyd-compact-bar{height:6px;background:var(--card-bg2);border-radius:3px;overflow:hidden;}
+  .hyd-compact-fill{height:100%;background:var(--accent);}
+  .hyd-compact-label-row{display:flex;justify-content:space-between;align-items:center;margin-top:5px;}
+  .hyd-compact-label{font-family:var(--mono);font-size:10px;color:var(--text);}
+  .hyd-mini-btn{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;font-size:15px;font-weight:700;line-height:1;}
+  .hyd-mini-btn.plus{background:var(--accent);color:var(--accent-text);border:none;}
+  .hyd-mini-btn.minus{background:transparent;border:1.5px solid var(--line);color:var(--text);}
+  .hyd-expand-wrap{padding-top:4px;text-align:center;}
   .day-card.open .chevron{transform:rotate(180deg);}
   .day-card.today .chevron{color:var(--accent);}
   .chevron-fwd{transform:rotate(-90deg);}
@@ -1278,6 +1299,8 @@ const editingTitles = new Set();
 const selectedMuscle = {};
 const pendingRows = {};
 let calendarOpen = false;
+let corpoEvoOpen = false;
+let hydrationDetailOpen = false;
 let calendarMonth = new Date().getMonth();
 let calendarYear = new Date().getFullYear();
 const MONTH_NAMES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
@@ -1732,7 +1755,7 @@ function renderHydrationGaugeSvg(currentMl, goalMl){
 function renderHydrationCard(){
   const currentMl = getTodayHydrationMl();
   const goalMl = getHydrationGoalMl();
-  const pct = Math.round((currentMl/goalMl)*100);
+  const pct = Math.min(100, Math.round((currentMl/goalMl)*100));
   const cur = hydFormatValue(currentMl);
   const goal = hydFormatValue(goalMl);
   const goalNote = (profile && profile.weight)
@@ -1741,26 +1764,23 @@ function renderHydrationCard(){
 
   return `
     <p class="section-title">Hidratação</p>
-    <div class="card" style="padding:16px;">
-      <div class="hyd-title">Hidratação anabólica</div>
-      <div class="hyd-sub">${goalNote}</div>
-      <div class="hyd-readout">
-        <span class="hyd-num">${cur.num}</span><span class="hyd-unit">${cur.unit}</span>
-      </div>
-      <div class="hyd-goal-label">de ${goal.num}${goal.unit} hoje · ${pct}%</div>
-      <div class="hyd-gauge-wrap">${renderHydrationGaugeSvg(currentMl, goalMl)}</div>
-      <div class="hyd-btn-row">
-        <div>
-          <button class="hyd-step-btn minus" data-action="hydration-minus" aria-label="Remover ${HYDRATION_STEP}ml">−</button>
-          <div class="hyd-step-label">−${HYDRATION_STEP}ml</div>
-        </div>
-        <div style="flex:1;"></div>
-        <div>
-          <button class="hyd-step-btn" data-action="hydration-plus" aria-label="Adicionar ${HYDRATION_STEP}ml">+</button>
-          <div class="hyd-step-label">+${HYDRATION_STEP}ml</div>
+    <div class="hyd-compact">
+      <button class="hyd-mini-btn minus" data-action="hydration-minus" aria-label="Remover ${HYDRATION_STEP}ml">−</button>
+      <div class="hyd-compact-mid" data-action="toggle-hydration-detail">
+        <div class="hyd-compact-bar"><div class="hyd-compact-fill" style="width:${pct}%;"></div></div>
+        <div class="hyd-compact-label-row">
+          <span class="hyd-compact-label">${cur.num}${cur.unit} / ${goal.num}${goal.unit}</span>
+          <span class="chevron ${hydrationDetailOpen?'open':''}" style="width:10px;height:10px;">${ICONS.chevron}</span>
         </div>
       </div>
+      <button class="hyd-mini-btn plus" data-action="hydration-plus" aria-label="Adicionar ${HYDRATION_STEP}ml">+</button>
     </div>
+    <div class="collapsible-wrapper ${hydrationDetailOpen?'open':''}" style="margin-bottom:18px;"><div class="collapsible-inner">
+      <div class="hyd-expand-wrap">
+        <div class="hyd-sub" style="margin-bottom:4px;">${goalNote}</div>
+        <div class="hyd-gauge-wrap">${renderHydrationGaugeSvg(currentMl, goalMl)}</div>
+      </div>
+    </div></div>
   `;
 }
 
@@ -2074,6 +2094,12 @@ function attachCalendarEvents(){
     const action = el.dataset.action;
     if(action==='toggle-calendar'){
       calendarOpen = !calendarOpen;
+      render();
+    }else if(action==='toggle-corpo-evo'){
+      corpoEvoOpen = !corpoEvoOpen;
+      render();
+    }else if(action==='toggle-hydration-detail'){
+      hydrationDetailOpen = !hydrationDetailOpen;
       render();
     }else if(action==='cal-prev'){
       calendarMonth--;
@@ -2479,19 +2505,6 @@ function renderInicioView(){
   const goalLabel = (GOALS.find(g=>g.id===profile.goal) || {}).label || 'não definido';
   const name = profile.name ? profile.name : 'Sem nome';
 
-  const imcValue = (profile.weight && profile.height) ? (Number(profile.weight) / Math.pow(Number(profile.height)/100, 2)) : null;
-  const imcItemHtml = imcValue
-    ? `<div class="inicio-weight-item"><div class="inicio-weight-num">${imcValue.toFixed(1)}</div><div class="inicio-weight-label">IMC</div></div>`
-    : '';
-  const weightHtml = (profile.weight || profile.bodyFat)
-    ? `<div class="inicio-weight-row">
-        <div class="inicio-weight-item"><div class="inicio-weight-num">${profile.weight || '—'}${profile.weight?'kg':''}</div><div class="inicio-weight-label">peso atual</div></div>
-        <div class="inicio-weight-item"><div class="inicio-weight-num">${profile.bodyFat || '—'}${profile.bodyFat?'%':''}</div><div class="inicio-weight-label">gordura</div></div>
-        ${imcItemHtml}
-      </div>
-      <div class="inicio-weight-updated">${profile.updatedAt ? 'Última atualização: '+fmtDate(profile.updatedAt) : ''}</div>`
-    : `<p class="inicio-weight-empty">Nenhum registro ainda. Toque pra adicionar seu peso e % de gordura no Perfil.</p>`;
-
   const streak = (completions && plan) ? computeStreak() : 0;
   const goal = (completions && plan) ? weeklyGoal() : 0;
   const weekCount = (completions && plan) ? currentWeekCount() : 0;
@@ -2504,11 +2517,6 @@ function renderInicioView(){
         <div class="inicio-pgoal">Objetivo: ${goalLabel}</div>
       </div>
       <span class="inicio-edit-icon">${ICONS.pencil}</span>
-    </div>
-
-    <p class="section-title">Evolução corporal</p>
-    <div class="inicio-weight-card" data-action="switch-tab" data-tab="profile">
-      ${weightHtml}
     </div>
 
     <p class="section-title">Seu progresso</p>
@@ -2529,15 +2537,81 @@ function renderInicioView(){
       </div></div>
     </div>
 
+    ${renderCorpoCard()}
+
     ${renderHydrationCard()}
+  `;
+}
 
-    <p class="section-title">Meus Treinos</p>
-    <div class="gen-btn-row" style="margin-bottom:14px;" data-action="open-meus-treinos">
-      <div><div class="gen-btn-text">Gerenciar meu treino</div><span class="gen-btn-sub">sugestão, consultoria, montar do zero ou histórico</span></div>
-      <span style="color:var(--accent);display:flex;transform:rotate(-90deg);">${ICONS.chevron}</span>
+function renderCorpoCard(){
+  const hasComp = !!(profile.weight || profile.bodyFat);
+  let compHtml;
+  if(hasComp){
+    const w = profile.weight ? Number(profile.weight) : null;
+    const bf = profile.bodyFat!==undefined && profile.bodyFat!==null && profile.bodyFat!=='' ? Number(profile.bodyFat) : null;
+    const lean = (w && bf!=null) ? (w*(1-bf/100)) : null;
+    compHtml = `
+      <div class="corpo-comp-row" data-action="toggle-corpo-evo">
+        <div class="corpo-comp-item"><div class="corpo-comp-num">${profile.weight || '—'}${profile.weight?'kg':''}</div><div class="corpo-comp-label">peso</div></div>
+        <div class="corpo-comp-item"><div class="corpo-comp-num">${profile.bodyFat || '—'}${profile.bodyFat?'%':''}</div><div class="corpo-comp-label">gordura</div></div>
+        <div class="corpo-comp-item"><div class="corpo-comp-num" style="color:var(--accent);">${lean?lean.toFixed(1):'—'}${lean?'kg':''}</div><div class="corpo-comp-label">massa magra</div></div>
+      </div>
+      <div class="corpo-comp-hint" data-action="toggle-corpo-evo">
+        ${profile.updatedAt ? 'Última atualização: '+fmtDate(profile.updatedAt)+' · ' : ''}toque pra ver evolução
+        <span class="chevron ${corpoEvoOpen?'open':''}" style="width:10px;height:10px;">${ICONS.chevron}</span>
+      </div>
+      <div class="collapsible-wrapper ${corpoEvoOpen?'open':''}"><div class="collapsible-inner">
+        <div style="padding-top:10px;">${renderBodyEvoChart()}</div>
+      </div></div>
+    `;
+  }else{
+    compHtml = `<p class="inicio-weight-empty" data-action="switch-tab" data-tab="profile">Nenhum registro ainda. Toque pra adicionar seu peso e % de gordura no Perfil.</p>`;
+  }
+
+  const shapeHtml = (radar && radar.shape) ? renderShapeSection() : '';
+
+  return `
+    <p class="section-title">Corpo</p>
+    <div class="corpo-card">
+      ${compHtml}
+      ${shapeHtml ? `<div class="corpo-divider"></div>${shapeHtml}` : ''}
     </div>
+  `;
+}
 
-    ${radar && radar.shape ? renderRadarCard() : renderTodayHero()}
+function renderBodyEvoChart(){
+  const hist = (profile.weightHistory||[]).filter(h=>h.weight);
+  if(hist.length < 2){
+    return `<p class="evo-empty">Registre pelo menos 2 avaliações de peso no Perfil pra ver a evolução aqui.</p>`;
+  }
+  const sorted = hist.slice().sort((a,b)=> a.date < b.date ? -1 : 1);
+  const weights = sorted.map(h=>Number(h.weight));
+  const leans = sorted.map(h=> (h.bodyFat!==undefined && h.bodyFat!==null && h.bodyFat!=='') ? Number(h.weight)*(1-Number(h.bodyFat)/100) : null);
+  const hasLean = leans.every(l=>l!=null);
+  const allVals = hasLean ? weights.concat(leans) : weights;
+  const min = Math.min(...allVals);
+  const max = Math.max(...allVals);
+  const range = (max-min) || 1;
+  const n = sorted.length;
+  const ptsFor = (arr) => arr.map((v,i)=>{
+    const x = n===1 ? 150 : (i/(n-1))*300;
+    const y = 95 - ((v-min)/range)*80;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  const weightPts = ptsFor(weights);
+  const leanPts = hasLean ? ptsFor(leans) : '';
+  return `
+    <div class="evo-chart-wrap" style="height:100px;">
+      <svg width="100%" height="100%" viewBox="0 0 300 100" preserveAspectRatio="none">
+        <polyline points="${weightPts}" fill="none" stroke="var(--text-muted)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        ${hasLean ? `<polyline points="${leanPts}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>` : ''}
+      </svg>
+    </div>
+    <div class="evo-range"><span>${fmtDate(sorted[0].date)}</span><span>${fmtDate(sorted[n-1].date)}</span></div>
+    <div class="radar-legend" style="margin-top:8px;margin-bottom:0;">
+      <div class="radar-legend-item"><span class="radar-legend-dot base"></span>Peso</div>
+      ${hasLean ? `<div class="radar-legend-item"><span class="radar-legend-dot dyn"></span>Massa magra</div>` : ''}
+    </div>
   `;
 }
 
@@ -2555,6 +2629,12 @@ function render(){
         <button class="welcome-btn" data-action="open-generator">Montar meu treino</button>
       </div>
     ` : '';
+    const meusTreinosHtml = isPlanEmpty() ? '' : `
+      <div class="gen-btn-row" style="margin-top:14px;" data-action="open-meus-treinos">
+        <div><div class="gen-btn-text">Gerenciar meu treino</div><span class="gen-btn-sub">sugestão, consultoria, montar do zero ou histórico</span></div>
+        <span style="color:var(--accent);display:flex;transform:rotate(-90deg);">${ICONS.chevron}</span>
+      </div>
+    `;
     const weekListHtml = `
       <div class="card" style="margin-top:22px;padding:14px 16px;">
         <div class="collapsible-section-head" data-action="toggle-week-list">
@@ -2566,7 +2646,7 @@ function render(){
         </div></div>
       </div>
     `;
-    container.innerHTML = welcomeHtml + renderWeekStrip() + renderTodayHero() + weekListHtml;
+    container.innerHTML = welcomeHtml + renderWeekStrip() + renderTodayHero() + meusTreinosHtml + weekListHtml;
   }
   renderInicioView();
   renderCalendar();
@@ -2599,6 +2679,9 @@ function attachEvents(){
     }
     else if(action==='open-generator'){
       genOpenOverlay();
+    }
+    else if(action==='open-meus-treinos'){
+      openMeusTreinosOverlay();
     }
     else if(action==='toggle-week-list'){
       weekListOpen = !weekListOpen;
@@ -3063,20 +3146,13 @@ function radarSvgMarkup(){
   return html;
 }
 
-function renderRadarCard(){
-  if(!radar || !radar.shape) return '';
-  const current = calcularIndiceSimetria(radar.shape);
-  const inicial = calcularIndiceSimetria(radar.shapeAtLastAssessment);
-  const delta = current - inicial;
-  let trendClass='radar-trend-flat', trendTxt='igual à última avaliação';
-  if(delta>0){ trendClass='radar-trend-up'; trendTxt=`▲ +${delta} — assimetria diminuindo`; }
-  else if(delta<0){ trendClass='radar-trend-down'; trendTxt=`▼ ${delta} — assimetria aumentando`; }
-
+function renderShapeSection(){
+  const isPristine = radarIsPristine();
   const dias = radarDiasDesdeAvaliacao();
   const restam = RADAR_REASSESS_DAYS - dias;
   const recalHtml = restam<=0 ? `
     <div class="radar-recal-card">
-      Já se passaram 2 meses desde sua última autoavaliação. Refaça o questionário pra recalibrar seu radar.
+      Já se passaram 2 meses desde sua última autoavaliação. Refaça o questionário pra recalibrar seu shape.
       <button class="radar-recal-btn" data-action="radar-reassess">Refazer autoavaliação</button>
     </div>` : '';
 
@@ -3088,37 +3164,34 @@ function renderRadarCard(){
   const reforcandoForte = fortes.filter(a => radar.shape[a.key]-ref[a.key] >= 15);
   let feedbackHtml = '';
   if(corrigindo.length){
-    feedbackHtml = `<div class="radar-feedback positive">Ótimo trabalho! Você está corrigindo seu ponto fraco em <b>${corrigindo.map(a=>a.label).join(' e ')}</b> com o volume de treino recente.</div>`;
+    feedbackHtml = `<div class="radar-feedback positive">Você está evoluindo bastante em <b>${corrigindo.map(a=>a.label).join(' e ')}</b> com o volume de treino recente.</div>`;
   } else if(reforcandoForte.length && fracos.length){
-    feedbackHtml = `<div class="radar-feedback warning">Atenção: você está investindo volume extra em <b>${reforcandoForte.map(a=>a.label).join(' e ')}</b>, que já é ponto forte. Considere priorizar <b>${fracos.map(a=>a.label).join(' e ')}</b>.</div>`;
+    feedbackHtml = `<div class="radar-feedback warning">Você está investindo volume extra em <b>${reforcandoForte.map(a=>a.label).join(' e ')}</b>. Se a ideia é equilibrar o desenvolvimento, considere também priorizar <b>${fracos.map(a=>a.label).join(' e ')}</b> — mas se for de propósito, sem problema nenhum.</div>`;
   }
 
   const dateLabel = radar.lastAssessmentDate ? new Date(radar.lastAssessmentDate).toLocaleDateString('pt-BR') : '—';
 
   return `
-    <p class="section-title" style="margin:18px 0 12px;">Radar de simetria</p>
-    <div class="radar-section-card">
-      <div class="radar-corner-badge">
-        <span class="radar-corner-num">${current}%</span>
-        <span class="radar-corner-trend ${trendClass}">${delta>0?'▲':delta<0?'▼':'—'}</span>
-      </div>
-      <span class="radar-meta-date">Avaliado em ${dateLabel}</span>
-      <div class="radar-svg-wrap">
-        <svg id="radar-svg" viewBox="0 0 360 360" width="100%">${radarSvgMarkup()}</svg>
-      </div>
-      <p class="radar-drag-hint" id="radar-drag-hint">Toque e arraste qualquer ponto pra ajustar manualmente.</p>
-      <div class="radar-legend">
-        <div class="radar-legend-item"><span class="radar-legend-dot base"></span>Ponto de partida</div>
-        <div class="radar-legend-item"><span class="radar-legend-dot dyn"></span>Shape atual</div>
-      </div>
-      ${feedbackHtml}
-      ${recalHtml}
+    <div class="corpo-shape-head">
+      <span class="corpo-shape-title">Meu Shape</span>
+      ${!isPristine ? `<span class="corpo-shape-trend">mudou desde a última avaliação</span>` : ''}
     </div>
-    <div class="radar-section-card" style="padding:14px;">
-      <button class="radar-goto-btn" data-action="switch-tab" data-tab="treinos">Ver treino de hoje</button>
+    <div class="radar-svg-wrap">
+      <svg id="radar-svg" viewBox="0 0 360 360" width="100%">${radarSvgMarkup()}</svg>
+    </div>
+    <p class="radar-drag-hint" id="radar-drag-hint">Toque e arraste qualquer ponto pra ajustar manualmente.</p>
+    <div class="radar-legend">
+      <div class="radar-legend-item"><span class="radar-legend-dot base"></span>Ponto de partida</div>
+      <div class="radar-legend-item"><span class="radar-legend-dot dyn"></span>Shape atual</div>
+    </div>
+    ${feedbackHtml}
+    ${recalHtml}
+    <div class="corpo-comp-hint" data-action="radar-reassess" style="justify-content:center;margin-top:8px;">
+      Avaliado em ${dateLabel} · <span style="color:var(--accent);">reavaliar</span>
     </div>
   `;
 }
+
 
 let radarDragKey = null;
 // delegação de pointerdown/move/up pro radar — anexada uma única vez no documento
