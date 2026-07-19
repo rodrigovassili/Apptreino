@@ -260,14 +260,14 @@
   .exercise-item:last-child{border-bottom:none;}
   .exercise-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;cursor:pointer;user-select:none;}
   .exercise-header-left{flex:1;min-width:0;}
-  .exercise-title-row{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;row-gap:2px;}
   .exercise-name{font-weight:500;font-size:14px;line-height:1.3;}
-  .exercise-side{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex-shrink:0;margin-top:1px;}
-  .exercise-ref-row{display:flex;align-items:baseline;gap:5px;white-space:nowrap;}
-  .exercise-ref-label{font-family:var(--mono);font-size:8px;color:var(--text-muted);}
-  .exercise-ref-value{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--text);}
+  .exercise-muscle{font-family:var(--mono);font-size:9px;letter-spacing:0.3px;text-transform:uppercase;color:var(--text-muted);margin-top:2px;}
+  .exercise-side{background:var(--card-bg2);border-radius:10px;padding:6px 10px;flex-shrink:0;margin-top:1px;}
+  .exercise-ref-line{display:table;width:100%;}
+  .exercise-ref-label{display:table-cell;font-family:var(--mono);font-size:8px;color:var(--text-muted);width:28px;white-space:nowrap;}
+  .exercise-ref-value{display:table-cell;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--text);text-align:right;white-space:nowrap;}
   .exercise-ref-value.accent{color:var(--accent);}
-  .exercise-muscle{font-family:var(--mono);font-size:9px;letter-spacing:0.3px;text-transform:uppercase;color:var(--text-muted);}
+  .exercise-ref-divider{border-top:1px solid var(--line);margin:3px 0;}
   .exercise-header-actions{display:flex;align-items:center;gap:2px;flex-shrink:0;margin-top:1px;}
   .exercise-done-btn{width:26px;height:26px;border-radius:8px;border:none;background:var(--card-bg2);color:transparent;flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
   .exercise-done-btn.done{background:var(--accent);color:var(--accent-text);}
@@ -382,6 +382,8 @@
   .evo-chart-wrap{position:relative;height:110px;}
   .evo-current{position:absolute;top:0;right:0;font-family:var(--display);font-size:13px;color:var(--accent);font-weight:700;}
   .evo-range{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--text-muted);margin-top:6px;}
+  .body-evo-share-btn{width:28px;height:28px;border-radius:50%;background:transparent;border:1px solid var(--line);color:var(--text-muted);display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;margin:10px auto 0;}
+  .body-evo-share-btn .icon{width:13px;height:13px;}
 
   .profile-head{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
   .avatar{width:56px;height:56px;border-radius:50%;background:var(--card-bg);border:1.5px dashed var(--text-muted);display:flex;align-items:center;justify-content:center;color:var(--text-muted);flex-shrink:0;}
@@ -537,6 +539,8 @@
   .today-hero-tag{font-family:var(--mono);font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;}
   .today-hero-title{font-family:var(--display);font-size:22px;font-weight:800;margin-top:4px;color:var(--accent);}
   .today-hero-badge{width:32px;height:32px;border-radius:50%;background:var(--card-bg2);display:flex;align-items:center;justify-content:center;color:var(--accent);font-family:var(--mono);font-size:9.5px;font-weight:700;flex-shrink:0;}
+  .today-hero-share-btn{width:30px;height:30px;border-radius:50%;background:transparent;border:1px solid var(--line);color:var(--text-muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;padding:0;}
+  .today-hero-share-btn .icon{width:14px;height:14px;}
   .today-hero-list{display:flex;flex-direction:column;gap:9px;margin-bottom:16px;}
   .today-hero-ex{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:11.5px;color:var(--text);}
   .today-hero-ex .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;}
@@ -1378,7 +1382,241 @@ const ICONS = {
   play: '<svg class="icon" viewBox="0 0 24 24"><path d="M6 4l12 8-12 8V4z"/></svg>',
   download: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 3v13"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>',
   upload: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 21V8"/><path d="M7 13l5-5 5 5"/><path d="M4 20h16"/></svg>',
+  share: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M4 14v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/></svg>',
 };
+
+// ---------------------------------------------------------------------
+// Compartilhamento — gera um card de conquista (formato Stories, 9:16)
+// usando as cores do tema ativo, e abre o menu nativo de compartilhar.
+// ---------------------------------------------------------------------
+function hexToRgba(hex, alpha){
+  const h = (hex||'#C6FF3D').trim().replace('#','');
+  const r = parseInt(h.substring(0,2),16), g = parseInt(h.substring(2,4),16), b = parseInt(h.substring(4,6),16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+function getThemeColors(){
+  const cs = getComputedStyle(document.documentElement);
+  return {
+    bg: cs.getPropertyValue('--bg').trim() || '#16303A',
+    cardBg: cs.getPropertyValue('--card-bg').trim() || '#1F4048',
+    accent: cs.getPropertyValue('--accent').trim() || '#C6FF3D',
+    accentText: cs.getPropertyValue('--accent-text').trim() || '#14171C',
+    text: cs.getPropertyValue('--text').trim() || '#EAF6F4',
+    textMuted: cs.getPropertyValue('--text-muted').trim() || '#9DBFBF',
+  };
+}
+function roundRectPath(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+}
+function drawStoryFrame(ctx, W, H, colors){
+  const grad = ctx.createRadialGradient(W*0.3,0,0, W*0.3,0, W*1.3);
+  grad.addColorStop(0, colors.cardBg);
+  grad.addColorStop(0.5, colors.bg);
+  grad.addColorStop(1, '#08151a');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,W,H);
+  const blob = (x,y,r,alpha)=>{
+    const g = ctx.createRadialGradient(x,y,0,x,y,r);
+    g.addColorStop(0, hexToRgba(colors.accent, alpha));
+    g.addColorStop(1, hexToRgba(colors.accent, 0));
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  };
+  blob(W*0.85, H*0.04, W*0.5, 0.28);
+  blob(W*0.05, H*0.78, W*0.4, 0.16);
+}
+function drawBrandHeader(ctx, W, colors, personName){
+  const pad = W*0.08;
+  const iconSize = W*0.075;
+  ctx.fillStyle = colors.accent;
+  roundRectPath(ctx, pad, pad, iconSize, iconSize, iconSize*0.3);
+  ctx.fill();
+  ctx.fillStyle = colors.accentText;
+  ctx.font = `900 ${iconSize*0.42}px Arial`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('V!', pad+iconSize/2, pad+iconSize/2+1);
+
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+  ctx.font = `800 ${W*0.05}px Arial`;
+  const brandY = pad + iconSize*0.68;
+  ctx.fillStyle = colors.text;
+  ctx.fillText('VAMO', pad, brandY);
+  const wVamo = ctx.measureText('VAMO').width;
+  ctx.fillStyle = colors.accent;
+  ctx.fillText('!', pad+wVamo, brandY);
+  const wExcl = ctx.measureText('!').width;
+  if(personName){
+    ctx.fillStyle = colors.text;
+    ctx.fillText(' '+personName, pad+wVamo+wExcl, brandY);
+  }
+}
+function drawFooterCTA(ctx, W, H, colors){
+  const cx = W/2;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = colors.textMuted;
+  ctx.font = `500 ${W*0.022}px monospace`;
+  ctx.fillText(new Date().toLocaleDateString('pt-BR'), cx, H*0.90);
+
+  const pillW = W*0.46, pillH = W*0.062;
+  const px = cx-pillW/2, py = H*0.925;
+  roundRectPath(ctx, px, py, pillW, pillH, pillH/2);
+  ctx.fillStyle = hexToRgba(colors.accent, 0.14);
+  ctx.fill();
+  ctx.strokeStyle = hexToRgba(colors.accent, 0.4);
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.fillStyle = colors.accent;
+  ctx.font = `700 ${W*0.024}px monospace`;
+  ctx.textBaseline = 'middle';
+  ctx.fillText('BAIXE O VAMO!', cx, py+pillH/2+1);
+  ctx.textBaseline = 'alphabetic';
+}
+
+// stat de composição corporal (peso perdido/massa magra ganha), conforme o objetivo
+function computeBodyShareStat(){
+  const hist = (profile.weightHistory||[]).filter(h=>h.weight);
+  if(hist.length < 2) return null;
+  const sorted = hist.slice().sort((a,b)=> a.date < b.date ? -1 : 1);
+  const first = sorted[0], last = sorted[sorted.length-1];
+  const goal = (profile && profile.goal) || 'hipertrofia';
+
+  if(goal === 'emagrecimento'){
+    const delta = Number(first.weight) - Number(last.weight); // positivo = perdeu peso
+    return { kicker:'evolução de peso', big:(delta>=0?'-':'+')+Math.abs(delta).toFixed(1)+'kg', label: delta>=0?'perdidos':'ganhos' };
+  }
+  const leanOf = (h)=> (h.bodyFat!==undefined && h.bodyFat!==null && h.bodyFat!=='') ? Number(h.weight)*(1-Number(h.bodyFat)/100) : null;
+  const leanFirst = leanOf(first), leanLast = leanOf(last);
+  if(leanFirst!==null && leanLast!==null){
+    const delta = leanLast - leanFirst;
+    return { kicker:'massa magra', big:(delta>=0?'+':'-')+Math.abs(delta).toFixed(1)+'kg', label:'ganha desde o início' };
+  }
+  const delta = Number(last.weight) - Number(first.weight);
+  return { kicker:'evolução de peso', big:(delta>=0?'+':'-')+Math.abs(delta).toFixed(1)+'kg', label:'desde que comecei' };
+}
+
+// stat do treino concluído hoje
+function computeWorkoutShareStat(){
+  const dayKey = todayKey();   // 'seg' etc — pra achar o plano do dia
+  const dateKey = todayStr();  // 'YYYY-MM-DD' — pra achar logs/duração
+  const data = plan[dayKey];
+  if(!data || !data.exercises || !data.exercises.length) return null;
+  let setsCount = 0;
+  data.exercises.forEach(ex=>{
+    const entry = (logs[ex.id]||[]).find(e=>e.date===dateKey);
+    if(entry && entry.sets) setsCount += entry.sets.length;
+  });
+  const durMin = Math.round(((durations && durations[dateKey]) || 0)/60);
+  return { workoutName: data.title, durMin, exCount: data.exercises.length, setsCount, streak: computeStreak() };
+}
+
+function desenharCardCorpo(ctx, W, H, colors){
+  drawStoryFrame(ctx, W, H, colors);
+  drawBrandHeader(ctx, W, colors, (profile.name||'').split(' ')[0] || '');
+  const stat = computeBodyShareStat();
+  if(!stat) return false;
+
+  const cx = W/2;
+  ctx.textAlign = 'center';
+  ctx.fillStyle = colors.textMuted;
+  ctx.font = `600 ${W*0.03}px monospace`;
+  ctx.fillText(stat.kicker.toUpperCase(), cx, H*0.42);
+
+  ctx.fillStyle = colors.accent;
+  ctx.font = `900 ${W*0.19}px Arial`;
+  ctx.fillText(stat.big, cx, H*0.42 + W*0.19);
+
+  ctx.fillStyle = colors.text;
+  ctx.font = `600 ${W*0.034}px monospace`;
+  ctx.fillText(stat.label.toUpperCase(), cx, H*0.42 + W*0.19 + W*0.06);
+
+  drawFooterCTA(ctx, W, H, colors);
+  return true;
+}
+
+function desenharCardTreino(ctx, W, H, colors){
+  drawStoryFrame(ctx, W, H, colors);
+  drawBrandHeader(ctx, W, colors, (profile.name||'').split(' ')[0] || '');
+  const stat = computeWorkoutShareStat();
+  if(!stat) return false;
+
+  const cx = W/2;
+  let y = H*0.24;
+
+  const r = W*0.065;
+  ctx.strokeStyle = colors.accent; ctx.lineWidth = W*0.006;
+  ctx.fillStyle = hexToRgba(colors.accent, 0.16);
+  ctx.beginPath(); ctx.arc(cx,y,r,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = colors.accent;
+  ctx.font = `700 ${r*1.1}px Arial`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText('✓', cx, y+2);
+
+  y += r + W*0.055;
+  ctx.fillStyle = colors.accent;
+  ctx.font = `700 ${W*0.028}px monospace`;
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('TREINO CONCLUÍDO', cx, y);
+
+  y += W*0.10;
+  ctx.fillStyle = colors.text;
+  ctx.font = `800 ${W*0.06}px Arial`;
+  ctx.fillText(stat.workoutName, cx, y);
+
+  y += W*0.11;
+  const items = [
+    {n: stat.durMin+'min', l:'DURAÇÃO'},
+    {n: String(stat.exCount), l:'EXERCÍCIOS'},
+    {n: String(stat.setsCount), l:'SÉRIES'},
+  ];
+  const colW = W*0.28;
+  const startX = cx - colW;
+  items.forEach((it,i)=>{
+    const x = startX + colW*i;
+    ctx.font = `800 ${W*0.05}px Arial`;
+    ctx.fillStyle = colors.text;
+    ctx.fillText(it.n, x, y);
+    ctx.font = `500 ${W*0.018}px monospace`;
+    ctx.fillStyle = colors.textMuted;
+    ctx.fillText(it.l, x, y+W*0.032);
+  });
+
+  y += W*0.11;
+  ctx.font = `500 ${W*0.026}px monospace`;
+  ctx.fillStyle = colors.textMuted;
+  ctx.fillText(`🔥 ${stat.streak} dias seguidos`, cx, y);
+
+  drawFooterCTA(ctx, W, H, colors);
+  return true;
+}
+
+async function gerarECompartilhar(desenhador, arquivoNome){
+  const W = 720, H = 1280;
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  const colors = getThemeColors();
+  const ok = desenhador(ctx, W, H, colors);
+  if(!ok) return;
+  canvas.toBlob(async (blob)=>{
+    if(!blob) return;
+    const file = new File([blob], arquivoNome, {type:'image/png'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      try{ await navigator.share({files:[file], title:'Vamo!'}); }catch(e){ /* usuário cancelou o compartilhamento */ }
+    }else{
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = arquivoNome;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(()=>URL.revokeObjectURL(url), 2000);
+    }
+  }, 'image/png');
+}
 
 // ---------------------------------------------------------------------
 // Carga Máxima Estimada (1RM) — Fórmula de Epley
@@ -2138,6 +2376,8 @@ function attachCalendarEvents(){
     }else if(action==='toggle-corpo-evo'){
       corpoEvoOpen = !corpoEvoOpen;
       render();
+    }else if(action==='share-body-progress'){
+      gerarECompartilhar(desenharCardCorpo, 'vamo-evolucao.png');
     }else if(action==='toggle-hydration-detail'){
       hydrationDetailOpen = !hydrationDetailOpen;
       render();
@@ -2228,8 +2468,8 @@ function renderExercise(dayKey, ex){
   const ref = rm!==null ? referenciaCarga(ex.id) : null;
   const rmSideHtml = rm!==null
     ? `<div class="exercise-side">
-        <span class="exercise-ref-row"><span class="exercise-ref-label">1RM</span><b class="exercise-ref-value accent">${rm}kg</b></span>
-        ${ref ? `<span class="exercise-ref-row"><span class="exercise-ref-label">${ref.pctLabel}</span><b class="exercise-ref-value">${ref.weight}kg</b></span>` : ''}
+        <div class="exercise-ref-line"><span class="exercise-ref-label">1RM</span><span class="exercise-ref-value accent">${rm}kg</span></div>
+        ${ref ? `<div class="exercise-ref-divider"></div><div class="exercise-ref-line"><span class="exercise-ref-label">${ref.pctLabel}</span><span class="exercise-ref-value">${ref.weight}kg</span></div>` : ''}
       </div>`
     : '';
 
@@ -2238,11 +2478,9 @@ function renderExercise(dayKey, ex){
       <div class="exercise-header" data-action="toggle-exercise-collapse" data-exid="${ex.id}">
         <button class="exercise-done-btn ${isDone?'done':''}" data-action="toggle-exercise-done" data-exid="${ex.id}" title="Marcar exercício como concluído">${ICONS.check}</button>
         <div class="exercise-header-left">
-          <div class="exercise-title-row">
-            <span class="exercise-name">${ex.name}</span>
-            <span class="exercise-muscle">${ex.muscle}</span>
-            <span class="save-indicator" id="save-ind-${ex.id}">✓ salvo</span>
-          </div>
+          <span class="exercise-name">${ex.name}</span>
+          <span class="save-indicator" id="save-ind-${ex.id}">✓ salvo</span>
+          <div class="exercise-muscle">${ex.muscle}</div>
         </div>
         ${rmSideHtml}
         <div class="exercise-header-actions">
@@ -2516,6 +2754,7 @@ function renderTodayHero(){
   const isRest = !isTrainingDay(key);
   const now = new Date();
   const todayDateLabel = pad(now.getDate())+'/'+pad(now.getMonth()+1);
+  const isDone = !!completions[todayStr()];
   return `
     <p class="section-title" style="margin:18px 0 12px;">Treino de hoje</p>
     <div class="today-hero-card">
@@ -2524,7 +2763,10 @@ function renderTodayHero(){
           <div class="today-hero-tag"><span class="hoje-badge">HOJE</span>${todayDateLabel} · ${day.label}</div>
           <div class="today-hero-title">${data.title}</div>
         </div>
-        <div class="today-hero-badge">${day.badge}</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          ${isDone ? `<button class="today-hero-share-btn" data-action="share-workout-done" title="Compartilhar treino concluído" aria-label="Compartilhar treino concluído">${ICONS.share}</button>` : ''}
+          <div class="today-hero-badge">${day.badge}</div>
+        </div>
       </div>
       ${isRest
         ? `<p class="today-hero-rest">Hoje é dia de descanso. Aproveita pra recuperar. 💤</p>`
@@ -2651,6 +2893,7 @@ function renderBodyEvoChart(){
       <div class="radar-legend-item"><span class="radar-legend-dot base"></span>Peso</div>
       ${hasLean ? `<div class="radar-legend-item"><span class="radar-legend-dot dyn"></span>Massa magra</div>` : ''}
     </div>
+    <button class="body-evo-share-btn" data-action="share-body-progress" title="Compartilhar evolução" aria-label="Compartilhar evolução">${ICONS.share}</button>
   `;
 }
 
@@ -2721,6 +2964,9 @@ function attachEvents(){
     }
     else if(action==='open-meus-treinos'){
       openMeusTreinosOverlay();
+    }
+    else if(action==='share-workout-done'){
+      gerarECompartilhar(desenharCardTreino, 'vamo-treino.png');
     }
     else if(action==='toggle-week-list'){
       weekListOpen = !weekListOpen;
