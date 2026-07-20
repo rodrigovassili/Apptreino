@@ -270,6 +270,35 @@
   .exercise-chevron{color:var(--text-muted);opacity:0.6;transition:transform .25s ease, opacity .25s ease;flex-shrink:0;padding:4px;display:flex;}
   .exercise-item.open .exercise-chevron{transform:rotate(180deg);color:var(--accent);opacity:1;}
   .remove-exercise-btn{background:none;border:none;color:var(--text-muted);opacity:0.35;cursor:pointer;padding:4px;margin-left:2px;flex-shrink:0;display:flex;align-items:center;transform:scale(0.85);}
+
+  /* Meus treinos montados — cards da lista */
+  .plan-card{background:var(--card-bg);border-radius:14px;padding:14px;margin-bottom:10px;}
+  .plan-card.active{border:1px solid var(--accent);}
+  .plan-card-tag{display:inline-block;font-family:var(--mono);font-size:8.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted);background:var(--card-bg2);padding:2px 7px;border-radius:5px;margin-bottom:6px;}
+  .plan-card-tag.active{color:var(--accent);background:color-mix(in srgb, var(--accent) 14%, transparent);}
+  .plan-card-name{font-family:var(--display);font-size:15px;font-weight:700;color:var(--text);}
+  .plan-card-sub{font-family:var(--mono);font-size:10px;color:var(--text-muted);margin-top:2px;}
+  .plan-card-actions{display:flex;gap:8px;margin-top:12px;}
+  .plan-card-btn{flex:1;background:var(--card-bg2);border:none;border-radius:8px;padding:9px;font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--text);cursor:pointer;}
+  .plan-card-btn.accent{background:var(--accent);color:var(--accent-text);}
+  .plan-card-btn.danger{background:none;border:1px solid var(--line);color:var(--danger);}
+
+  /* Editor de treino */
+  .editor-plan-name-row{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;font-family:var(--mono);font-size:14px;color:var(--text);cursor:pointer;}
+  .editor-day-row{display:flex;align-items:center;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line);cursor:pointer;}
+  .editor-day-row:last-of-type{border-bottom:none;}
+  .editor-day-badge{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--text-muted);flex-shrink:0;}
+  .editor-day-info{flex:1;min-width:0;}
+  .editor-day-title{display:block;font-family:var(--display);font-size:14px;color:var(--text);}
+  .editor-day-meta{display:block;font-family:var(--mono);font-size:10.5px;color:var(--text-muted);margin-top:2px;}
+  .editor-day-meta.accent{color:var(--accent);}
+  .editor-ex-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);}
+  .editor-ex-arrows{display:flex;flex-direction:column;gap:2px;flex-shrink:0;}
+  .editor-ex-arrows button{background:none;border:none;color:var(--text-muted);font-size:9px;cursor:pointer;padding:2px 4px;line-height:1;}
+  .editor-ex-arrows button:disabled{opacity:0.25;cursor:default;}
+  .editor-ex-info{flex:1;min-width:0;}
+  .editor-ex-muscle{display:block;font-family:var(--mono);font-size:7.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--text-muted);opacity:0.6;margin-bottom:2px;}
+  .editor-ex-name{display:block;font-family:var(--display);font-size:13.5px;color:var(--text);}
   .remove-exercise-btn:active{opacity:0.8;}
   .remove-exercise-btn:hover{color:var(--danger);}
   .exercise-body-wrapper{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease;}
@@ -523,6 +552,7 @@
   .week-card-icon .icon{width:15px;height:15px;}
   .week-card-title{font-family:var(--display);font-size:13.5px;font-weight:700;}
   .week-card-row{display:flex;justify-content:space-between;}
+  .week-card-divider{border-top:1px solid var(--line);margin:16px 0 10px;}
   .day-col{display:flex;flex-direction:column;align-items:center;gap:7px;cursor:pointer;}
   .day-col-label{font-family:var(--mono);font-size:9px;color:var(--text-muted);}
   .day-col-check{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;color:transparent;}
@@ -868,15 +898,6 @@
     </div>
   </div>
 
-  <div class="generator-overlay" id="history-overlay">
-    <div class="generator-sheet">
-      <button class="generator-close" data-action="close-history" aria-label="Fechar">✕</button>
-      <p class="gen-eyebrow">Histórico de treinos</p>
-      <h2 class="gen-h1" style="margin-bottom:14px;">Treinos salvos</h2>
-      <div id="history-list"></div>
-    </div>
-  </div>
-
   <div class="generator-overlay" id="meus-treinos-overlay">
     <div class="generator-sheet">
       <button class="generator-close" data-action="close-meus-treinos" aria-label="Fechar">✕</button>
@@ -890,14 +911,20 @@
         <div><div class="gen-btn-text">Treino Consultoria</div><span class="gen-btn-sub">em breve — treino do seu personal</span></div>
         <span style="color:var(--text-muted);display:flex;transform:rotate(-90deg);"><svg class="icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
       </div>
-      <div class="gen-btn-row" style="margin-bottom:10px;" data-action="open-montar-treino">
+      <div class="gen-btn-row" style="margin-bottom:20px;" data-action="open-montar-treino">
         <div><div class="gen-btn-text">Montar meu treino</div><span class="gen-btn-sub">você planeja cada exercício</span></div>
         <span style="color:var(--accent);display:flex;transform:rotate(-90deg);"><svg class="icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
       </div>
-      <div class="gen-btn-row" style="margin-bottom:0;" data-action="open-history">
-        <div><div class="gen-btn-text">Histórico de treinos</div><span class="gen-btn-sub" id="meus-treinos-history-sub">salvos</span></div>
-        <span style="color:var(--accent);display:flex;transform:rotate(-90deg);"><svg class="icon" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
-      </div>
+      <p class="gen-eyebrow">Meus treinos montados</p>
+      <div id="meus-treinos-list" style="margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <div class="generator-overlay" id="plan-editor-overlay">
+    <div class="generator-sheet">
+      <button class="generator-close" data-action="close-plan-editor" aria-label="Fechar">✕</button>
+      <p class="gen-eyebrow">Editar treino</p>
+      <div id="plan-editor-body"></div>
     </div>
   </div>
 
@@ -1269,13 +1296,19 @@ function genNavRowHtml(){
   `;
 }
 function genApplyPlan(){
-  applyNewPlan(genAnswers._generatedPlan, {
-    confirmMsg: 'Isso vai substituir todo o treino atual pela nova semana gerada. O treino de agora fica salvo no histórico. Continuar?',
-    onDone: ()=>{
-      genCloseOverlay();
-      showToast('Treino gerado e aplicado na sua semana.');
-    }
-  });
+  const entry = {
+    id: uid(),
+    name: 'Treino sugerido',
+    origin: 'sugestao',
+    createdAt: todayStr(),
+    plan: genAnswers._generatedPlan,
+    logs: {},
+  };
+  planHistory.unshift(entry);
+  savePlanHistory();
+  genCloseOverlay();
+  showToast('Treino gerado e salvo na sua lista — ative quando quiser usar.');
+  openPlanEditor('entry', entry.id);
 }
 function attachGeneratorEvents(){
   document.getElementById('generator-close-btn').addEventListener('click', genCloseOverlay);
@@ -1778,6 +1811,34 @@ function savePlanHistory(){
   catch(e){ console.error('Erro ao salvar histórico de treinos', e); }
 }
 
+// Identificação do treino ativo (nome + origem) — separado do `plan` em si.
+// Se não existir ainda (apps já em uso antes dessa versão), gera uma automaticamente
+// pra não perder o treino que já estava rodando.
+let activePlanMeta = null;
+async function loadActivePlanMeta(){
+  try{
+    const raw = localStorage.getItem('vamo-active-plan-meta');
+    activePlanMeta = raw ? JSON.parse(raw) : null;
+  }catch(e){ activePlanMeta = null; }
+  if(!activePlanMeta && !isPlanEmpty()){
+    const titles = DAYS.map(d=>plan[d.key]).filter(d=>d.exercises.length>0 || d.forceTraining).map(d=>d.title);
+    activePlanMeta = {
+      id: uid(),
+      name: titles.length ? [...new Set(titles)].join(', ') : 'Meu treino atual',
+      origin: 'manual',
+      createdAt: todayStr(),
+    };
+    saveActivePlanMeta();
+  }
+}
+function saveActivePlanMeta(){
+  try{ localStorage.setItem('vamo-active-plan-meta', JSON.stringify(activePlanMeta)); }
+  catch(e){ console.error('Erro ao salvar identificação do treino ativo', e); }
+}
+function originLabel(origin){
+  return origin==='sugestao' ? 'Sugerido pelo app' : origin==='consultoria' ? 'Consultoria' : 'Montado por mim';
+}
+
 // nameHistory guarda, por NOME do exercício (não por ID), a última sessão registrada —
 // isso sobrevive a trocas de treino, já que cada treino novo gera IDs novos pros exercícios
 let nameHistory = {};
@@ -1799,52 +1860,60 @@ function findExerciseNameById(exId){
   return null;
 }
 
-// Arquiva o treino ativo (com os logs que existirem) no histórico, se houver algo relevante
-function archiveCurrentPlanIfNeeded(){
-  if(isPlanEmpty()) return;
-  const activeTitles = DAYS.map(d=>plan[d.key]).filter(d=>d.exercises.length>0 || d.forceTraining).map(d=>d.title);
-  const name = activeTitles.length ? [...new Set(activeTitles)].join(', ') : 'Treino sem nome';
-  const bundledLogs = {};
-  DAYS.forEach(d=>{
-    (plan[d.key].exercises||[]).forEach(ex=>{
-      if(logs[ex.id]) bundledLogs[ex.id] = logs[ex.id];
-    });
-  });
-  planHistory.unshift({
-    id: uid(),
-    name,
-    archivedAt: todayStr(),
-    plan: JSON.parse(JSON.stringify(plan)),
-    logs: JSON.parse(JSON.stringify(bundledLogs)),
-  });
-  savePlanHistory();
-}
-
-// Ponto único de troca de treino — usado pela Sugestão de treino, Montar meu treino,
-// Treino Consultoria (futuro) e reativação pelo Histórico. Sempre confirma, sempre arquiva.
-function applyNewPlan(newPlan, opts){
-  opts = opts || {};
+// Ponto único de ATIVAÇÃO de treino — troca o treino ativo por um da lista.
+// O que estava ativo antes é arquivado de volta na lista, com sua identificação preservada.
+function activatePlanEntry(entryId){
+  const entry = planHistory.find(h=>h.id===entryId);
+  if(!entry) return;
   const proceed = ()=>{
-    archiveCurrentPlanIfNeeded();
-    plan = newPlan;
+    if(!isPlanEmpty()){
+      const bundledLogs = {};
+      DAYS.forEach(d=>{
+        (plan[d.key].exercises||[]).forEach(ex=>{ if(logs[ex.id]) bundledLogs[ex.id] = logs[ex.id]; });
+      });
+      planHistory.push({
+        id: activePlanMeta ? activePlanMeta.id : uid(),
+        name: activePlanMeta ? activePlanMeta.name : 'Treino anterior',
+        origin: activePlanMeta ? activePlanMeta.origin : 'manual',
+        createdAt: activePlanMeta ? activePlanMeta.createdAt : todayStr(),
+        plan: JSON.parse(JSON.stringify(plan)),
+        logs: JSON.parse(JSON.stringify(bundledLogs)),
+      });
+    }
+    planHistory = planHistory.filter(h=>h.id!==entryId);
+    plan = JSON.parse(JSON.stringify(entry.plan));
+    activePlanMeta = {id: entry.id, name: entry.name, origin: entry.origin, createdAt: entry.createdAt};
+    Object.assign(logs, JSON.parse(JSON.stringify(entry.logs||{})));
     savePlan();
+    saveActivePlanMeta();
+    saveLogs();
+    savePlanHistory();
     activeDayKey = null;
     pendingRows = {};
+    closeMeusTreinosOverlay();
+    switchTab('treinos');
     render();
-    if(opts.onDone) opts.onDone();
+    showToast(`"${entry.name}" ativado.`);
   };
   if(!isPlanEmpty()){
-    if(confirm(opts.confirmMsg || 'Isso vai substituir seu treino atual. O treino de agora fica salvo no histórico, com todas as cargas registradas. Continuar?')){
-      proceed();
-    }
+    if(confirm(`Isso vai trocar seu treino ativo por "${entry.name}". O treino atual continua salvo na lista, com as cargas registradas. Continuar?`)) proceed();
   }else{
     proceed();
   }
 }
 
+function deletePlanEntry(entryId){
+  const entry = planHistory.find(h=>h.id===entryId);
+  if(!entry) return;
+  if(!confirm(`Apagar "${entry.name}"? Isso remove o treino e as cargas registradas nele. Não dá pra desfazer.`)) return;
+  planHistory = planHistory.filter(h=>h.id!==entryId);
+  savePlanHistory();
+  renderMeusTreinosList();
+  showToast('Treino apagado.');
+}
+
 function openMeusTreinosOverlay(){
-  const sub = document.getElementById('meus-treinos-history-sub');
-  if(sub) sub.textContent = `${planHistory.length} treino${planHistory.length===1?'':'s'} salvo${planHistory.length===1?'':'s'}`;
+  renderMeusTreinosList();
   document.getElementById('meus-treinos-overlay').classList.add('show');
 }
 function closeMeusTreinosOverlay(){
@@ -1862,75 +1931,69 @@ function attachMeusTreinosEvents(){
     else if(action==='open-generator'){ closeMeusTreinosOverlay(); genOpenOverlay(); }
     else if(action==='open-consultoria'){ showToast('Em breve — seu personal vai poder enviar treinos direto pro seu app.'); }
     else if(action==='open-montar-treino'){ closeMeusTreinosOverlay(); startMontarMeuTreino(); }
-    else if(action==='open-history'){ closeMeusTreinosOverlay(); openHistoryOverlay(); }
+    else if(action==='activate-plan'){ activatePlanEntry(btn.dataset.id); }
+    else if(action==='delete-plan'){ deletePlanEntry(btn.dataset.id); }
+    else if(action==='edit-plan'){
+      closeMeusTreinosOverlay();
+      openPlanEditor(btn.dataset.id==='active' ? 'active' : 'entry', btn.dataset.id);
+    }
   });
 }
 
-// Montar meu treino: começa uma semana em branco (via o mesmo mecanismo de confirmação+arquivo)
+// Montar meu treino: cria uma semana em branco JÁ SALVA na lista (sem ativar) e abre o editor nela
 function startMontarMeuTreino(){
   const blankPlan = {};
-  DAYS.forEach(d=>{ blankPlan[d.key] = {title:'Descanso', exercises:[], forceTraining:false}; });
-  applyNewPlan(blankPlan, {
-    confirmMsg: 'Isso vai substituir seu treino atual por uma semana em branco pra você montar. O treino de agora fica salvo no histórico. Continuar?',
-    onDone: ()=>{
-      switchTab('treinos');
-      showToast('Semana em branco pronta — escolha os dias de treino e adicione seus exercícios.');
-    }
-  });
+  DAYS.forEach(d=>{ blankPlan[d.key] = {title: DEFAULT_TITLES[d.key], exercises:[], forceTraining:false}; });
+  const entry = { id: uid(), name:'Novo treino', origin:'manual', createdAt: todayStr(), plan: blankPlan, logs:{} };
+  planHistory.unshift(entry);
+  savePlanHistory();
+  openPlanEditor('entry', entry.id);
 }
 
-// Histórico de treinos
-function renderHistoryList(){
-  const el = document.getElementById('history-list');
+// Lista unificada: treino ativo + treinos salvos
+function renderMeusTreinosList(){
+  const el = document.getElementById('meus-treinos-list');
   if(!el) return;
-  if(!planHistory.length){
-    el.innerHTML = `<p class="gen-hint">Nenhum treino salvo ainda. Toda vez que você trocar de treino, o anterior fica guardado aqui, com todas as cargas registradas.</p>`;
-    return;
-  }
-  el.innerHTML = planHistory.map(h=>{
-    const exCount = Object.values(h.plan).reduce((s,d)=> s + (d.exercises ? d.exercises.length : 0), 0);
-    return `
-      <div class="card" style="margin-bottom:12px;">
-        <div class="gen-result-title">${h.name}</div>
-        <div class="gen-result-sub" style="margin-bottom:10px;">arquivado em ${fmtDate(h.archivedAt)} · ${exCount} exercício${exCount===1?'':'s'}</div>
-        <button class="radar-goto-btn" data-action="reactivate-history" data-id="${h.id}">Usar esse treino</button>
+  const rows = [];
+  if(!isPlanEmpty() && activePlanMeta){
+    const exCount = DAYS.reduce((s,d)=> s + plan[d.key].exercises.length, 0);
+    rows.push(`
+      <div class="plan-card active">
+        <div class="plan-card-top">
+          <div>
+            <span class="plan-card-tag active">● ATUAL</span>
+            <div class="plan-card-name">${activePlanMeta.name}</div>
+            <div class="plan-card-sub">${originLabel(activePlanMeta.origin)} · ${exCount} exercício${exCount===1?'':'s'}</div>
+          </div>
+        </div>
+        <div class="plan-card-actions">
+          <button class="plan-card-btn" data-action="edit-plan" data-id="active">Editar</button>
+        </div>
       </div>
-    `;
-  }).join('');
-}
-function openHistoryOverlay(){
-  renderHistoryList();
-  document.getElementById('history-overlay').classList.add('show');
-}
-function closeHistoryOverlay(){
-  document.getElementById('history-overlay').classList.remove('show');
-}
-function reactivateHistoryEntry(entryId){
-  const entry = planHistory.find(h=>h.id===entryId);
-  if(!entry) return;
-  applyNewPlan(JSON.parse(JSON.stringify(entry.plan)), {
-    confirmMsg: `Isso vai substituir seu treino atual por "${entry.name}". O treino de agora fica salvo no histórico. Continuar?`,
-    onDone: ()=>{
-      Object.assign(logs, JSON.parse(JSON.stringify(entry.logs)));
-      saveLogs();
-      closeHistoryOverlay();
-      switchTab('treinos');
-      showToast(`"${entry.name}" reativado, com as cargas de quando você usou ele.`);
-    }
+    `);
+  }
+  planHistory.forEach(h=>{
+    const exCount = Object.values(h.plan).reduce((s,d)=> s + (d.exercises ? d.exercises.length : 0), 0);
+    rows.push(`
+      <div class="plan-card">
+        <div class="plan-card-top">
+          <div>
+            <span class="plan-card-tag">${originLabel(h.origin)}</span>
+            <div class="plan-card-name">${h.name}</div>
+            <div class="plan-card-sub">${exCount} exercício${exCount===1?'':'s'}</div>
+          </div>
+        </div>
+        <div class="plan-card-actions">
+          <button class="plan-card-btn" data-action="edit-plan" data-id="${h.id}">Editar</button>
+          <button class="plan-card-btn accent" data-action="activate-plan" data-id="${h.id}">Ativar</button>
+          <button class="plan-card-btn danger" data-action="delete-plan" data-id="${h.id}">Apagar</button>
+        </div>
+      </div>
+    `);
   });
+  el.innerHTML = rows.length ? rows.join('') : `<p class="gen-hint">Nenhum treino ainda. Use "Sugestão de treino" ou "Montar meu treino" pra criar o primeiro.</p>`;
 }
-function attachHistoryEvents(){
-  const overlay = document.getElementById('history-overlay');
-  if(!overlay) return;
-  overlay.addEventListener('click', (e)=>{
-    if(e.target.id === 'history-overlay'){ closeHistoryOverlay(); return; }
-    const btn = e.target.closest('[data-action]');
-    if(!btn) return;
-    const action = btn.dataset.action;
-    if(action==='close-history'){ closeHistoryOverlay(); }
-    else if(action==='reactivate-history'){ reactivateHistoryEntry(btn.dataset.id); }
-  });
-}
+
 
 /* ========================================================================
    HIDRATAÇÃO — medidor tipo velocímetro, meta calculada pelo peso
@@ -2479,7 +2542,6 @@ function renderExercise(dayKey, ex){
         </div>
         <div class="exercise-header-actions">
           <span class="exercise-chevron">${ICONS.chevron}</span>
-          <button class="remove-exercise-btn" data-action="remove-exercise" data-day="${dayKey}" data-exid="${ex.id}" title="Remover exercício">${ICONS.x}</button>
         </div>
       </div>
       <div class="exercise-body-wrapper"><div class="exercise-body-inner"><div class="exercise-body">
@@ -2511,6 +2573,282 @@ function renderLibrary(dayKey){
 let activeDayKey = null;
 let weekListOpen = false;
 
+// ---------------------------------------------------------------------
+// Editor de treino — único lugar onde a estrutura de um treino (dias,
+// exercícios) pode ser alterada. Opera sobre o treino ativo OU sobre um
+// treino salvo na lista, nunca os dois ao mesmo tempo.
+// ---------------------------------------------------------------------
+let editorTarget = null;     // 'active' | 'entry'
+let editorEntryId = null;    // id do item em planHistory, quando target==='entry'
+let editorDayKey = null;     // dia aberto dentro do editor; null = lista dos 7 dias
+let editorLibraryOpen = false;
+let editorSelectedMuscle = MUSCLES[0];
+let editorEditingTitle = false;
+
+function editorGetPlan(){
+  if(editorTarget==='active') return plan;
+  const entry = planHistory.find(h=>h.id===editorEntryId);
+  return entry ? entry.plan : null;
+}
+function editorGetName(){
+  if(editorTarget==='active') return activePlanMeta ? activePlanMeta.name : '';
+  const entry = planHistory.find(h=>h.id===editorEntryId);
+  return entry ? entry.name : '';
+}
+function editorSetName(name){
+  if(editorTarget==='active'){
+    if(!activePlanMeta) return;
+    activePlanMeta.name = name || 'Meu treino atual';
+    saveActivePlanMeta();
+  }else{
+    const entry = planHistory.find(h=>h.id===editorEntryId);
+    if(!entry) return;
+    entry.name = name || 'Novo treino';
+    savePlanHistory();
+  }
+}
+function editorPersist(){
+  if(editorTarget==='active') savePlan();
+  else savePlanHistory();
+}
+
+function openPlanEditor(target, id){
+  editorTarget = target;
+  editorEntryId = target==='entry' ? id : null;
+  editorDayKey = null;
+  editorLibraryOpen = false;
+  editorEditingTitle = false;
+  renderPlanEditor();
+  document.getElementById('plan-editor-overlay').classList.add('show');
+}
+function closePlanEditor(){
+  document.getElementById('plan-editor-overlay').classList.remove('show');
+  editorTarget = null;
+  editorEntryId = null;
+  editorDayKey = null;
+  render();
+}
+
+function renderPlanEditor(){
+  const body = document.getElementById('plan-editor-body');
+  if(!body) return;
+  const planRef = editorGetPlan();
+  if(!planRef){ closePlanEditor(); return; }
+
+  if(editorDayKey){
+    body.innerHTML = renderEditorDayDetail(editorDayKey, planRef);
+    return;
+  }
+
+  const dayRows = DAYS.map(d=>{
+    const day = planRef[d.key];
+    const type = day.exercises.length>0 ? 'treino' : (day.forceTraining ? 'cardio' : 'descanso');
+    const typeLabel = type==='treino'
+      ? `${day.exercises.length} exercício${day.exercises.length===1?'':'s'}`
+      : (type==='cardio' ? 'Cardio' : 'Descanso');
+    return `
+      <div class="editor-day-row" data-action="editor-open-day" data-day="${d.key}">
+        <div class="editor-day-badge">${d.badge}</div>
+        <div class="editor-day-info">
+          <span class="editor-day-title">${day.title}</span>
+          <span class="editor-day-meta ${type==='treino'?'accent':''}">${typeLabel}</span>
+        </div>
+        <span class="chevron chevron-fwd">${ICONS.chevron}</span>
+      </div>
+    `;
+  }).join('');
+
+  body.innerHTML = `
+    <div class="field" style="margin-bottom:16px;">
+      <label>Nome do treino</label>
+      ${editorEditingTitle
+        ? `<input type="text" id="editor-plan-name-input" class="day-title-input" value="${editorGetName()}" placeholder="Ex: Push Pull Legs" style="width:100%;box-sizing:border-box;">`
+        : `<div class="editor-plan-name-row" data-action="editor-edit-plan-name"><span>${editorGetName() || 'Toque pra nomear'}</span>${ICONS.pencil}</div>`}
+    </div>
+    <p class="gen-hint" style="margin-bottom:12px;">Toque em um dia pra marcar o tipo (treino, descanso ou cardio) e montar os exercícios.</p>
+    ${dayRows}
+    <button class="workout-control-btn start" style="margin-top:20px;width:100%;" data-action="editor-finish">${ICONS.check}Concluir</button>
+  `;
+}
+
+function renderEditorDayDetail(dayKey, planRef){
+  const day = planRef[dayKey];
+  const dayMeta = DAYS.find(d=>d.key===dayKey);
+  const type = day.exercises.length>0 ? 'treino' : (day.forceTraining ? 'cardio' : 'descanso');
+
+  const exRows = day.exercises.map((ex, idx)=> `
+    <div class="editor-ex-row">
+      <div class="editor-ex-arrows">
+        <button data-action="editor-move-exercise" data-dir="up" data-idx="${idx}" ${idx===0?'disabled':''} aria-label="Mover pra cima">▲</button>
+        <button data-action="editor-move-exercise" data-dir="down" data-idx="${idx}" ${idx===day.exercises.length-1?'disabled':''} aria-label="Mover pra baixo">▼</button>
+      </div>
+      <div class="editor-ex-info">
+        <span class="editor-ex-muscle">${ex.muscle}</span>
+        <span class="editor-ex-name">${ex.name}</span>
+      </div>
+      <button class="remove-exercise-btn" data-action="editor-remove-exercise" data-idx="${idx}" title="Remover exercício">${ICONS.x}</button>
+    </div>
+  `).join('');
+
+  return `
+    <div class="day-detail">
+      <div class="detail-top-row">
+        <button class="detail-back-btn" data-action="editor-back-to-days" aria-label="Voltar">${ICONS.chevron}</button>
+        <span class="detail-eyebrow">${dayMeta.label}</span>
+      </div>
+      <div class="detail-title-row">
+        ${editorEditingTitle
+          ? `<input class="day-title-input detail-title-input" id="editor-day-title-input" value="${day.title}" placeholder="Nome do dia">`
+          : `<h2 class="detail-title-text">${day.title}</h2><button class="edit-title-btn" data-action="editor-edit-day-title" title="Editar nome" aria-label="Editar nome">${ICONS.pencil}</button>`}
+      </div>
+      <div class="day-type-toggle">
+        <button class="day-type-btn ${type==='descanso'?'active':''}" data-action="editor-set-day-type" data-type="descanso">${ICONS.book}Descanso</button>
+        <button class="day-type-btn ${type==='cardio'?'active':''}" data-action="editor-set-day-type" data-type="cardio">${ICONS.activity}Cardio</button>
+        <button class="day-type-btn ${type==='treino'?'active':''}" data-action="editor-set-day-type" data-type="treino">${ICONS.plus}Treino</button>
+      </div>
+      ${type==='treino' ? `
+        ${day.exercises.length ? exRows : '<p class="empty-state">Nenhum exercício ainda.</p>'}
+        <button class="add-exercise-btn" data-action="editor-toggle-library">${ICONS.plus}Adicionar exercício</button>
+        ${editorLibraryOpen ? renderEditorLibrary() : ''}
+      ` : ''}
+    </div>
+  `;
+}
+
+function renderEditorLibrary(){
+  const chips = MUSCLES.map(m =>
+    `<button class="muscle-chip ${m===editorSelectedMuscle?'active':''}" data-action="editor-select-muscle" data-muscle="${m}">${m}</button>`
+  ).join('');
+  const options = EXERCISE_LIBRARY[editorSelectedMuscle].map(name =>
+    `<button class="exercise-option" data-action="editor-add-exercise" data-muscle="${editorSelectedMuscle}" data-name="${name}">${name}</button>`
+  ).join('');
+  return `
+    <div class="library-panel">
+      <div class="muscle-chips">${chips}</div>
+      <div class="exercise-options">${options}</div>
+      <button class="close-library-btn" data-action="editor-close-library">Concluir</button>
+    </div>
+  `;
+}
+
+function attachPlanEditorEvents(){
+  const overlay = document.getElementById('plan-editor-overlay');
+  if(!overlay) return;
+
+  overlay.addEventListener('click', (e)=>{
+    if(e.target.id === 'plan-editor-overlay'){ closePlanEditor(); return; }
+    const btn = e.target.closest('[data-action]');
+    if(!btn) return;
+    const action = btn.dataset.action;
+    const planRef = editorGetPlan();
+
+    if(action==='close-plan-editor'){ closePlanEditor(); }
+    else if(action==='editor-finish'){ closePlanEditor(); }
+    else if(action==='editor-open-day'){
+      editorDayKey = btn.dataset.day;
+      editorLibraryOpen = false;
+      editorEditingTitle = false;
+      renderPlanEditor();
+    }
+    else if(action==='editor-back-to-days'){
+      editorDayKey = null;
+      editorEditingTitle = false;
+      renderPlanEditor();
+    }
+    else if(action==='editor-edit-plan-name'){
+      editorEditingTitle = true;
+      renderPlanEditor();
+      requestAnimationFrame(()=>{
+        const input = document.getElementById('editor-plan-name-input');
+        if(input){ input.focus(); input.select(); }
+      });
+    }
+    else if(action==='editor-edit-day-title'){
+      editorEditingTitle = true;
+      renderPlanEditor();
+      requestAnimationFrame(()=>{
+        const input = document.getElementById('editor-day-title-input');
+        if(input){ input.focus(); input.select(); }
+      });
+    }
+    else if(action==='editor-set-day-type'){
+      if(!planRef || !editorDayKey) return;
+      const type = btn.dataset.type;
+      const day = planRef[editorDayKey];
+      if(type==='descanso'){ day.exercises=[]; day.forceTraining=false; day.title='Descanso'; }
+      else if(type==='cardio'){ day.exercises=[]; day.forceTraining=true; day.title='Cardio'; }
+      else if(type==='treino' && day.exercises.length===0 && !day.forceTraining){
+        day.forceTraining = false;
+        day.title = DEFAULT_TITLES[editorDayKey] || 'Treino';
+      }
+      editorPersist();
+      renderPlanEditor();
+    }
+    else if(action==='editor-toggle-library'){
+      editorLibraryOpen = !editorLibraryOpen;
+      renderPlanEditor();
+    }
+    else if(action==='editor-close-library'){
+      editorLibraryOpen = false;
+      renderPlanEditor();
+    }
+    else if(action==='editor-select-muscle'){
+      editorSelectedMuscle = btn.dataset.muscle;
+      renderPlanEditor();
+    }
+    else if(action==='editor-add-exercise'){
+      if(!planRef || !editorDayKey) return;
+      planRef[editorDayKey].exercises.push({ id: uid(), name: btn.dataset.name, muscle: btn.dataset.muscle });
+      editorPersist();
+      renderPlanEditor();
+    }
+    else if(action==='editor-remove-exercise'){
+      if(!planRef || !editorDayKey) return;
+      const idx = Number(btn.dataset.idx);
+      planRef[editorDayKey].exercises.splice(idx, 1);
+      editorPersist();
+      renderPlanEditor();
+    }
+    else if(action==='editor-move-exercise'){
+      if(!planRef || !editorDayKey) return;
+      const idx = Number(btn.dataset.idx);
+      const dir = btn.dataset.dir;
+      const arr = planRef[editorDayKey].exercises;
+      const swapWith = dir==='up' ? idx-1 : idx+1;
+      if(swapWith<0 || swapWith>=arr.length) return;
+      [arr[idx], arr[swapWith]] = [arr[swapWith], arr[idx]];
+      editorPersist();
+      renderPlanEditor();
+    }
+  });
+
+  overlay.addEventListener('blur', (e)=>{
+    if(!e.target.classList) return;
+    if(e.target.id === 'editor-plan-name-input'){
+      editorSetName(e.target.value.trim());
+      editorEditingTitle = false;
+      renderPlanEditor();
+    }
+    if(e.target.id === 'editor-day-title-input'){
+      const planRef = editorGetPlan();
+      if(planRef && editorDayKey){
+        planRef[editorDayKey].title = e.target.value.trim() || 'Sem título';
+        editorPersist();
+      }
+      editorEditingTitle = false;
+      renderPlanEditor();
+    }
+  }, true);
+
+  overlay.addEventListener('keydown', (e)=>{
+    if(e.target.classList && e.target.classList.contains('day-title-input') && e.key==='Enter'){
+      e.target.blur();
+    }
+  });
+}
+
+
+
 function renderDayRow(day){
   const data = plan[day.key];
   const isToday = day.key === todayKey();
@@ -2537,7 +2875,7 @@ function renderDayDetail(day){
   const isCardioDay = data.exercises.length === 0 && data.forceTraining;
   const exercisesHtml = data.exercises.length
     ? data.exercises.map(ex => renderExercise(day.key, ex)).join('')
-    : '<p class="empty-state">Nenhum exercício ainda. Toque em "+ Adicionar exercício" para montar o treino.</p>';
+    : '<p class="empty-state">Dia de descanso. Pra adicionar exercícios, vá em Meus Treinos → Editar.</p>';
   const workoutControlBtn = !isToday
     ? ''
     : isCardioDay
@@ -2545,12 +2883,6 @@ function renderDayDetail(day){
       : (totalRunning
           ? `<button class="workout-control-btn finish" data-action="finish-workout">${ICONS.check}Concluir treino</button>`
           : `<button class="workout-control-btn start" data-action="start-workout">${ICONS.play}Iniciar treino</button>`);
-  const dayTypeButtons = data.exercises.length === 0
-    ? `<div class="day-type-toggle">
-        <button class="day-type-btn ${!data.forceTraining?'active':''}" data-action="set-day-type" data-day="${day.key}" data-type="rest">${ICONS.book}Descanso</button>
-        <button class="day-type-btn ${data.forceTraining?'active':''}" data-action="set-day-type" data-day="${day.key}" data-type="cardio">${ICONS.activity}Cardio</button>
-      </div>`
-    : '';
 
   return `
     <div class="day-detail">
@@ -2559,14 +2891,10 @@ function renderDayDetail(day){
         <span class="detail-eyebrow">${day.label}${isToday ? ' · Hoje' : ''}</span>
       </div>
       <div class="detail-title-row">
-        ${editingTitles.has(day.key)
-          ? `<input class="day-title-input detail-title-input" data-day="${day.key}" value="${data.title}" placeholder="Nome do treino">`
-          : `<h2 class="detail-title-text">${data.title}</h2><button class="edit-title-btn" data-action="edit-day-title" data-day="${day.key}" title="Editar nome" aria-label="Editar nome">${ICONS.pencil}</button>`}
+        <h2 class="detail-title-text">${data.title}</h2>
         ${workoutControlBtn}
       </div>
       ${isCardioDay ? '' : exercisesHtml}
-      ${dayTypeButtons}
-      ${isCardioDay ? '' : `<button class="add-exercise-btn" data-action="toggle-library" data-day="${day.key}">${ICONS.plus}Adicionar exercício</button>${renderLibrary(day.key)}`}
     </div>
   `;
 }
@@ -2712,8 +3040,7 @@ function attachProfileEvents(){
   }, true);
 }
 
-function renderWeekStrip(){
-  if(isPlanEmpty()) return '';
+function renderWeekStripInner(){
   const today = todayKey();
   const cols = DAYS.map(d=>{
     const start = getWeekStart(new Date());
@@ -2731,13 +3058,11 @@ function renderWeekStrip(){
     `;
   }).join('');
   return `
-    <div class="week-card">
-      <div class="week-card-head">
-        <div class="week-card-icon">${ICONS.flame}</div>
-        <span class="week-card-title">Treinos na semana</span>
-      </div>
-      <div class="week-card-row">${cols}</div>
+    <div class="week-card-head">
+      <div class="week-card-icon">${ICONS.flame}</div>
+      <span class="week-card-title">Sua semana</span>
     </div>
+    <div class="week-card-row">${cols}</div>
   `;
 }
 function renderTodayHero(){
@@ -2897,24 +3222,34 @@ function render(){
     const day = DAYS.find(d=>d.key===activeDayKey);
     container.innerHTML = renderDayDetail(day);
   }else{
-    const welcomeHtml = isPlanEmpty() ? `
+    const hasSavedPlans = planHistory.length > 0;
+    const welcomeHtml = !isPlanEmpty() ? '' : hasSavedPlans ? `
+      <div class="welcome-card">
+        <div class="welcome-icon">${ICONS.check}</div>
+        <div class="welcome-title">Nenhum treino ativo</div>
+        <div class="welcome-text">Você tem ${planHistory.length} treino${planHistory.length===1?'':'s'} salvo${planHistory.length===1?'':'s'}. Escolha um pra ativar e começar a treinar.</div>
+        <button class="welcome-btn" data-action="open-meus-treinos">Ver meus treinos</button>
+      </div>
+    ` : `
       <div class="welcome-card">
         <div class="welcome-icon">${ICONS.plus}</div>
         <div class="welcome-title">Não sabe por onde começar?</div>
         <div class="welcome-text">Responde 4 perguntas rápidas e a gente monta sua semana de treino do zero — você edita depois se quiser.</div>
         <button class="welcome-btn" data-action="open-generator">Montar meu treino</button>
       </div>
-    ` : '';
+    `;
     const meusTreinosHtml = isPlanEmpty() ? '' : `
       <div class="gen-btn-row" style="margin-top:14px;" data-action="open-meus-treinos">
-        <div><div class="gen-btn-text">Gerenciar meu treino</div><span class="gen-btn-sub">sugestão, consultoria, montar do zero ou histórico</span></div>
+        <div><div class="gen-btn-text">Gerenciar e editar treinos</div><span class="gen-btn-sub">sugestão, consultoria, montar do zero ou histórico</span></div>
         <span style="color:var(--accent);display:flex;transform:rotate(-90deg);">${ICONS.chevron}</span>
       </div>
     `;
-    const weekListHtml = `
-      <div class="card" style="margin-top:22px;padding:14px 16px;">
+    const weekListHtml = isPlanEmpty() ? '' : `
+      <div class="week-card" style="margin-top:0;">
+        ${renderWeekStripInner()}
+        <div class="week-card-divider"></div>
         <div class="collapsible-section-head" data-action="toggle-week-list">
-          <p class="section-title" style="margin:0;">Semana completa</p>
+          <p class="section-title" style="margin:0;">Ver semana completa</p>
           <span class="chevron ${weekListOpen?'open':''}">${ICONS.chevron}</span>
         </div>
         <div class="collapsible-wrapper ${weekListOpen?'open':''}"><div class="collapsible-inner">
@@ -2922,7 +3257,7 @@ function render(){
         </div></div>
       </div>
     `;
-    container.innerHTML = welcomeHtml + renderWeekStrip() + renderTodayHero() + meusTreinosHtml + weekListHtml;
+    container.innerHTML = welcomeHtml + weekListHtml + renderTodayHero() + meusTreinosHtml;
   }
   renderInicioView();
   renderCalendar();
@@ -2970,53 +3305,6 @@ function attachEvents(){
       activeDayKey = null;
       render();
       window.scrollTo(0,0);
-    }
-    else if(action==='edit-day-title'){
-      const key = el.dataset.day;
-      editingTitles.add(key);
-      render();
-      requestAnimationFrame(()=>{
-        const input = document.querySelector(`.day-title-input[data-day="${key}"]`);
-        if(input){ input.focus(); input.select(); }
-      });
-    }
-    else if(action==='toggle-library'){
-      const key = el.dataset.day;
-      openLibrary.has(key) ? openLibrary.delete(key) : openLibrary.add(key);
-      render();
-    }
-    else if(action==='close-library'){
-      openLibrary.delete(el.dataset.day);
-      render();
-    }
-    else if(action==='select-muscle'){
-      selectedMuscle[el.dataset.day] = el.dataset.muscle;
-      render();
-    }
-    else if(action==='add-exercise'){
-      const key = el.dataset.day;
-      const newEx = { id: uid(), name: el.dataset.name, muscle: el.dataset.muscle };
-      plan[key].exercises.push(newEx);
-      savePlan();
-      render();
-    }
-    else if(action==='remove-exercise'){
-      const key = el.dataset.day;
-      const exId = el.dataset.exid;
-      plan[key].exercises = plan[key].exercises.filter(ex=>ex.id!==exId);
-      delete logs[exId];
-      delete pendingRows[exId];
-      savePlan();
-      saveLogs();
-      render();
-    }
-    else if(action==='set-day-type'){
-      const key = el.dataset.day;
-      const isCardio = (el.dataset.type === 'cardio');
-      plan[key].forceTraining = isCardio;
-      plan[key].title = isCardio ? 'Cardio' : 'Descanso';
-      savePlan();
-      render();
     }
     else if(action==='toggle-exercise-collapse'){
       const exId = el.dataset.exid;
@@ -3755,6 +4043,7 @@ function onbStartFullFlow(){
   await loadProfile();
   await loadRadar();
   await loadPlanHistory();
+  await loadActivePlanMeta();
   await loadNameHistory();
   await loadHydration();
   attachEvents();
@@ -3764,8 +4053,8 @@ function onbStartFullFlow(){
   attachThemeToggle();
   attachProfileEvents();
   attachSettingsEvents();
-  attachHistoryEvents();
   attachMeusTreinosEvents();
+  attachPlanEditorEvents();
   attachStatsEvents();
   attachGeneratorEvents();
   initTimers();
