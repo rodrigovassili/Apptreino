@@ -285,13 +285,17 @@
 
   /* Editor de treino */
   .editor-plan-name-row{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px;font-family:var(--mono);font-size:14px;color:var(--text);cursor:pointer;}
-  .editor-day-row{display:flex;align-items:center;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line);cursor:pointer;}
+  .editor-day-row{display:flex;align-items:center;gap:8px;padding:11px 2px;border-bottom:1px solid var(--line);}
   .editor-day-row:last-of-type{border-bottom:none;}
-  .editor-day-badge{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--text-muted);flex-shrink:0;}
-  .editor-day-info{flex:1;min-width:0;}
-  .editor-day-title{display:block;font-family:var(--display);font-size:14px;color:var(--text);}
-  .editor-day-meta{display:block;font-family:var(--mono);font-size:10.5px;color:var(--text-muted);margin-top:2px;}
-  .editor-day-meta.accent{color:var(--accent);}
+  .editor-day-label{width:32px;flex-shrink:0;font-family:var(--display);font-size:13px;font-weight:700;color:var(--text);}
+  .editor-chip-group{display:flex;gap:6px;flex:1;}
+  .editor-chip{flex:1;text-align:center;background:none;border:none;font-family:var(--mono);font-size:9px;font-weight:600;padding:6px 2px;letter-spacing:.2px;color:var(--text-muted);opacity:0.55;cursor:pointer;}
+  .editor-chip.sel{opacity:1;color:var(--accent);}
+  .editor-chip.sel.rest{opacity:1;color:var(--text-muted);}
+  .editor-chip.sel.cardio{opacity:1;color:#FF9F40;}
+  .editor-day-arrow{background:none;border:none;color:var(--line);flex-shrink:0;padding:4px;display:flex;}
+  .editor-day-arrow.active{color:var(--accent);cursor:pointer;}
+  .detail-title-text.placeholder{color:var(--text-muted);font-weight:400;cursor:pointer;}
   .editor-ex-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);}
   .editor-ex-arrows{display:flex;flex-direction:column;gap:2px;flex-shrink:0;}
   .editor-ex-arrows button{background:none;border:none;color:var(--text-muted);font-size:9px;cursor:pointer;padding:2px 4px;line-height:1;}
@@ -2642,18 +2646,16 @@ function renderPlanEditor(){
 
   const dayRows = DAYS.map(d=>{
     const day = planRef[d.key];
-    const type = day.exercises.length>0 ? 'treino' : (day.forceTraining ? 'cardio' : 'descanso');
-    const typeLabel = type==='treino'
-      ? `${day.exercises.length} exercício${day.exercises.length===1?'':'s'}`
-      : (type==='cardio' ? 'Cardio' : 'Descanso');
+    const type = day.exercises.length>0 ? 'treino' : (day.forceTraining ? 'cardio' : (day.emptyTrainingFlag ? 'treino' : 'descanso'));
     return `
-      <div class="editor-day-row" data-action="editor-open-day" data-day="${d.key}">
-        <div class="editor-day-badge">${d.badge}</div>
-        <div class="editor-day-info">
-          <span class="editor-day-title">${day.title}</span>
-          <span class="editor-day-meta ${type==='treino'?'accent':''}">${typeLabel}</span>
+      <div class="editor-day-row">
+        <span class="editor-day-label">${d.badge}</span>
+        <div class="editor-chip-group">
+          <button class="editor-chip ${type==='treino'?'sel':''}" data-action="editor-quick-set-type" data-day="${d.key}" data-type="treino">Treino</button>
+          <button class="editor-chip ${type==='descanso'?'sel rest':''}" data-action="editor-quick-set-type" data-day="${d.key}" data-type="descanso">Descanso</button>
+          <button class="editor-chip ${type==='cardio'?'sel cardio':''}" data-action="editor-quick-set-type" data-day="${d.key}" data-type="cardio">Cardio</button>
         </div>
-        <span class="chevron chevron-fwd">${ICONS.chevron}</span>
+        <button class="editor-day-arrow ${type==='treino'?'active':''}" ${type==='treino' ? `data-action="editor-open-day" data-day="${d.key}"` : ''} aria-label="Editar dia">${ICONS.chevron}</button>
       </div>
     `;
   }).join('');
@@ -2665,7 +2667,7 @@ function renderPlanEditor(){
         ? `<input type="text" id="editor-plan-name-input" class="day-title-input" value="${editorGetName()}" placeholder="Ex: Push Pull Legs" style="width:100%;box-sizing:border-box;">`
         : `<div class="editor-plan-name-row" data-action="editor-edit-plan-name"><span>${editorGetName() || 'Toque pra nomear'}</span>${ICONS.pencil}</div>`}
     </div>
-    <p class="gen-hint" style="margin-bottom:12px;">Toque em um dia pra marcar o tipo (treino, descanso ou cardio) e montar os exercícios.</p>
+    <p class="gen-hint" style="margin-bottom:8px;">Toque no tipo de cada dia. Nos dias de treino, toque na seta pra nomear e escolher os exercícios.</p>
     ${dayRows}
     <button class="workout-control-btn start" style="margin-top:20px;width:100%;" data-action="editor-finish">${ICONS.check}Concluir</button>
   `;
@@ -2674,7 +2676,6 @@ function renderPlanEditor(){
 function renderEditorDayDetail(dayKey, planRef){
   const day = planRef[dayKey];
   const dayMeta = DAYS.find(d=>d.key===dayKey);
-  const type = day.exercises.length>0 ? 'treino' : (day.forceTraining ? 'cardio' : 'descanso');
 
   const exRows = day.exercises.map((ex, idx)=> `
     <div class="editor-ex-row">
@@ -2698,19 +2699,12 @@ function renderEditorDayDetail(dayKey, planRef){
       </div>
       <div class="detail-title-row">
         ${editorEditingTitle
-          ? `<input class="day-title-input detail-title-input" id="editor-day-title-input" value="${day.title}" placeholder="Nome do dia">`
-          : `<h2 class="detail-title-text">${day.title}</h2><button class="edit-title-btn" data-action="editor-edit-day-title" title="Editar nome" aria-label="Editar nome">${ICONS.pencil}</button>`}
+          ? `<input class="day-title-input detail-title-input" id="editor-day-title-input" value="${day.title}" placeholder="Nome do dia (ex: Peito e Tríceps)">`
+          : `<h2 class="detail-title-text ${day.title?'':'placeholder'}" data-action="editor-edit-day-title">${day.title || 'Toque pra dar um nome'}</h2><button class="edit-title-btn" data-action="editor-edit-day-title" title="Editar nome" aria-label="Editar nome">${ICONS.pencil}</button>`}
       </div>
-      <div class="day-type-toggle">
-        <button class="day-type-btn ${type==='descanso'?'active':''}" data-action="editor-set-day-type" data-type="descanso">${ICONS.book}Descanso</button>
-        <button class="day-type-btn ${type==='cardio'?'active':''}" data-action="editor-set-day-type" data-type="cardio">${ICONS.activity}Cardio</button>
-        <button class="day-type-btn ${type==='treino'?'active':''}" data-action="editor-set-day-type" data-type="treino">${ICONS.plus}Treino</button>
-      </div>
-      ${type==='treino' ? `
-        ${day.exercises.length ? exRows : '<p class="empty-state">Nenhum exercício ainda.</p>'}
-        <button class="add-exercise-btn" data-action="editor-toggle-library">${ICONS.plus}Adicionar exercício</button>
-        ${editorLibraryOpen ? renderEditorLibrary() : ''}
-      ` : ''}
+      ${day.exercises.length ? exRows : '<p class="empty-state">Nenhum exercício ainda.</p>'}
+      <button class="add-exercise-btn" data-action="editor-toggle-library">${ICONS.plus}Adicionar exercício</button>
+      ${editorLibraryOpen ? renderEditorLibrary() : ''}
     </div>
   `;
 }
@@ -2771,15 +2765,17 @@ function attachPlanEditorEvents(){
         if(input){ input.focus(); input.select(); }
       });
     }
-    else if(action==='editor-set-day-type'){
-      if(!planRef || !editorDayKey) return;
+    else if(action==='editor-quick-set-type'){
+      if(!planRef) return;
+      const dayKey = btn.dataset.day;
       const type = btn.dataset.type;
-      const day = planRef[editorDayKey];
-      if(type==='descanso'){ day.exercises=[]; day.forceTraining=false; day.title='Descanso'; }
-      else if(type==='cardio'){ day.exercises=[]; day.forceTraining=true; day.title='Cardio'; }
-      else if(type==='treino' && day.exercises.length===0 && !day.forceTraining){
+      const day = planRef[dayKey];
+      if(type==='descanso'){ day.exercises=[]; day.forceTraining=false; day.emptyTrainingFlag=false; day.title='Descanso'; }
+      else if(type==='cardio'){ day.exercises=[]; day.forceTraining=true; day.emptyTrainingFlag=false; day.title='Cardio'; }
+      else if(type==='treino'){
         day.forceTraining = false;
-        day.title = DEFAULT_TITLES[editorDayKey] || 'Treino';
+        day.emptyTrainingFlag = true;
+        if(day.title==='Descanso' || day.title==='Cardio' || !day.title) day.title = '';
       }
       editorPersist();
       renderPlanEditor();
