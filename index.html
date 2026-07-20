@@ -185,10 +185,10 @@
   .hero-name{text-transform:none;}
   .hero p{color:var(--text-muted);font-size:14px;margin:0 0 20px;}
   .tape{height:4px;border-radius:4px;margin-bottom:26px;background:var(--accent);opacity:0.9;position:relative;}
-  .header-timer-pill{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--bg);border:2px solid var(--accent);border-radius:20px;padding:4px 6px;display:flex;align-items:center;gap:10px;z-index:1;}
+  .header-timer-pill{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--accent);border:none;border-radius:20px;padding:4px 6px;display:flex;align-items:center;gap:10px;z-index:1;}
   .header-timer-pill.hidden{display:none;}
-  .header-timer-btn{width:24px;height:24px;border-radius:50%;background:var(--card-bg2);border:none;color:var(--accent);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
-  .header-timer-value{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--text);min-width:46px;text-align:center;}
+  .header-timer-btn{width:24px;height:24px;border-radius:50%;background:color-mix(in srgb, var(--accent-text) 18%, transparent);border:none;color:var(--accent-text);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
+  .header-timer-value{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--accent-text);min-width:46px;text-align:center;cursor:pointer;}
 
   .day-card{background:none;border:none;border-bottom:1px solid rgba(255,255,255,0.1);border-radius:0;margin-bottom:0;overflow:visible;}
   .day-card:last-child{border-bottom:none;}
@@ -346,6 +346,13 @@
   .workout-control-btn{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;white-space:nowrap;padding:8px 13px;border-radius:20px;font-family:var(--mono);font-size:11px;font-weight:600;cursor:pointer;}
   .workout-control-btn.start{background:none;border:1.5px solid var(--accent);color:var(--accent);}
   .workout-control-btn.finish{background:var(--accent);border:1.5px solid var(--accent);color:var(--accent-text);}
+  .workout-control-btn.done{background:none;border:1.5px solid var(--line);color:var(--text-muted);}
+  .finish-timer-sep{width:1px;height:11px;background:currentColor;opacity:0.35;margin:0 2px;display:inline-block;}
+  .finish-timer-sep.hidden{display:none;}
+  .finish-timer-val{font-variant-numeric:tabular-nums;}
+  .finish-timer-val.hidden{display:none;}
+  .finish-timer-toggle{display:inline-flex;align-items:center;opacity:0.75;margin-left:1px;}
+  .finish-timer-toggle .icon{width:13px;height:13px;}
   @keyframes fadeInBtn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 
   .day-type-toggle{display:flex;gap:8px;margin:4px 0 10px;}
@@ -613,6 +620,7 @@
   .inicio-calendar-inner .calendar-summary{display:block;font-family:var(--mono);font-size:10.5px;color:var(--text-muted);margin-bottom:6px;line-height:1.5;}
 
   .today-hero-btn{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;background:var(--accent);color:var(--accent-text);border:none;border-radius:14px;padding:13px;font-family:var(--display);font-weight:700;font-size:13.5px;cursor:pointer;}
+  .today-hero-btn.done{background:none;border:1.5px solid var(--accent);color:var(--accent);}
   .today-hero-btn .icon{width:14px;height:14px;transform:rotate(-90deg);}
 
   .welcome-card{background:linear-gradient(155deg, color-mix(in srgb, var(--accent) 14%, var(--card-bg)), var(--card-bg));border:1px solid color-mix(in srgb, var(--accent) 30%, transparent);border-radius:20px;padding:20px;margin-bottom:16px;text-align:center;}
@@ -876,7 +884,7 @@
   <div class="tape">
     <div class="header-timer-pill hidden" id="header-timer-pill">
       <button class="header-timer-btn" data-action="header-rest-minus15" aria-label="Tirar 15 segundos">−</button>
-      <span class="header-timer-value" id="header-timer-value">00:00</span>
+      <span class="header-timer-value" id="header-timer-value" data-action="header-rest-toggle" role="button" aria-label="Iniciar ou pausar descanso">00:00</span>
       <button class="header-timer-btn" data-action="header-rest-plus15" aria-label="Adicionar 15 segundos">+</button>
     </div>
   </div>
@@ -1417,6 +1425,8 @@ const ICONS = {
   download: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 3v13"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>',
   upload: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 21V8"/><path d="M7 13l5-5 5 5"/><path d="M4 20h16"/></svg>',
   share: '<svg class="icon" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M7 8l5-5 5 5"/><path d="M4 14v5a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5"/></svg>',
+  eye: '<svg class="icon" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>',
+  eyeOff: '<svg class="icon" viewBox="0 0 24 24"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a20.3 20.3 0 0 1 5.06-6.06M9.9 4.24A9.1 9.1 0 0 1 12 4c7 0 11 8 11 8a20.3 20.3 0 0 1-2.16 3.19"/><path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/></svg>',
 };
 
 // ---------------------------------------------------------------------
@@ -2485,6 +2495,8 @@ function attachNavEvents(){
     if(headerMinus){ adjustRest(-15); }
     const headerPlus = e.target.closest('[data-action="header-rest-plus15"]');
     if(headerPlus){ adjustRest(15); }
+    const headerToggle = e.target.closest('[data-action="header-rest-toggle"]');
+    if(headerToggle){ toggleRest(); }
   });
 }
 function updateFlameNav(){
@@ -2874,13 +2886,20 @@ function renderDayDetail(day){
   const exercisesHtml = data.exercises.length
     ? data.exercises.map(ex => renderExercise(day.key, ex)).join('')
     : '<p class="empty-state">Dia de descanso. Pra adicionar exercícios, vá em Meus Treinos → Editar.</p>';
+  const finishTimerHtml = `
+    <span class="finish-timer-sep ${totalTimerHidden?'hidden':''}" id="finish-timer-sep"></span>
+    <span class="finish-timer-val ${totalTimerHidden?'hidden':''}" id="finish-timer-val">${fmtTime(totalAccum + (totalRunning ? (Date.now()-totalStart)/1000 : 0))}</span>
+    <span class="finish-timer-toggle" data-action="toggle-finish-timer-view" title="${totalTimerHidden?'Mostrar tempo':'Esconder tempo'}" id="finish-timer-toggle-icon">${totalTimerHidden?ICONS.eyeOff:ICONS.eye}</span>
+  `;
   const workoutControlBtn = !isToday
     ? ''
     : isCardioDay
       ? `<button class="workout-control-btn ${isDayDone?'finish':'start'}" data-action="toggle-day-done">${isDayDone ? ICONS.check+'Cardio registrado' : ICONS.play+'Registrar cardio de hoje'}</button>`
       : (totalRunning
-          ? `<button class="workout-control-btn finish" data-action="finish-workout">${ICONS.check}Concluir treino</button>`
-          : `<button class="workout-control-btn start" data-action="start-workout">${ICONS.play}Iniciar treino</button>`);
+          ? `<button class="workout-control-btn finish" data-action="finish-workout">${ICONS.check}Concluir treino${finishTimerHtml}</button>`
+          : isDayDone
+            ? `<span class="workout-control-btn done">${ICONS.check}Treino concluído hoje</span>`
+            : `<button class="workout-control-btn start" data-action="start-workout">${ICONS.play}Iniciar treino</button>`);
 
   return `
     <div class="day-detail">
@@ -3090,7 +3109,9 @@ function renderTodayHero(){
         : `<div class="today-hero-list">
             ${data.exercises.map(ex=>`<div class="today-hero-ex"><span class="dot"></span>${ex.name}</div>`).join('')}
           </div>
-          <button class="today-hero-btn" data-action="start-today-workout">Iniciar treino${ICONS.chevron}</button>`
+          ${isDone
+            ? `<button class="today-hero-btn done" data-action="view-today-workout">${ICONS.check}Treino concluído</button>`
+            : `<button class="today-hero-btn" data-action="start-today-workout">Iniciar treino${ICONS.chevron}</button>`}`
       }
     </div>
   `;
@@ -3303,6 +3324,11 @@ function attachEvents(){
       render();
       window.scrollTo(0,0);
     }
+    else if(action==='view-today-workout'){
+      activeDayKey = todayKey();
+      render();
+      window.scrollTo(0,0);
+    }
     else if(action==='open-generator'){
       genOpenOverlay();
     }
@@ -3338,6 +3364,9 @@ function attachEvents(){
     }
     else if(action==='start-workout'){
       if(!totalRunning) toggleTotal();
+    }
+    else if(action==='toggle-finish-timer-view'){
+      toggleFinishTimerView();
     }
     else if(action==='finish-workout'){
       if(restRunning) toggleRest();
@@ -3551,7 +3580,7 @@ function attachThemeToggle(){
 }
 
 // ---------- Cronômetros ----------
-let totalRunning=false, totalAccum=0, totalStart=0;
+let totalRunning=false, totalAccum=0, totalStart=0, totalInterval=null, totalTimerHidden=false;
 let restRunning=false, restDefault=60, restRemaining=60, restEnd=0, restInterval=null;
 
 /* ========================================================================
@@ -4119,11 +4148,30 @@ function toggleTotal(){
   if(totalRunning){
     totalAccum += (Date.now()-totalStart)/1000;
     totalRunning = false;
+    clearInterval(totalInterval);
   }else{
     totalStart = Date.now();
     totalRunning = true;
+    totalInterval = setInterval(updateTotalDisplay, 1000);
   }
   render();
+}
+function updateTotalDisplay(){
+  const elapsed = totalAccum + (totalRunning ? (Date.now()-totalStart)/1000 : 0);
+  const val = document.getElementById('finish-timer-val');
+  if(val) val.textContent = fmtTime(elapsed);
+}
+function toggleFinishTimerView(){
+  totalTimerHidden = !totalTimerHidden;
+  const sep = document.getElementById('finish-timer-sep');
+  const val = document.getElementById('finish-timer-val');
+  const iconWrap = document.getElementById('finish-timer-toggle-icon');
+  if(sep) sep.classList.toggle('hidden', totalTimerHidden);
+  if(val) val.classList.toggle('hidden', totalTimerHidden);
+  if(iconWrap){
+    iconWrap.innerHTML = totalTimerHidden ? ICONS.eyeOff : ICONS.eye;
+    iconWrap.title = totalTimerHidden ? 'Mostrar tempo' : 'Esconder tempo';
+  }
 }
 
 function updateRestDisplay(){
@@ -4157,7 +4205,7 @@ function updateRestDisplay(){
   const navBtn = document.getElementById('nav-timer-btn');
   if(navBtn) navBtn.classList.toggle('running', restRunning);
   const headerPill = document.getElementById('header-timer-pill');
-  if(headerPill) headerPill.classList.toggle('hidden', !restRunning);
+  if(headerPill) headerPill.classList.toggle('hidden', !activeDayKey);
   const headerVal = document.getElementById('header-timer-value');
   if(headerVal) headerVal.textContent = fmtTime(remaining);
   updateTimerButtons();
