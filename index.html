@@ -191,10 +191,19 @@
 
   .timer-focus-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);display:flex;align-items:center;justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:opacity .25s ease;}
   .timer-focus-overlay.show{opacity:1;pointer-events:auto;}
-  .timer-focus-content{background:var(--card-bg);border-radius:24px;padding:24px 22px 16px;display:flex;flex-direction:column;align-items:center;gap:2px;max-width:300px;transform:scale(0.85);transition:transform .25s ease;}
+  .timer-focus-content{background:var(--card-bg);border-radius:24px;padding:20px 20px 14px;display:flex;flex-direction:column;align-items:center;gap:2px;width:290px;box-sizing:border-box;transform:scale(0.85);transition:transform .25s ease;}
   .timer-focus-overlay.show .timer-focus-content{transform:scale(1);}
-  .timer-focus-label{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;}
+  .timer-focus-label{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px;}
   .timer-focus-hint{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);margin-top:2px;opacity:0.7;}
+  .timer-focus-content .rest-ring-row{gap:10px;margin-bottom:14px;}
+  .timer-focus-content .rest-ring{width:150px;height:150px;margin:8px 0;flex-shrink:0;}
+  .timer-focus-content .rest-ring-inner{width:124px;height:124px;gap:6px;}
+  .timer-focus-content .rest-focus-time{font-size:30px;}
+  .timer-focus-content .ring-play-icon{width:18px;height:18px;}
+  .timer-focus-content .ring-side-btn{width:36px;height:36px;font-size:9px;flex-shrink:0;}
+  .timer-focus-content .rest-presets{max-width:none;width:100%;margin:0 0 10px;gap:6px;}
+  .timer-focus-content .preset-btn{padding:8px 4px;font-size:10.5px;}
+  .timer-focus-content .rest-zero-btn{margin:0 auto;padding:4px 12px;}
 
   .day-card{background:none;border:none;border-bottom:1px solid rgba(255,255,255,0.1);border-radius:0;margin-bottom:0;overflow:visible;}
   .day-card:last-child{border-bottom:none;}
@@ -507,7 +516,7 @@
     50%{transform:scaleY(1.1) scaleX(0.95) skewX(-2deg);}
   }
   .timer-page{padding-top:8px;text-align:center;}
-  .rest-ring{width:220px;height:220px;border-radius:50%;margin:16px auto 26px;display:flex;align-items:center;justify-content:center;background:conic-gradient(var(--accent) calc(var(--pct,50)*1%), var(--card-bg) 0);cursor:pointer;transition:background .2s linear;}
+  .rest-ring{width:220px;height:220px;border-radius:50%;margin:16px auto 26px;display:flex;align-items:center;justify-content:center;background:conic-gradient(var(--card-bg) calc((100 - var(--pct,50))*1%), var(--accent) 0);cursor:pointer;transition:background .2s linear;}
   .rest-ring-inner{width:184px;height:184px;border-radius:50%;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;}
   .rest-focus-time{font-family:var(--display);font-size:48px;font-weight:800;line-height:1;color:var(--text);}
   .rest-time-value.warn{color:var(--accent);animation:pulse-dot 1s ease-in-out infinite;}
