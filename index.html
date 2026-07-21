@@ -187,18 +187,14 @@
   .tape{height:4px;border-radius:4px;margin-bottom:26px;background:var(--accent);opacity:0.9;position:relative;}
   .header-timer-pill{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--accent);border:none;border-radius:20px;padding:4px 6px;display:flex;align-items:center;gap:10px;z-index:1;}
   .header-timer-pill.hidden{display:none;}
-  .header-timer-btn{width:24px;height:24px;border-radius:50%;background:color-mix(in srgb, var(--accent-text) 18%, transparent);border:none;color:var(--accent-text);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
   .header-timer-value{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--accent-text);min-width:46px;text-align:center;cursor:pointer;}
 
   .timer-focus-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.72);display:flex;align-items:center;justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:opacity .25s ease;}
   .timer-focus-overlay.show{opacity:1;pointer-events:auto;}
-  .timer-focus-content{background:var(--card-bg);border-radius:24px;padding:32px 36px;display:flex;flex-direction:column;align-items:center;gap:6px;transform:scale(0.85);transition:transform .25s ease;}
+  .timer-focus-content{background:var(--card-bg);border-radius:24px;padding:24px 22px 16px;display:flex;flex-direction:column;align-items:center;gap:2px;max-width:300px;transform:scale(0.85);transition:transform .25s ease;}
   .timer-focus-overlay.show .timer-focus-content{transform:scale(1);}
-  .timer-focus-label{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);}
-  .timer-focus-value{font-family:var(--mono);font-size:64px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;margin:6px 0;}
-  .timer-focus-row{display:flex;gap:12px;margin-top:8px;}
-  .timer-focus-btn{background:var(--card-bg2);border:none;color:var(--text);border-radius:20px;padding:9px 18px;font-family:var(--mono);font-size:12px;font-weight:600;cursor:pointer;}
-  .timer-focus-hint{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);margin-top:14px;opacity:0.7;}
+  .timer-focus-label{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px;}
+  .timer-focus-hint{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);margin-top:2px;opacity:0.7;}
 
   .day-card{background:none;border:none;border-bottom:1px solid rgba(255,255,255,0.1);border-radius:0;margin-bottom:0;overflow:visible;}
   .day-card:last-child{border-bottom:none;}
@@ -894,9 +890,7 @@
   </div>
   <div class="tape">
     <div class="header-timer-pill hidden" id="header-timer-pill">
-      <button class="header-timer-btn" data-action="header-rest-minus15" aria-label="Tirar 15 segundos">−</button>
       <span class="header-timer-value" id="header-timer-value" data-action="header-reopen-focus" role="button" aria-label="Ver cronômetro em foco">00:00</span>
-      <button class="header-timer-btn" data-action="header-rest-plus15" aria-label="Adicionar 15 segundos">+</button>
     </div>
   </div>
 </div>
@@ -954,17 +948,22 @@
   <div class="timer-focus-overlay" id="timer-focus-overlay">
     <div class="timer-focus-content">
       <span class="timer-focus-label">Descanso</span>
-      <div class="timer-focus-value" id="timer-focus-value">00:00</div>
-      <div class="timer-focus-row">
-        <button class="timer-focus-btn" data-action="header-rest-minus15" aria-label="Tirar 15 segundos">−15s</button>
-        <button class="timer-focus-btn" data-action="focus-toggle-pause" id="timer-focus-pause-btn" aria-label="Pausar ou retomar">Pausar</button>
-        <button class="timer-focus-btn" data-action="header-rest-plus15" aria-label="Adicionar 15 segundos">+15s</button>
+      <div class="rest-ring-row">
+        <button class="ring-side-btn" data-action="header-rest-minus15">−15s</button>
+        <div class="rest-ring" id="focus-rest-ring" data-action="header-rest-toggle-ring">
+          <div class="rest-ring-inner">
+            <span class="rest-focus-time rest-time-value">01:30</span>
+            <svg class="icon ring-play-icon rest-toggle-icon" viewBox="0 0 24 24"><path d="M6 4l12 8-12 8V4z"/></svg>
+          </div>
+        </div>
+        <button class="ring-side-btn" data-action="header-rest-plus15">+15s</button>
       </div>
-      <div class="timer-focus-row" style="margin-top:8px;">
-        <button class="timer-focus-btn" data-action="rest-preset" data-sec="45">45s</button>
-        <button class="timer-focus-btn" data-action="rest-preset" data-sec="60">1min</button>
-        <button class="timer-focus-btn" data-action="rest-preset" data-sec="120">2min</button>
+      <div class="rest-presets" style="margin-left:auto;margin-right:auto;">
+        <button class="preset-btn" data-action="rest-preset" data-sec="45">45s</button>
+        <button class="preset-btn" data-action="rest-preset" data-sec="60">1min</button>
+        <button class="preset-btn" data-action="rest-preset" data-sec="120">2min</button>
       </div>
+      <button class="rest-zero-btn" data-action="header-rest-reset">Zerar</button>
       <span class="timer-focus-hint">toque fora pra minimizar</span>
     </div>
   </div>
@@ -2527,8 +2526,10 @@ function attachNavEvents(){
     const headerReopen = e.target.closest('[data-action="header-reopen-focus"]');
     if(headerReopen){ restRunning ? openTimerFocus() : toggleRest(); }
     if(e.target.id === 'timer-focus-overlay'){ closeTimerFocus(); }
-    const focusPauseBtn = e.target.closest('[data-action="focus-toggle-pause"]');
-    if(focusPauseBtn){ toggleRest(); }
+    const focusRing = e.target.closest('[data-action="header-rest-toggle-ring"]');
+    if(focusRing){ toggleRest(); }
+    const focusReset = e.target.closest('[data-action="header-rest-reset"]');
+    if(focusReset){ resetRest(); }
     const focusPreset = e.target.closest('[data-action="rest-preset"]');
     if(focusPreset && e.target.closest('#timer-focus-overlay')){ setRestPreset(parseInt(focusPreset.dataset.sec,10)); }
   });
@@ -4231,8 +4232,9 @@ function updateRestDisplay(){
   });
   const baseDur = restDefault>0 ? restDefault : 60;
   const pct = Math.max(0, Math.min(100, (remaining/baseDur)*100));
-  const ring = document.getElementById('rest-ring');
-  if(ring) ring.style.setProperty('--pct', pct.toFixed(1));
+  document.querySelectorAll('.rest-ring').forEach(ring=>{
+    ring.style.setProperty('--pct', pct.toFixed(1));
+  });
   const navLabel = document.getElementById('nav-timer-label');
   if(navLabel) navLabel.textContent = restRunning ? fmtTime(remaining) : 'Timer';
   document.querySelectorAll('.preset-btn').forEach(btn=>{
@@ -4244,10 +4246,6 @@ function updateRestDisplay(){
   if(headerPill) headerPill.classList.toggle('hidden', !activeDayKey);
   const headerVal = document.getElementById('header-timer-value');
   if(headerVal) headerVal.textContent = fmtTime(remaining);
-  const focusVal = document.getElementById('timer-focus-value');
-  if(focusVal) focusVal.textContent = fmtTime(remaining);
-  const focusPauseBtn = document.getElementById('timer-focus-pause-btn');
-  if(focusPauseBtn) focusPauseBtn.textContent = restRunning ? 'Pausar' : 'Retomar';
   updateTimerButtons();
 }
 function toggleRest(){
