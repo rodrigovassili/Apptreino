@@ -3633,12 +3633,12 @@ let restRunning=false, restDefault=60, restRemaining=60, restEnd=0, restInterval
    RADAR DE SIMETRIA — modelo de dados, cálculo e renderização
    ======================================================================== */
 const RADAR_ATTRS = [
-  { key:'upperPush',      label:'Peitoral & Ombros' },
   { key:'upperPull',      label:'Dorsal & Trapézio' },
   { key:'arms',           label:'Braços' },
   { key:'lowerAnterior',  label:'Quadríceps & Glúteos' },
-  { key:'lowerPosterior', label:'Posteriores & Panturrilhas' },
   { key:'core',           label:'Abdômen & Lombar' },
+  { key:'lowerPosterior', label:'Posteriores & Panturrilhas' },
+  { key:'upperPush',      label:'Peitoral & Ombros' },
 ];
 // mapeia os grupos musculares reais do app (EXERCISE_LIBRARY) pros 6 atributos do radar
 const MUSCLE_TO_RADAR = {
