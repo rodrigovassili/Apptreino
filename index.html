@@ -645,6 +645,31 @@
   .welcome-text{font-family:'Inter',sans-serif;font-size:12px;color:var(--text-muted);line-height:1.5;margin-bottom:16px;}
   .welcome-btn{display:block;width:100%;background:var(--accent);border:none;color:var(--accent-text);border-radius:14px;padding:13px;font-family:var(--display);font-weight:700;font-size:13.5px;cursor:pointer;}
 
+  .nutri-title{font-family:var(--display);font-size:24px;font-weight:800;color:var(--text);margin:0 0 4px;}
+  .nutri-sub{font-family:var(--mono);font-size:10.5px;color:var(--text-muted);margin:0 0 18px;}
+  .sex-toggle{display:flex;gap:6px;}
+  .sex-btn{flex:1;background:var(--bg);border:1px solid var(--line);color:var(--text-muted);border-radius:8px;padding:9px;font-family:var(--mono);font-size:11px;cursor:pointer;}
+  .sex-btn.active{border-color:var(--accent);color:var(--accent);}
+  .nutri-readonly{background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--text);font-family:var(--mono);font-size:13px;padding:9px;}
+  .nutri-result-big{text-align:center;padding:6px 0 14px;}
+  .nutri-result-num{font-family:var(--display);font-size:40px;font-weight:800;color:var(--accent);}
+  .nutri-result-unit{font-family:var(--mono);font-size:12px;color:var(--text-muted);}
+  .nutri-result-label{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+  .nutri-stat-row{display:flex;gap:10px;}
+  .nutri-stat{flex:1;background:var(--card-bg2);border-radius:12px;padding:10px;text-align:center;}
+  .nutri-stat-num{font-family:var(--display);font-size:16px;font-weight:800;color:var(--text);}
+  .nutri-stat-lab{font-family:var(--mono);font-size:8px;color:var(--text-muted);margin-top:2px;text-transform:uppercase;}
+  .nutri-obj-note{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);text-align:center;margin-top:8px;}
+  .nutri-macro-bar{display:flex;height:8px;border-radius:4px;overflow:hidden;margin:0 0 4px;}
+  .nutri-macro-bar div{height:100%;}
+  .nutri-macro-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);}
+  .nutri-macro-row:last-child{border-bottom:none;}
+  .nutri-macro-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  .nutri-macro-name{flex:1;font-family:var(--display);font-size:13px;color:var(--text);}
+  .nutri-macro-g{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text);}
+  .nutri-macro-kcal{font-family:var(--mono);font-size:9px;color:var(--text-muted);margin-left:6px;}
+  .nutri-disclaimer{font-family:var(--mono);font-size:9px;color:var(--text-muted);text-align:center;opacity:0.7;margin-top:4px;}
+
   .gen-btn-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--card-bg2);border-radius:14px;border:1px dashed color-mix(in srgb, var(--accent) 40%, transparent);cursor:pointer;margin-bottom:18px;}
   .gen-btn-text{font-family:var(--display);font-size:13px;font-weight:700;}
   .gen-btn-sub{display:block;font-family:var(--mono);font-size:9.5px;color:var(--text-muted);margin-top:2px;}
@@ -977,26 +1002,8 @@
     </div>
   </div>
 
-  <div class="view hidden" id="view-timer">
-    <div class="timer-page">
-      <p class="section-title">Descanso</p>
-      <div class="rest-ring-row">
-        <button class="ring-side-btn" data-action="rest-minus15">−15s</button>
-        <div class="rest-ring" id="rest-ring" data-action="rest-toggle">
-          <div class="rest-ring-inner">
-            <span class="rest-focus-time rest-time-value">01:30</span>
-            <svg class="icon ring-play-icon rest-toggle-icon" viewBox="0 0 24 24" id="ring-play-icon"><path d="M6 4l12 8-12 8V4z"/></svg>
-          </div>
-        </div>
-        <button class="ring-side-btn" data-action="rest-plus15">+15s</button>
-      </div>
-      <div class="rest-presets">
-        <button class="preset-btn" data-action="rest-preset" data-sec="45">45s</button>
-        <button class="preset-btn" data-action="rest-preset" data-sec="60">1min</button>
-        <button class="preset-btn" data-action="rest-preset" data-sec="120">2min</button>
-      </div>
-      <button class="rest-zero-btn" data-action="rest-reset">Zerar</button>
-    </div>
+  <div class="view hidden" id="view-nutricao">
+    <div id="nutricao-content"></div>
   </div>
 </div>
 <div id="toast" class="toast"></div>
@@ -1012,7 +1019,7 @@
 <nav class="bottom-nav">
   <button class="nav-btn" data-action="switch-tab" data-tab="inicio">Início</button>
   <button class="nav-btn active" data-action="switch-tab" data-tab="treinos">Treinos</button>
-  <button class="nav-btn" id="nav-timer-btn" data-action="switch-tab" data-tab="timer"><span id="nav-timer-label">Timer</span></button>
+  <button class="nav-btn" data-action="switch-tab" data-tab="nutricao">Nutrição</button>
 </nav>
 
 <script>
@@ -2510,7 +2517,7 @@ function attachCalendarEvents(){
 }
 
 function switchTab(tab){
-  ['treinos','profile','timer','inicio'].forEach(t=>{
+  ['treinos','profile','nutricao','inicio'].forEach(t=>{
     const view = document.getElementById('view-'+t);
     if(view) view.classList.toggle('hidden', t!==tab);
   });
@@ -2966,6 +2973,175 @@ const GOALS = [
   {id:'condicionamento', label:'Condicionamento'},
 ];
 const REST_OPTIONS = [60, 90, 120];
+
+// ---------------------------------------------------------------------
+// Nutrição — calculadora de TMB/TDEE/macros (fórmula de Mifflin-St Jeor).
+// Só a calculadora: sem sugestão de refeição/alimento ainda.
+// ---------------------------------------------------------------------
+const ACTIVITY_LEVELS = [
+  {factor:1.2,   label:'Sedentário', sub:'pouco ou nenhum exercício'},
+  {factor:1.375, label:'Leve',       sub:'1 a 3x por semana'},
+  {factor:1.55,  label:'Moderado',   sub:'3 a 5x por semana'},
+  {factor:1.725, label:'Intenso',    sub:'6 a 7x por semana'},
+];
+const GOAL_CALORIE_FACTOR = { hipertrofia: 1.10, emagrecimento: 0.80, condicionamento: 1.0 };
+const GOAL_CALORIE_NOTE = {
+  hipertrofia: '+10% de superávit pra ganho de massa',
+  emagrecimento: '−20% de déficit pra emagrecimento',
+  condicionamento: 'calorias de manutenção',
+};
+
+function calcAge(birthdateStr){
+  if(!birthdateStr) return null;
+  const b = new Date(birthdateStr);
+  if(isNaN(b.getTime())) return null;
+  const today = new Date();
+  let age = today.getFullYear() - b.getFullYear();
+  const m = today.getMonth() - b.getMonth();
+  if(m < 0 || (m===0 && today.getDate() < b.getDate())) age--;
+  return age;
+}
+function calcTMB(peso, altura, idade, sexo){
+  let tmb = (10*peso) + (6.25*altura) - (5*idade);
+  tmb += sexo === 'F' ? -161 : 5;
+  return tmb;
+}
+function calcNutricao(){
+  const peso = Number(profile.weight);
+  const altura = Number(profile.height);
+  const idade = calcAge(profile.birthdate);
+  const sexo = profile.sexo || 'M';
+  const activityFactor = Number(profile.activityLevel) || 1.55;
+  if(!peso || !altura || !idade) return null;
+
+  const tmb = calcTMB(peso, altura, idade, sexo);
+  const manutencao = tmb * activityFactor;
+  const goal = (profile.goal) || 'hipertrofia';
+  const metaCal = manutencao * (GOAL_CALORIE_FACTOR[goal] || 1);
+
+  const protG = peso * 2;
+  const fatG = peso * 0.9;
+  const protKcal = protG * 4;
+  const fatKcal = fatG * 9;
+  const carbKcal = Math.max(0, metaCal - protKcal - fatKcal);
+  const carbG = carbKcal / 4;
+
+  return {
+    tmb: Math.round(tmb), manutencao: Math.round(manutencao), metaCal: Math.round(metaCal),
+    goal, nota: GOAL_CALORIE_NOTE[goal] || '',
+    protG: Math.round(protG), protKcal: Math.round(protKcal),
+    carbG: Math.round(carbG), carbKcal: Math.round(carbKcal),
+    fatG: Math.round(fatG), fatKcal: Math.round(fatKcal),
+  };
+}
+function renderNutricaoView(){
+  const el = document.getElementById('nutricao-content');
+  if(!el || !profile) return;
+
+  const faltaPeso = !profile.weight, faltaAltura = !profile.height, faltaIdade = !calcAge(profile.birthdate);
+  if(faltaPeso || faltaAltura || faltaIdade){
+    const faltando = [faltaPeso&&'peso', faltaAltura&&'altura', faltaIdade&&'data de nascimento'].filter(Boolean).join(', ');
+    el.innerHTML = `
+      <p class="section-title">Nutrição</p>
+      <div class="welcome-card">
+        <div class="welcome-icon">${ICONS.plus}</div>
+        <div class="welcome-title">Falta completar seu perfil</div>
+        <div class="welcome-text">Pra calcular sua meta calórica preciso de: ${faltando}. Isso fica salvo no seu Perfil.</div>
+        <button class="welcome-btn" data-action="switch-tab" data-tab="profile">Completar perfil</button>
+      </div>
+    `;
+    return;
+  }
+
+  const sexo = profile.sexo || 'M';
+  const activityFactor = Number(profile.activityLevel) || 1.55;
+  const activityChipsHtml = ACTIVITY_LEVELS.map(a =>
+    `<option value="${a.factor}" ${a.factor===activityFactor?'selected':''}>${a.label} — ${a.sub}</option>`
+  ).join('');
+
+  const goalLabel = (GOALS.find(g=>g.id===profile.goal) || GOALS[0]).label;
+  const n = calcNutricao();
+
+  el.innerHTML = `
+    <p class="section-title">Nutrição</p>
+    <h1 class="nutri-title">Sua calculadora</h1>
+    <p class="nutri-sub">baseada no seu perfil · objetivo: ${goalLabel}</p>
+
+    <div class="card">
+      <div class="field-row">
+        <div class="field"><label>Sexo biológico</label>
+          <div class="sex-toggle">
+            <button class="sex-btn ${sexo==='M'?'active':''}" data-action="set-sexo" data-sexo="M">M</button>
+            <button class="sex-btn ${sexo==='F'?'active':''}" data-action="set-sexo" data-sexo="F">F</button>
+          </div>
+        </div>
+        <div class="field"><label>Idade</label><div class="nutri-readonly">${calcAge(profile.birthdate)} anos</div></div>
+      </div>
+      <div class="field">
+        <label>Nível de atividade</label>
+        <select id="nutri-activity-select">${activityChipsHtml}</select>
+      </div>
+    </div>
+
+    ${n ? `
+    <div class="card">
+      <div class="nutri-result-big">
+        <div><span class="nutri-result-num">${n.metaCal}</span><span class="nutri-result-unit"> kcal/dia</span></div>
+        <div class="nutri-result-label">meta calórica (${goalLabel.toLowerCase()})</div>
+      </div>
+      <div class="nutri-stat-row">
+        <div class="nutri-stat"><div class="nutri-stat-num">${n.tmb}</div><div class="nutri-stat-lab">TMB</div></div>
+        <div class="nutri-stat"><div class="nutri-stat-num">${n.manutencao}</div><div class="nutri-stat-lab">Manutenção</div></div>
+      </div>
+      <div class="nutri-obj-note">${n.nota}</div>
+    </div>
+
+    <div class="card">
+      <p class="section-title" style="margin-bottom:10px;">Macros do dia</p>
+      <div class="nutri-macro-bar">
+        <div style="width:${(n.protKcal/n.metaCal*100).toFixed(1)}%;background:#5AB478;"></div>
+        <div style="width:${(n.carbKcal/n.metaCal*100).toFixed(1)}%;background:var(--accent);"></div>
+        <div style="width:${(n.fatKcal/n.metaCal*100).toFixed(1)}%;background:#FF9F40;"></div>
+      </div>
+      <div class="nutri-macro-row">
+        <div class="nutri-macro-dot" style="background:#5AB478;"></div>
+        <span class="nutri-macro-name">Proteína</span>
+        <span class="nutri-macro-g">${n.protG}g</span>
+        <span class="nutri-macro-kcal">${n.protKcal}kcal</span>
+      </div>
+      <div class="nutri-macro-row">
+        <div class="nutri-macro-dot" style="background:var(--accent);"></div>
+        <span class="nutri-macro-name">Carboidrato</span>
+        <span class="nutri-macro-g">${n.carbG}g</span>
+        <span class="nutri-macro-kcal">${n.carbKcal}kcal</span>
+      </div>
+      <div class="nutri-macro-row">
+        <div class="nutri-macro-dot" style="background:#FF9F40;"></div>
+        <span class="nutri-macro-name">Gordura</span>
+        <span class="nutri-macro-g">${n.fatG}g</span>
+        <span class="nutri-macro-kcal">${n.fatKcal}kcal</span>
+      </div>
+    </div>
+    <p class="nutri-disclaimer">Estimativa, não substitui orientação de um nutricionista.</p>
+    ` : ''}
+  `;
+}
+function attachNutricaoEvents(){
+  const view = document.getElementById('view-nutricao');
+  if(!view) return;
+  view.addEventListener('click', (e)=>{
+    const btn = e.target.closest('[data-action="set-sexo"]');
+    if(btn){ profile.sexo = btn.dataset.sexo; saveProfile(); renderNutricaoView(); }
+  });
+  view.addEventListener('change', (e)=>{
+    if(e.target.id === 'nutri-activity-select'){
+      profile.activityLevel = e.target.value;
+      saveProfile();
+      renderNutricaoView();
+    }
+  });
+}
+
 function renderProfileView(){
   const el = document.getElementById('profile-content');
   if(!el || !profile) return;
@@ -3344,6 +3520,7 @@ function render(){
   renderStreakCard();
   renderEvolutionChart();
   renderProfileView();
+  renderNutricaoView();
   updateHeroGreeting();
   updateRestDisplay();
   updateFlameNav();
@@ -4345,7 +4522,7 @@ function attachTimerViewEvents(){
 
 function initTimers(){
   updateRestDisplay();
-  attachTimerViewEvents();
+  attachNutricaoEvents();
 }
 
 </script>
