@@ -354,6 +354,7 @@
   .day-done-btn.done{background:var(--accent);border-color:var(--accent);color:var(--accent-text);font-weight:600;}
 
   .workout-control-btn{display:inline-flex;align-items:center;gap:6px;flex-shrink:0;white-space:nowrap;padding:8px 13px;border-radius:20px;font-family:var(--mono);font-size:11px;font-weight:600;cursor:pointer;}
+  .icon-rot90{display:inline-flex;transform:rotate(90deg);}
   .workout-control-btn.start{background:none;border:1.5px solid var(--accent);color:var(--accent);}
   .workout-control-btn.finish{background:var(--accent);border:1.5px solid var(--accent);color:var(--accent-text);}
   .workout-control-btn.done{background:none;border:1.5px solid var(--line);color:var(--text-muted);}
@@ -958,6 +959,11 @@
         <button class="timer-focus-btn" data-action="header-rest-minus15" aria-label="Tirar 15 segundos">−15s</button>
         <button class="timer-focus-btn" data-action="focus-toggle-pause" id="timer-focus-pause-btn" aria-label="Pausar ou retomar">Pausar</button>
         <button class="timer-focus-btn" data-action="header-rest-plus15" aria-label="Adicionar 15 segundos">+15s</button>
+      </div>
+      <div class="timer-focus-row" style="margin-top:8px;">
+        <button class="timer-focus-btn" data-action="rest-preset" data-sec="45">45s</button>
+        <button class="timer-focus-btn" data-action="rest-preset" data-sec="60">1min</button>
+        <button class="timer-focus-btn" data-action="rest-preset" data-sec="120">2min</button>
       </div>
       <span class="timer-focus-hint">toque fora pra minimizar</span>
     </div>
@@ -2523,6 +2529,8 @@ function attachNavEvents(){
     if(e.target.id === 'timer-focus-overlay'){ closeTimerFocus(); }
     const focusPauseBtn = e.target.closest('[data-action="focus-toggle-pause"]');
     if(focusPauseBtn){ toggleRest(); }
+    const focusPreset = e.target.closest('[data-action="rest-preset"]');
+    if(focusPreset && e.target.closest('#timer-focus-overlay')){ setRestPreset(parseInt(focusPreset.dataset.sec,10)); }
   });
 }
 function updateFlameNav(){
@@ -2924,7 +2932,7 @@ function renderDayDetail(day){
       : (totalRunning
           ? `<button class="workout-control-btn finish" data-action="finish-workout">${ICONS.check}Concluir treino${finishTimerHtml}</button>`
           : isDayDone
-            ? `<span class="workout-control-btn done">${ICONS.check}Treino concluído hoje</span>`
+            ? `<span class="workout-control-btn done"><span class="icon-rot90">${ICONS.check}</span>Treino concluído hoje</span>`
             : `<button class="workout-control-btn start" data-action="start-workout">${ICONS.play}Iniciar treino</button>`);
 
   return `
@@ -3136,7 +3144,7 @@ function renderTodayHero(){
             ${data.exercises.map(ex=>`<div class="today-hero-ex"><span class="dot"></span>${ex.name}</div>`).join('')}
           </div>
           ${isDone
-            ? `<button class="today-hero-btn done" data-action="view-today-workout">${ICONS.check}Treino concluído</button>`
+            ? `<button class="today-hero-btn done" data-action="view-today-workout"><span class="icon-rot90">${ICONS.check}</span>Treino concluído</button>`
             : `<button class="today-hero-btn" data-action="start-today-workout">Iniciar treino${ICONS.chevron}</button>`}`
       }
     </div>
