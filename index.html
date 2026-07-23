@@ -185,7 +185,7 @@
   .hero-name{text-transform:none;}
   .hero p{color:var(--text-muted);font-size:14px;margin:0 0 20px;}
   .tape{height:4px;border-radius:4px;margin-bottom:26px;background:var(--accent);opacity:0.9;position:relative;}
-  .header-timer-pill{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--accent);border:none;border-radius:20px;padding:4px 6px;display:flex;align-items:center;gap:10px;z-index:1;}
+  .header-timer-pill{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--accent);border:none;border-radius:20px;padding:9px 16px;min-height:32px;display:flex;align-items:center;justify-content:center;gap:10px;z-index:1;cursor:pointer;}
   .header-timer-pill.hidden{display:none;}
   .header-timer-value{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--accent-text);min-width:46px;text-align:center;cursor:pointer;}
 
@@ -195,6 +195,18 @@
   .timer-focus-overlay.show .timer-focus-content{transform:scale(1);}
   .timer-focus-label{font-family:var(--mono);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-muted);margin-bottom:2px;}
   .timer-focus-hint{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);margin-top:2px;opacity:0.7;}
+
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;z-index:210;opacity:0;pointer-events:none;transition:opacity .2s;}
+  .modal-backdrop.show{opacity:1;pointer-events:auto;}
+  .confirm-modal{background:var(--card-bg);border-radius:20px;padding:22px 20px;width:260px;box-sizing:border-box;text-align:center;transform:scale(0.9);transition:transform .2s;}
+  .modal-backdrop.show .confirm-modal{transform:scale(1);}
+  .confirm-title{font-family:var(--display);font-size:16px;font-weight:800;color:var(--text);margin:0 0 6px;}
+  .confirm-time{font-family:var(--mono);font-size:28px;font-weight:700;color:var(--accent);margin:8px 0 4px;font-variant-numeric:tabular-nums;}
+  .confirm-sub{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);margin-bottom:18px;}
+  .confirm-actions{display:flex;gap:8px;}
+  .confirm-btn{flex:1;border:none;border-radius:12px;padding:11px;font-family:var(--mono);font-size:11.5px;font-weight:700;cursor:pointer;}
+  .confirm-btn.cancel{background:var(--card-bg2);color:var(--text);}
+  .confirm-btn.ok{background:var(--accent);color:var(--accent-text);}
   .timer-focus-content .rest-ring-row{gap:10px;margin-bottom:14px;}
   .timer-focus-content .rest-ring{width:150px;height:150px;margin:8px 0;flex-shrink:0;}
   .timer-focus-content .rest-ring-inner{width:124px;height:124px;gap:6px;}
@@ -254,6 +266,15 @@
   .hyd-mini-btn.plus{background:var(--accent);color:var(--accent-text);border:none;}
   .hyd-mini-btn.minus{background:transparent;border:1.5px solid var(--line);color:var(--text);}
   .hyd-expand-wrap{padding-top:4px;text-align:center;}
+  .hyd-week-chart-wrap{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);}
+  .hyd-week-title{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted);margin-bottom:10px;text-align:left;}
+  .hyd-week-chart{display:flex;justify-content:space-between;align-items:flex-end;height:64px;gap:6px;}
+  .hyd-week-col{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;}
+  .hyd-week-bar-track{flex:1;width:100%;max-width:18px;background:var(--card-bg2);border-radius:5px;display:flex;align-items:flex-end;overflow:hidden;}
+  .hyd-week-bar-fill{width:100%;background:var(--text-muted);border-radius:5px;opacity:0.6;transition:height .3s ease;}
+  .hyd-week-bar-fill.full{background:var(--accent);opacity:1;}
+  .hyd-week-daylabel{font-family:var(--mono);font-size:8.5px;color:var(--text-muted);margin-top:5px;}
+  .hyd-week-daylabel.today{color:var(--accent);font-weight:700;}
   .day-card.open .chevron{transform:rotate(180deg);}
   .day-card.today .chevron{color:var(--accent);}
   .chevron-fwd{transform:rotate(-90deg);}
@@ -367,8 +388,8 @@
   .finish-timer-sep.hidden{display:none;}
   .finish-timer-val{font-variant-numeric:tabular-nums;}
   .finish-timer-val.hidden{display:none;}
-  .finish-timer-toggle{display:inline-flex;align-items:center;opacity:0.75;margin-left:1px;}
-  .finish-timer-toggle .icon{width:13px;height:13px;}
+  .finish-timer-toggle{display:inline-flex;align-items:center;justify-content:center;opacity:0.85;margin-left:2px;width:26px;height:26px;margin-right:-8px;}
+  .finish-timer-toggle .icon{width:16px;height:16px;}
   @keyframes fadeInBtn{from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);}}
 
   .day-type-toggle{display:flex;gap:8px;margin:4px 0 10px;}
@@ -691,7 +712,6 @@
 .radar-meta-date{font-family:var(--mono);font-size:9.5px;color:var(--text-muted);display:block;margin-bottom:2px;}
 .radar-svg-wrap{display:flex;justify-content:center;margin:2px -4px 0;}
 .radar-svg-wrap svg{width:100%;height:auto;max-width:400px;}
-.radar-drag-hint{text-align:center;font-size:10.5px;color:var(--text-muted);margin:2px 0 8px;transition:opacity .3s;}
 .radar-legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:10px;}
 .radar-legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-muted);}
 .radar-legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
@@ -703,8 +723,6 @@
 .radar-feedback{border-radius:12px;padding:11px 12px;font-size:11.5px;line-height:1.5;margin-bottom:10px;}
 .radar-feedback.positive{background:color-mix(in srgb, var(--accent) 10%, var(--card-bg));border:1px solid color-mix(in srgb, var(--accent) 40%, transparent);}
 .radar-feedback.warning{background:color-mix(in srgb, var(--danger) 10%, var(--card-bg));border:1px solid color-mix(in srgb, var(--danger) 40%, transparent);}
-.radar-recal-card{background:color-mix(in srgb, var(--danger) 10%, var(--card-bg));border:1px solid color-mix(in srgb, var(--danger) 40%, transparent);border-radius:12px;padding:11px 12px;margin-bottom:0;font-size:11.5px;}
-.radar-recal-btn{background:var(--danger);color:#fff;border:none;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;margin-top:8px;cursor:pointer;}
 .radar-goto-btn{display:block;width:100%;background:none;border:1.5px solid var(--line);color:var(--text);border-radius:12px;padding:11px;font-size:12.5px;font-weight:600;cursor:pointer;text-align:center;}
 .radar-goto-btn:active{border-color:var(--accent-dim);}
 .hyd-title{font-family:var(--display);font-size:14px;font-weight:700;}
@@ -923,8 +941,8 @@
     <p id="hero-subtitle">toque no dia para abrir, monte o treino e registre cada série</p>
   </div>
   <div class="tape">
-    <div class="header-timer-pill hidden" id="header-timer-pill">
-      <span class="header-timer-value" id="header-timer-value" data-action="header-reopen-focus" role="button" aria-label="Ver cronômetro em foco">00:00</span>
+    <div class="header-timer-pill hidden" id="header-timer-pill" data-action="header-reopen-focus" role="button" aria-label="Ver cronômetro em foco">
+      <span class="header-timer-value" id="header-timer-value">00:00</span>
     </div>
   </div>
 </div>
@@ -999,6 +1017,18 @@
       </div>
       <button class="rest-zero-btn" data-action="header-rest-reset">Zerar</button>
       <span class="timer-focus-hint">toque fora pra minimizar</span>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="finish-confirm-overlay">
+    <div class="confirm-modal">
+      <div class="confirm-title">Concluir treino?</div>
+      <div class="confirm-time" id="finish-confirm-time">00:00</div>
+      <div class="confirm-sub">tempo total registrado</div>
+      <div class="confirm-actions">
+        <button class="confirm-btn cancel" data-action="cancel-finish-workout">Cancelar</button>
+        <button class="confirm-btn ok" data-action="confirm-finish-workout">Ok</button>
+      </div>
     </div>
   </div>
 
@@ -2172,8 +2202,30 @@ function renderHydrationCard(){
       <div class="hyd-expand-wrap">
         <div class="hyd-sub" style="margin-bottom:4px;">${goalNote}</div>
         <div class="hyd-gauge-wrap">${renderHydrationGaugeSvg(currentMl, goalMl)}</div>
+        ${renderHydrationWeekChart()}
       </div>
     </div></div>
+  `;
+}
+function renderHydrationWeekChart(){
+  const days = getHydrationLast7Days();
+  const dayLabels = ['D','S','T','Q','Q','S','S'];
+  const bars = days.map(d=>{
+    const dateObj = new Date(d.date+'T00:00:00');
+    const label = dayLabels[dateObj.getDay()];
+    const isToday = d.date === todayStr();
+    return `
+      <div class="hyd-week-col">
+        <div class="hyd-week-bar-track"><div class="hyd-week-bar-fill ${d.pct>=100?'full':''}" style="height:${Math.max(d.pct,3)}%;"></div></div>
+        <span class="hyd-week-daylabel ${isToday?'today':''}">${label}</span>
+      </div>
+    `;
+  }).join('');
+  return `
+    <div class="hyd-week-chart-wrap">
+      <span class="hyd-week-title">Últimos 7 dias</span>
+      <div class="hyd-week-chart">${bars}</div>
+    </div>
   `;
 }
 
@@ -2278,6 +2330,59 @@ function getWeekStart(date){
   d.setDate(d.getDate()+diff);
   d.setHours(0,0,0,0);
   return d;
+}
+
+// últimos 7 dias de hidratação, do mais antigo pro mais recente — pra o mini-gráfico
+function getHydrationLast7Days(){
+  const days = [];
+  const goalMl = getHydrationGoalMl();
+  for(let i=6; i>=0; i--){
+    const d = new Date();
+    d.setDate(d.getDate()-i);
+    const key = fmtDateKey(d.getFullYear(), d.getMonth(), d.getDate());
+    const ml = hydration[key] || 0;
+    days.push({ date: key, ml, pct: goalMl ? Math.min(100, Math.round((ml/goalMl)*100)) : 0 });
+  }
+  return days;
+}
+
+// média de ingestão numa semana (só considera dias com algum registro, pra não puxar a média pra baixo com dias de antes de usar o app)
+function hydrationWeekAverage(weekStartDate){
+  let total = 0, count = 0;
+  for(let i=0; i<7; i++){
+    const d = new Date(weekStartDate);
+    d.setDate(d.getDate()+i);
+    const key = fmtDateKey(d.getFullYear(), d.getMonth(), d.getDate());
+    if(hydration[key] !== undefined){ total += hydration[key]; count++; }
+  }
+  return count ? (total/count) : null;
+}
+
+// compara a semana atual com a anterior, uma vez por semana, e avisa por toast
+function checkWeeklyHydrationSummary(){
+  const thisWeekStart = getWeekStart(new Date());
+  const thisWeekKey = fmtDateKey(thisWeekStart.getFullYear(), thisWeekStart.getMonth(), thisWeekStart.getDate());
+  let shownWeeks = [];
+  try{ shownWeeks = JSON.parse(localStorage.getItem('vamo-hydration-summary-shown')||'[]'); }catch(e){}
+  if(shownWeeks.includes(thisWeekKey)) return;
+
+  const lastWeekStart = new Date(thisWeekStart);
+  lastWeekStart.setDate(lastWeekStart.getDate()-7);
+  const lastWeekAvg = hydrationWeekAverage(lastWeekStart);
+  const thisWeekAvgSoFar = hydrationWeekAverage(thisWeekStart);
+  // só mostra se já tem pelo menos 1 dia registrado nas duas semanas, e se hoje é o primeiro acesso da semana nova
+  if(lastWeekAvg === null || thisWeekAvgSoFar === null) return;
+
+  const delta = ((thisWeekAvgSoFar - lastWeekAvg) / lastWeekAvg) * 100;
+  const pctAbs = Math.abs(Math.round(delta));
+  if(pctAbs < 3) return; // variação pequena demais, não vale notificar
+
+  const msg = delta >= 0
+    ? `💧 Você está bebendo ${pctAbs}% a mais de água que na semana passada.`
+    : `💧 Sua ingestão de água caiu ${pctAbs}% em relação à semana passada.`;
+  showToast(msg);
+  shownWeeks.push(thisWeekKey);
+  try{ localStorage.setItem('vamo-hydration-summary-shown', JSON.stringify(shownWeeks.slice(-12))); }catch(e){}
 }
 function currentWeekCount(){
   const start = getWeekStart(new Date());
@@ -2548,7 +2653,39 @@ function attachNavEvents(){
     if(focusReset){ resetRest(); }
     const focusPreset = e.target.closest('[data-action="rest-preset"]');
     if(focusPreset && e.target.closest('#timer-focus-overlay')){ setRestPreset(parseInt(focusPreset.dataset.sec,10)); }
+    if(e.target.id === 'finish-confirm-overlay'){ closeFinishConfirm(); }
+    const cancelFinish = e.target.closest('[data-action="cancel-finish-workout"]');
+    if(cancelFinish){ closeFinishConfirm(); }
+    const confirmFinish = e.target.closest('[data-action="confirm-finish-workout"]');
+    if(confirmFinish){ confirmFinishWorkout(); }
   });
+}
+function openFinishConfirm(){
+  const elapsedNow = totalAccum + (totalRunning ? (Date.now()-totalStart)/1000 : 0);
+  const timeEl = document.getElementById('finish-confirm-time');
+  if(timeEl) timeEl.textContent = fmtTime(elapsedNow);
+  const overlay = document.getElementById('finish-confirm-overlay');
+  if(overlay) overlay.classList.add('show');
+}
+function closeFinishConfirm(){
+  const overlay = document.getElementById('finish-confirm-overlay');
+  if(overlay) overlay.classList.remove('show');
+}
+function confirmFinishWorkout(){
+  closeFinishConfirm();
+  if(restRunning) toggleRest();
+  if(totalRunning){
+    toggleTotal();
+    const key = todayStr();
+    durations[key] = (durations[key]||0) + totalAccum;
+    saveDurations();
+    totalAccum = 0;
+  }
+  if(!completions[todayStr()]){
+    completions[todayStr()] = true;
+    saveCompletions();
+  }
+  render();
 }
 function updateFlameNav(){
   const btn = document.getElementById('flame-nav-btn');
@@ -3590,26 +3727,7 @@ function attachEvents(){
       toggleFinishTimerView();
     }
     else if(action==='finish-workout'){
-      const elapsedNow = totalAccum + (totalRunning ? (Date.now()-totalStart)/1000 : 0);
-      if(!confirm(`Concluir o treino agora? Tempo registrado: ${fmtTime(elapsedNow)}.`)) return;
-      if(restRunning) toggleRest();
-      if(totalRunning){
-        toggleTotal();
-        const key = todayStr();
-        durations[key] = (durations[key]||0) + totalAccum;
-        saveDurations();
-        showToast(`Treino finalizado — ${fmtTime(totalAccum)}`);
-        totalAccum = 0;
-      }
-      if(!completions[todayStr()]){
-        completions[todayStr()] = true;
-        saveCompletions();
-      }
-      const todayKeyPlan = todayKey();
-      if(plan[todayKeyPlan] && isTrainingDay(todayKeyPlan)){
-        atualizarRadarPorTreino(plan[todayKeyPlan].exercises);
-      }
-      render();
+      openFinishConfirm();
     }
     else if(action==='rest-toggle'){
       toggleRest();
@@ -3827,7 +3945,90 @@ const MUSCLE_TO_RADAR = {
   'Abdômen':'core',
 };
 
-const RADAR_REASSESS_DAYS = 60;
+
+// músculo secundário estimulado por cada grupo principal, e o quanto ele conta
+// (uma série de peito conta cheia pra Peitoral&Ombros, e uma fração pra Braços)
+const SECONDARY_FRACTION = 0.3;
+const MUSCLE_SECONDARY_TO_RADAR = {
+  'Peito':'arms', 'Ombros':'arms',
+  'Costas':'arms',
+  'Quadríceps':'core', 'Glúteos':'lowerPosterior',
+  'Posterior de coxa':'lowerAnterior',
+  'Bíceps':'upperPull', 'Tríceps':'upperPush',
+};
+
+const RADAR_VOLUME_WINDOW_DAYS = 28; // janela deslizante — sempre "os últimos 28 dias"
+const RADAR_TRUST_TOUCHES = 8;       // treinos reais tocando um grupo até ele virar 100% volume real
+
+function radarWindowStartStr(){
+  const d = new Date();
+  d.setDate(d.getDate() - RADAR_VOLUME_WINDOW_DAYS);
+  return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+}
+// soma de séries por atributo do radar nas últimas 4 semanas (principal cheio, secundário fracionado)
+function computeMuscleVolumeRaw(){
+  const raw = {}; RADAR_ATTRS.forEach(a=>raw[a.key]=0);
+  const windowStart = radarWindowStartStr();
+  DAYS.forEach(d=>{
+    (plan[d.key].exercises||[]).forEach(ex=>{
+      const primaryAttr = MUSCLE_TO_RADAR[ex.muscle];
+      const secondaryAttr = MUSCLE_SECONDARY_TO_RADAR[ex.muscle];
+      if(!primaryAttr && !secondaryAttr) return;
+      (logs[ex.id]||[]).forEach(entry=>{
+        if(!entry.date || entry.date < windowStart) return;
+        const setsCount = (entry.sets||[]).length;
+        if(!setsCount) return;
+        if(primaryAttr) raw[primaryAttr] += setsCount;
+        if(secondaryAttr) raw[secondaryAttr] += setsCount * SECONDARY_FRACTION;
+      });
+    });
+  });
+  return raw;
+}
+// normaliza relativo ao grupo mais treinado (esse vira 100%, os outros ficam proporcionais)
+function computeMuscleVolumeNormalized(){
+  const raw = computeMuscleVolumeRaw();
+  const maxVal = Math.max(...Object.values(raw), 0.0001);
+  const norm = {};
+  RADAR_ATTRS.forEach(a=> norm[a.key] = Math.min(100, Math.round((raw[a.key]/maxVal)*100)));
+  return { norm, hasAnyVolume: maxVal > 0.0001 };
+}
+// quantos dias distintos, desde a última autoavaliação, cada grupo foi realmente treinado
+function computeRadarTouchCounts(){
+  const daysSeenPerAttr = {}; RADAR_ATTRS.forEach(a=>daysSeenPerAttr[a.key]=new Set());
+  const sinceStr = radar.lastAssessmentDate
+    ? (()=>{ const d=new Date(radar.lastAssessmentDate); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); })()
+    : '0000-00-00';
+  DAYS.forEach(d=>{
+    (plan[d.key].exercises||[]).forEach(ex=>{
+      const attr = MUSCLE_TO_RADAR[ex.muscle];
+      if(!attr) return;
+      (logs[ex.id]||[]).forEach(entry=>{
+        if(!entry.date || entry.date < sinceStr) return;
+        if(!entry.sets || !entry.sets.length) return;
+        daysSeenPerAttr[attr].add(entry.date);
+      });
+    });
+  });
+  const counts = {};
+  RADAR_ATTRS.forEach(a=> counts[a.key] = daysSeenPerAttr[a.key].size);
+  return counts;
+}
+// o shape "de verdade" mostrado no gráfico: mistura o ponto de partida (questionário) com o
+// volume real treinado, grupo por grupo — cada grupo evolui na sua própria velocidade, conforme
+// quantas vezes ELE foi treinado de verdade, não um relógio único pra todos.
+function computeDisplayShape(){
+  if(!radar || !radar.shape) return null;
+  const baseline = radar.shapeAtLastAssessment;
+  const { norm: volumeNorm } = computeMuscleVolumeNormalized();
+  const touches = computeRadarTouchCounts();
+  const display = {};
+  RADAR_ATTRS.forEach(a=>{
+    const w = Math.min(1, touches[a.key] / RADAR_TRUST_TOUCHES);
+    display[a.key] = Math.round(baseline[a.key]*(1-w) + volumeNorm[a.key]*w);
+  });
+  return display;
+}
 
 let radar = null;
 async function loadRadar(){
@@ -3861,32 +4062,11 @@ function calcularShapeBase(answers){
 
 // chamado quando um treino é concluído (finish-workout) — soma estímulo nos
 // atributos correspondentes aos músculos trabalhados naquele dia
-function atualizarRadarPorTreino(exercisesDoDia){
-  if(!radar || !radar.shape || !Array.isArray(exercisesDoDia)) return;
-  const attrsTocados = new Set();
-  exercisesDoDia.forEach(ex=>{
-    const attr = MUSCLE_TO_RADAR[ex.muscle];
-    if(attr) attrsTocados.add(attr);
-  });
-  attrsTocados.forEach(attr=>{
-    radar.shape[attr] = Math.min(100, radar.shape[attr] + 10);
-  });
-  if(attrsTocados.size){ saveRadar(); }
-}
-
 function calcularIndiceSimetria(shape){
   const vals = RADAR_ATTRS.map(a=>shape[a.key]);
   const gap = Math.max(...vals) - Math.min(...vals);
   return Math.max(0, Math.round(100 - gap));
 }
-function radarIsPristine(){
-  return RADAR_ATTRS.every(a => radar.shape[a.key] === radar.shapeAtLastAssessment[a.key]);
-}
-function radarDiasDesdeAvaliacao(){
-  if(!radar.lastAssessmentDate) return 0;
-  return Math.floor((Date.now() - radar.lastAssessmentDate)/86400000);
-}
-
 const RADAR_CX=180, RADAR_CY=180, RADAR_R=100;
 function radarPointsFor(values){
   return RADAR_ATTRS.map((a,i)=>{
@@ -3923,34 +4103,28 @@ function radarSvgMarkup(){
   });
   const refPts = radarPointsFor(radar.shapeAtLastAssessment).map(p=>p.join(',')).join(' ');
   html += `<polygon points="${refPts}" fill="var(--text-muted)" fill-opacity="0.06" stroke="var(--text-muted)" stroke-width="1.2" stroke-dasharray="3,3"/>`;
-  const curPts = radarPointsFor(radar.shape).map(p=>p.join(',')).join(' ');
+  const displayShape = computeDisplayShape();
+  const curPts = radarPointsFor(displayShape).map(p=>p.join(',')).join(' ');
   html += `<polygon points="${curPts}" fill="var(--accent)" fill-opacity="0.18" stroke="var(--accent)" stroke-width="2.5" style="filter:drop-shadow(0 0 5px var(--accent))"/>`;
   RADAR_ATTRS.forEach((a,i)=>{
     const angle=(Math.PI*2*i/RADAR_ATTRS.length)-Math.PI/2;
-    const r=(radar.shape[a.key]/100)*RADAR_R;
+    const r=(displayShape[a.key]/100)*RADAR_R;
     const x=RADAR_CX+r*Math.cos(angle), y=RADAR_CY+r*Math.sin(angle);
-    html += `<circle cx="${x}" cy="${y}" r="16" fill="transparent" data-radarkey="${a.key}" style="cursor:grab;touch-action:none;"/>`;
-    html += `<circle cx="${x}" cy="${y}" r="5" fill="var(--accent)" style="pointer-events:none;"/>`;
+    html += `<circle cx="${x}" cy="${y}" r="5" fill="var(--accent)"/>`;
   });
   return html;
 }
 
 function renderShapeSection(){
-  const isPristine = radarIsPristine();
-  const dias = radarDiasDesdeAvaliacao();
-  const restam = RADAR_REASSESS_DAYS - dias;
-  const recalHtml = restam<=0 ? `
-    <div class="radar-recal-card">
-      Já se passaram 2 meses desde sua última autoavaliação. Refaça o questionário pra recalibrar seu shape.
-      <button class="radar-recal-btn" data-action="radar-reassess">Refazer autoavaliação</button>
-    </div>` : '';
+  const displayShape = computeDisplayShape();
+  const isPristine = RADAR_ATTRS.every(a => displayShape[a.key] === radar.shapeAtLastAssessment[a.key]);
 
   const ref = radar.shapeAtLastAssessment;
   const avg = RADAR_ATTRS.reduce((s,a)=>s+ref[a.key],0)/RADAR_ATTRS.length;
   const fracos = RADAR_ATTRS.filter(a => ref[a.key] <= avg-10);
   const fortes = RADAR_ATTRS.filter(a => ref[a.key] >= avg+10);
-  const corrigindo = fracos.filter(a => radar.shape[a.key]-ref[a.key] >= 15);
-  const reforcandoForte = fortes.filter(a => radar.shape[a.key]-ref[a.key] >= 15);
+  const corrigindo = fracos.filter(a => displayShape[a.key]-ref[a.key] >= 15);
+  const reforcandoForte = fortes.filter(a => displayShape[a.key]-ref[a.key] >= 15);
   let feedbackHtml = '';
   if(corrigindo.length){
     feedbackHtml = `<div class="radar-feedback positive">Você está evoluindo bastante em <b>${corrigindo.map(a=>a.label).join(' e ')}</b> com o volume de treino recente.</div>`;
@@ -3963,62 +4137,21 @@ function renderShapeSection(){
   return `
     <div class="corpo-shape-head">
       <span class="corpo-shape-title">Meu Shape</span>
-      ${!isPristine ? `<span class="corpo-shape-trend">mudou desde a última avaliação</span>` : ''}
+      ${!isPristine ? `<span class="corpo-shape-trend">baseado no volume dos últimos 28 dias</span>` : ''}
     </div>
     <div class="radar-svg-wrap">
       <svg id="radar-svg" viewBox="0 0 360 360" width="100%">${radarSvgMarkup()}</svg>
     </div>
-    <p class="radar-drag-hint" id="radar-drag-hint">Toque e arraste qualquer ponto pra ajustar manualmente.</p>
     <div class="radar-legend">
       <div class="radar-legend-item"><span class="radar-legend-dot base"></span>Ponto de partida</div>
       <div class="radar-legend-item"><span class="radar-legend-dot dyn"></span>Shape atual</div>
     </div>
     ${feedbackHtml}
-    ${recalHtml}
     <div class="corpo-comp-hint" data-action="radar-reassess" style="justify-content:center;margin-top:8px;">
-      Avaliado em ${dateLabel} · <span style="color:var(--accent);">reavaliar</span>
+      Avaliação inicial em ${dateLabel} · <span style="color:var(--accent);">refazer</span>
     </div>
   `;
 }
-
-
-let radarDragKey = null;
-// delegação de pointerdown/move/up pro radar — anexada uma única vez no documento
-function radarSvgPointFromEvent(svg, evt){
-  const pt = svg.createSVGPoint();
-  pt.x = evt.clientX; pt.y = evt.clientY;
-  return pt.matrixTransform(svg.getScreenCTM().inverse());
-}
-function radarValueFromPointer(svg, key, evt){
-  const i = RADAR_ATTRS.findIndex(a=>a.key===key);
-  const angle = (Math.PI*2*i/RADAR_ATTRS.length) - Math.PI/2;
-  const dx = Math.cos(angle), dy = Math.sin(angle);
-  const p = radarSvgPointFromEvent(svg, evt);
-  const r = (p.x-RADAR_CX)*dx + (p.y-RADAR_CY)*dy;
-  const clamped = Math.max(0, Math.min(RADAR_R, r));
-  return Math.round((clamped/RADAR_R)*100);
-}
-document.addEventListener('pointerdown', (e)=>{
-  const key = e.target.dataset && e.target.dataset.radarkey;
-  if(!key) return;
-  radarDragKey = key;
-  const hint = document.getElementById('radar-drag-hint');
-  if(hint) hint.style.opacity = '0';
-  e.preventDefault();
-});
-document.addEventListener('pointermove', (e)=>{
-  if(!radarDragKey || !radar || !radar.shape) return;
-  const svg = document.getElementById('radar-svg');
-  if(!svg) return;
-  const val = radarValueFromPointer(svg, radarDragKey, e);
-  const pristine = radarIsPristine();
-  radar.shape[radarDragKey] = val;
-  if(pristine) radar.shapeAtLastAssessment[radarDragKey] = val;
-  svg.innerHTML = radarSvgMarkup();
-});
-document.addEventListener('pointerup', ()=>{
-  if(radarDragKey){ radarDragKey=null; saveRadar(); renderInicioView(); }
-});
 
 /* ========================================================================
    ONBOARDING — primeiro acesso: welcome swipe, login, perfil, contrato,
@@ -4338,6 +4471,8 @@ function onbStartFullFlow(){
   try{ onboarded = localStorage.getItem('vamo-onboarded') === '1'; }catch(e){}
   if(!onboarded){
     onbStartFullFlow();
+  }else{
+    setTimeout(checkWeeklyHydrationSummary, 1200);
   }
 })();
 
