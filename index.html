@@ -691,6 +691,17 @@
   .nutri-macro-kcal{font-family:var(--mono);font-size:9px;color:var(--text-muted);margin-left:6px;}
   .nutri-disclaimer{font-family:var(--mono);font-size:9px;color:var(--text-muted);text-align:center;opacity:0.7;margin-top:4px;}
 
+  .mission-cat-head{display:flex;justify-content:space-between;align-items:center;font-family:var(--display);font-size:14px;font-weight:700;color:var(--text);margin:0 0 10px;}
+  .mission-cat-count{font-family:var(--mono);font-size:10.5px;color:var(--text-muted);font-weight:600;}
+  .mission-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);cursor:default;}
+  .mission-row:last-child{border-bottom:none;}
+  .mission-row[data-action]{cursor:pointer;}
+  .mission-check{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .mission-check .icon{width:12px;height:12px;color:var(--accent-text);}
+  .mission-row.done .mission-check{background:var(--accent);border-color:var(--accent);}
+  .mission-title{font-family:var(--display);font-size:13px;color:var(--text);line-height:1.3;}
+  .mission-row.done .mission-title{color:var(--text-muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb, var(--text-muted) 50%, transparent);}
+
   .gen-btn-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--card-bg2);border-radius:14px;border:1px dashed color-mix(in srgb, var(--accent) 40%, transparent);cursor:pointer;margin-bottom:18px;}
   .gen-btn-text{font-family:var(--display);font-size:13px;font-weight:700;}
   .gen-btn-sub{display:block;font-family:var(--mono);font-size:9.5px;color:var(--text-muted);margin-top:2px;}
@@ -1035,6 +1046,10 @@
   <div class="view hidden" id="view-nutricao">
     <div id="nutricao-content"></div>
   </div>
+
+  <div class="view hidden" id="view-missoes">
+    <div id="missoes-content"></div>
+  </div>
 </div>
 <div id="toast" class="toast"></div>
 
@@ -1050,6 +1065,7 @@
   <button class="nav-btn" data-action="switch-tab" data-tab="inicio">Início</button>
   <button class="nav-btn active" data-action="switch-tab" data-tab="treinos">Treinos</button>
   <button class="nav-btn" data-action="switch-tab" data-tab="nutricao">Nutrição</button>
+  <button class="nav-btn" data-action="switch-tab" data-tab="missoes">Missões</button>
 </nav>
 
 <script>
@@ -1721,6 +1737,8 @@ async function gerarECompartilhar(desenhador, arquivoNome){
   const colors = getThemeColors();
   const ok = desenhador(ctx, W, H, colors);
   if(!ok) return;
+  missionsManual['compartilhar_conquista'] = true;
+  saveMissionsManual();
   canvas.toBlob(async (blob)=>{
     if(!blob) return;
     const file = new File([blob], arquivoNome, {type:'image/png'});
@@ -1970,7 +1988,14 @@ function activatePlanEntry(entryId){
     }
     planHistory = planHistory.filter(h=>h.id!==entryId);
     plan = JSON.parse(JSON.stringify(entry.plan));
+    DAYS.forEach(d=>{
+      const day = plan[d.key];
+      if(day && (day.exercises.length>0 || day.forceTraining) && !day.scheduledSince){
+        day.scheduledSince = todayStr();
+      }
+    });
     activePlanMeta = {id: entry.id, name: entry.name, origin: entry.origin, createdAt: entry.createdAt};
+    if(entry.origin === 'manual'){ missionsManual['ativar_treino_proprio'] = true; saveMissionsManual(); }
     Object.assign(logs, JSON.parse(JSON.stringify(entry.logs||{})));
     savePlan();
     saveActivePlanMeta();
@@ -2085,6 +2110,156 @@ function renderMeusTreinosList(){
    ======================================================================== */
 const HYDRATION_STEP = 250; // ml por toque no + / -
 let hydration = {};
+
+// ---------------------------------------------------------------------
+// MISSÕES — desafios de app + de vida real, em 4 níveis. Missões com
+// `check` são verificadas automaticamente pelos dados que já existem;
+// as sem `check` são marcadas manualmente pela própria pessoa.
+// Uma vez concluída (por check automático ou manual), fica permanente
+// — não "desmarca" sozinha se a condição deixar de ser verdadeira depois.
+// ---------------------------------------------------------------------
+let missionsManual = {};
+async function loadMissionsManual(){
+  try{
+    const raw = localStorage.getItem('vamo-missions-manual');
+    missionsManual = raw ? JSON.parse(raw) : {};
+  }catch(e){ missionsManual = {}; }
+}
+function saveMissionsManual(){
+  try{ localStorage.setItem('vamo-missions-manual', JSON.stringify(missionsManual)); }
+  catch(e){ console.error('Erro ao salvar missões', e); }
+}
+
+let completionsTime = {};
+async function loadCompletionsTime(){
+  try{
+    const raw = localStorage.getItem('vamo-completions-time');
+    completionsTime = raw ? JSON.parse(raw) : {};
+  }catch(e){ completionsTime = {}; }
+}
+function saveCompletionsTime(){
+  try{ localStorage.setItem('vamo-completions-time', JSON.stringify(completionsTime)); }
+  catch(e){ console.error('Erro ao salvar horário de conclusão', e); }
+}
+
+function countHydrationGoalDaysStreak(){
+  const goalMl = getHydrationGoalMl();
+  let count = 0;
+  for(let i=0; i<60; i++){
+    const d = new Date(); d.setDate(d.getDate()-i);
+    const key = fmtDateKey(d.getFullYear(), d.getMonth(), d.getDate());
+    if((hydration[key]||0) >= goalMl) count++;
+    else break;
+  }
+  return count;
+}
+function countBeforeSevenAM(){
+  return Object.values(completionsTime).filter(ts => new Date(ts).getHours() < 7).length;
+}
+function weightHistorySorted(){
+  return (profile.weightHistory||[]).filter(h=>h.weight).slice().sort((a,b)=> a.date<b.date?-1:1);
+}
+function maxLeanMassGain(){
+  const hist = weightHistorySorted();
+  if(hist.length<2) return 0;
+  const leanOf = h => (h.bodyFat!=null && h.bodyFat!=='') ? Number(h.weight)*(1-Number(h.bodyFat)/100) : null;
+  const first = leanOf(hist[0]), last = leanOf(hist[hist.length-1]);
+  if(first==null || last==null) return 0;
+  return last-first;
+}
+function maxWeightLoss(){
+  const hist = weightHistorySorted();
+  if(hist.length<2) return 0;
+  return Number(hist[0].weight) - Number(hist[hist.length-1].weight);
+}
+function maxFatReduction(){
+  const hist = weightHistorySorted().filter(h=>h.bodyFat!=null && h.bodyFat!=='');
+  if(hist.length<2) return 0;
+  return Number(hist[0].bodyFat) - Number(hist[hist.length-1].bodyFat);
+}
+function anyExerciseDoubledOneRM(){
+  const seen = {};
+  DAYS.forEach(d=>{
+    (plan[d.key].exercises||[]).forEach(ex=>{
+      if(seen[ex.name]) return;
+      const hist = historico1RM(ex.id);
+      if(hist.length>=2 && hist[0].oneRM>0 && hist[hist.length-1].oneRM >= hist[0].oneRM*2) seen[ex.name]=true;
+    });
+  });
+  return Object.keys(seen).length>0;
+}
+
+const MISSIONS = [
+  // ---- FÁCIL ----
+  {id:'app_perfil', cat:'facil', title:'Completar seu perfil (peso, altura, objetivo)', check:()=> !!(profile && profile.weight && profile.height && profile.birthdate && profile.goal)},
+  {id:'app_tema', cat:'facil', title:'Trocar o tema visual do app'},
+  {id:'app_hidratacao_3dias', cat:'facil', title:'Bater a meta de água por 3 dias', check:()=> countHydrationGoalDaysStreak()>=3},
+  {id:'app_primeiro_treino', cat:'facil', title:'Concluir seu primeiro treino', check:()=> Object.keys(completions||{}).length>0},
+  {id:'app_mostrar_app', cat:'facil', title:'Mostrar o app pra alguém'},
+  {id:'flexoes_10', cat:'facil', title:'Fazer 10 flexões seguidas'},
+  {id:'prancha_30s', cat:'facil', title:'Segurar prancha por 30 segundos'},
+  {id:'treino_fim_semana', cat:'facil', title:'Treinar num fim de semana', check:()=> Object.keys(completions||{}).some(k=>{ const d=new Date(k+'T12:00:00'); return d.getDay()===0||d.getDay()===6; })},
+  {id:'treino_peso_corporal', cat:'facil', title:'Treinar só com peso do corpo, sem equipamento'},
+  {id:'exercicio_novo', cat:'facil', title:'Experimentar um exercício que nunca tinha feito'},
+  {id:'ver_video_execucao', cat:'facil', title:'Assistir um vídeo de execução antes de um exercício novo'},
+  {id:'cardio_primeira_vez', cat:'facil', title:'Fazer cardio pela primeira vez'},
+  {id:'maquina_e_halter', cat:'facil', title:'Fazer o mesmo exercício na máquina e com halteres'},
+
+  // ---- MÉDIO ----
+  {id:'streak_7', cat:'medio', title:'7 dias de treino seguidos', check:()=> computeStreak()>=7},
+  {id:'hidratacao_5_seguidos', cat:'medio', title:'Bater a meta de água 5 dias seguidos', check:()=> countHydrationGoalDaysStreak()>=5},
+  {id:'correr_5km', cat:'medio', title:'Correr ou caminhar 5km acumulados'},
+  {id:'cardio_3x_semana', cat:'medio', title:'Fazer cardio 3x numa semana'},
+  {id:'treino_antes_7h', cat:'medio', title:'Treinar antes das 7h da manhã', check:()=> countBeforeSevenAM()>=1},
+  {id:'flexoes_20', cat:'medio', title:'Fazer 20 flexões seguidas'},
+  {id:'prancha_1min', cat:'medio', title:'Segurar prancha por 1 minuto'},
+  {id:'duas_reps_a_mais', cat:'medio', title:'Numa série, fazer 2 reps a mais quando bateu vontade de parar'},
+  {id:'consciencia_corporal', cat:'medio', title:'Um treino inteiro focado em sentir o músculo trabalhando'},
+  {id:'convidar_sedentario', cat:'medio', title:'Levar alguém sedentário pra treinar com você'},
+  {id:'reduzir_doce_semana', cat:'medio', title:'Reduzir doce/açúcar por 1 semana inteira'},
+  {id:'compartilhar_conquista', cat:'medio', title:'Compartilhar uma conquista do app'},
+  {id:'calcular_meta_calorica', cat:'medio', title:'Calcular sua meta calórica na Nutrição', check:()=> !!(profile && profile.sexo && profile.activityLevel)},
+  {id:'ativar_treino_proprio', cat:'medio', title:'Ativar um treino montado por você'},
+
+  // ---- DIFÍCIL ----
+  {id:'streak_30', cat:'dificil', title:'30 dias de treino seguidos', check:()=> computeStreak()>=30},
+  {id:'correr_10km', cat:'dificil', title:'Correr 10km numa sessão só'},
+  {id:'flexoes_50', cat:'dificil', title:'Fazer 50 flexões seguidas'},
+  {id:'barras_10', cat:'dificil', title:'Fazer 10 barras fixas seguidas'},
+  {id:'prancha_3min', cat:'dificil', title:'Segurar prancha por 3 minutos'},
+  {id:'burpees_50', cat:'dificil', title:'Fazer 50 burpees numa sessão'},
+  {id:'treino_antes_7h_10x', cat:'dificil', title:'Treinar antes das 7h, 10 vezes', check:()=> countBeforeSevenAM()>=10},
+  {id:'nutricionista_1mes', cat:'dificil', title:'Ir ao nutricionista e seguir o plano por 1 mês'},
+  {id:'ganhar_massa_magra', cat:'dificil', title:'Ganhar massa magra de verdade (registrado no Perfil)', check:()=> maxLeanMassGain()>=2},
+  {id:'perder_peso', cat:'dificil', title:'Perder peso de verdade (registrado no Perfil)', check:()=> maxWeightLoss()>=5},
+  {id:'reduzir_gordura', cat:'dificil', title:'Reduzir % de gordura corporal (registrado no Perfil)', check:()=> maxFatReduction()>=5},
+
+  // ---- LENDÁRIA ----
+  {id:'streak_100', cat:'lendaria', title:'100 dias de treino seguidos', check:()=> computeStreak()>=100},
+  {id:'streak_365', cat:'lendaria', title:'1 ano inteiro de treino seguido', check:()=> computeStreak()>=365},
+  {id:'meia_maratona', cat:'lendaria', title:'Correr uma meia-maratona (21km) ou mais'},
+  {id:'flexoes_100', cat:'lendaria', title:'Fazer 100 flexões seguidas'},
+  {id:'barras_20', cat:'lendaria', title:'Fazer 20 barras fixas seguidas'},
+  {id:'prancha_5min', cat:'lendaria', title:'Segurar prancha por 5 minutos'},
+  {id:'burpees_100', cat:'lendaria', title:'Fazer 100 burpees numa sessão'},
+  {id:'dobrar_1rm', cat:'lendaria', title:'Dobrar o 1RM de algum exercício desde o primeiro registro', check:()=> anyExerciseDoubledOneRM()},
+  {id:'cardio_500km_ano', cat:'lendaria', title:'500km acumulados de cardio no ano'},
+];
+const MISSION_CATS = [
+  {key:'facil', label:'Fácil', emoji:'🟢'},
+  {key:'medio', label:'Médio', emoji:'🟡'},
+  {key:'dificil', label:'Difícil', emoji:'🔴'},
+  {key:'lendaria', label:'Muito Difícil', emoji:'⚫'},
+];
+function isMissionDone(m){
+  if(missionsManual[m.id]) return true;
+  if(m.check){
+    try{
+      if(m.check()){ missionsManual[m.id] = true; saveMissionsManual(); return true; }
+    }catch(e){ /* dados insuficientes ainda pra checar */ }
+  }
+  return false;
+}
 async function loadHydration(){
   try{
     const raw = localStorage.getItem('vamo-hydration');
@@ -2299,7 +2474,11 @@ function toggleExerciseDone(exId){
 function toggleDayDone(){
   const key = todayStr();
   if(completions[key]) delete completions[key];
-  else completions[key] = true;
+  else{
+    completions[key] = true;
+    missionsManual['cardio_primeira_vez'] = true;
+    saveMissionsManual();
+  }
   saveCompletions();
   render();
 }
@@ -2399,16 +2578,29 @@ function computeStreak(){
   let streak = 0;
   const cursor = new Date();
   cursor.setHours(0,0,0,0);
-  if(completions[todayStr()]){
-    streak = 1;
+  let isToday = true;
+  let daysChecked = 0;
+  while(daysChecked < 730){
+    const dayKey = GETDAY_TO_KEY[cursor.getDay()];
+    const dateKey = fmtDateKey(cursor.getFullYear(), cursor.getMonth(), cursor.getDate());
+    const day = plan[dayKey];
+    const scheduledSince = day && day.scheduledSince;
+    // só exige esse dia se ele já era dia de treino NAQUELA data — dias adicionados depois
+    // não penalizam retroativamente datas anteriores a terem sido incluídas no plano
+    const requiredOnThisDate = isTrainingDay(dayKey) && (!scheduledSince || dateKey >= scheduledSince);
+    if(requiredOnThisDate){
+      if(completions[dateKey]){
+        streak++;
+      }else if(isToday){
+        // hoje é dia de treino mas ainda não foi feito — não quebra, só ainda não conta
+      }else{
+        break; // faltou um dia de treino agendado de verdade — aí sim quebra
+      }
+    }
+    // dia de descanso (ou dia que só passou a ser treino depois dessa data): pula sem quebrar
+    isToday = false;
     cursor.setDate(cursor.getDate()-1);
-  }else{
-    cursor.setDate(cursor.getDate()-1);
-  }
-  while(true){
-    const key = fmtDateKey(cursor.getFullYear(), cursor.getMonth(), cursor.getDate());
-    if(completions[key]){ streak++; cursor.setDate(cursor.getDate()-1); }
-    else break;
+    daysChecked++;
   }
   return streak;
 }
@@ -2622,7 +2814,7 @@ function attachCalendarEvents(){
 }
 
 function switchTab(tab){
-  ['treinos','profile','nutricao','inicio'].forEach(t=>{
+  ['treinos','profile','nutricao','missoes','inicio'].forEach(t=>{
     const view = document.getElementById('view-'+t);
     if(view) view.classList.toggle('hidden', t!==tab);
   });
@@ -2685,6 +2877,8 @@ function confirmFinishWorkout(){
     completions[todayStr()] = true;
     saveCompletions();
   }
+  completionsTime[todayStr()] = Date.now();
+  saveCompletionsTime();
   render();
 }
 function updateFlameNav(){
@@ -2972,12 +3166,13 @@ function attachPlanEditorEvents(){
       const dayKey = btn.dataset.day;
       const type = btn.dataset.type;
       const day = planRef[dayKey];
-      if(type==='descanso'){ day.exercises=[]; day.forceTraining=false; day.emptyTrainingFlag=false; day.title='Descanso'; }
-      else if(type==='cardio'){ day.exercises=[]; day.forceTraining=true; day.emptyTrainingFlag=false; day.title='Cardio'; }
+      if(type==='descanso'){ day.exercises=[]; day.forceTraining=false; day.emptyTrainingFlag=false; day.title='Descanso'; day.scheduledSince=null; }
+      else if(type==='cardio'){ day.exercises=[]; day.forceTraining=true; day.emptyTrainingFlag=false; day.title='Cardio'; day.scheduledSince=null; }
       else if(type==='treino'){
         day.forceTraining = false;
         day.emptyTrainingFlag = true;
         if(day.title==='Descanso' || day.title==='Cardio' || !day.title) day.title = '';
+        if(!day.scheduledSince) day.scheduledSince = todayStr();
       }
       editorPersist();
       renderPlanEditor();
@@ -3275,6 +3470,53 @@ function attachNutricaoEvents(){
       profile.activityLevel = e.target.value;
       saveProfile();
       renderNutricaoView();
+    }
+  });
+}
+
+function renderMissoesView(){
+  const el = document.getElementById('missoes-content');
+  if(!el) return;
+  const totalDone = MISSIONS.filter(isMissionDone).length;
+  const sections = MISSION_CATS.map(cat=>{
+    const items = MISSIONS.filter(m=>m.cat===cat.key);
+    const doneCount = items.filter(isMissionDone).length;
+    const rows = items.map(m=>{
+      const done = isMissionDone(m);
+      const manualOnly = !m.check;
+      return `
+        <div class="mission-row ${done?'done':''}" ${manualOnly && !done ? `data-action="toggle-mission" data-id="${m.id}"` : ''}>
+          <span class="mission-check">${done ? ICONS.check : ''}</span>
+          <span class="mission-title">${m.title}</span>
+        </div>
+      `;
+    }).join('');
+    return `
+      <div class="mission-cat-head">
+        <span>${cat.emoji} ${cat.label}</span>
+        <span class="mission-cat-count">${doneCount}/${items.length}</span>
+      </div>
+      <div class="card" style="margin-bottom:18px;">${rows}</div>
+    `;
+  }).join('');
+
+  el.innerHTML = `
+    <p class="section-title">Missões</p>
+    <h1 class="nutri-title">${totalDone} de ${MISSIONS.length} concluídas</h1>
+    <p class="nutri-sub">desafios de app e de vida real — algumas o app confirma sozinho, outras você marca quando fizer</p>
+    ${sections}
+  `;
+}
+function attachMissoesEvents(){
+  const view = document.getElementById('view-missoes');
+  if(!view) return;
+  view.addEventListener('click', (e)=>{
+    const btn = e.target.closest('[data-action="toggle-mission"]');
+    if(btn){
+      missionsManual[btn.dataset.id] = true;
+      saveMissionsManual();
+      renderMissoesView();
+      showToast('Missão concluída! 🎉');
     }
   });
 }
@@ -3658,6 +3900,7 @@ function render(){
   renderEvolutionChart();
   renderProfileView();
   renderNutricaoView();
+  renderMissoesView();
   updateHeroGreeting();
   updateRestDisplay();
   updateFlameNav();
@@ -3915,6 +4158,8 @@ function attachThemeToggle(){
     const next = THEME_ORDER[(idx+1) % THEME_ORDER.length];
     document.documentElement.setAttribute('data-theme', next);
     try{ localStorage.setItem('vamo-theme', next); }catch(e){}
+    missionsManual['app_tema'] = true;
+    saveMissionsManual();
     const meta = document.getElementById('theme-color-meta');
     if(meta) meta.setAttribute('content', THEME_COLORS[next]);
   });
@@ -4453,6 +4698,8 @@ function onbStartFullFlow(){
   await loadActivePlanMeta();
   await loadNameHistory();
   await loadHydration();
+  await loadMissionsManual();
+  await loadCompletionsTime();
   attachEvents();
   attachBackupEvents();
   attachCalendarEvents();
@@ -4658,6 +4905,7 @@ function attachTimerViewEvents(){
 function initTimers(){
   updateRestDisplay();
   attachNutricaoEvents();
+  attachMissoesEvents();
 }
 
 </script>
